@@ -70,6 +70,14 @@ model JobSeekerProfile {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 enum RoleName {
   Job_finder
   Recruiter

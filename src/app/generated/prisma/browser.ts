@@ -42,3 +42,8 @@ export type PhoneOtp = Prisma.PhoneOtpModel
  * 
  */
 export type JobSeekerProfile = Prisma.JobSeekerProfileModel
+/**
+ * Model AdminUser
+ * 
+ */
+export type AdminUser = Prisma.AdminUserModel

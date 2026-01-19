@@ -3,6 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
@@ -59,7 +62,24 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = (_values: LoginValues) => {};
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const onSubmit = async (values: LoginValues) => {
+    setErrorMessage(null);
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
+
+    if (result?.error) {
+      setErrorMessage("Invalid email or password.");
+      return;
+    }
+
+    router.push("/dashboard");
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -147,7 +167,12 @@ export function LoginForm({
                 <label htmlFor="remember">Remember me</label>
               </div>
             )}
-          />
+          />{" "}
+          {errorMessage ? (
+            <p className="text-sm text-destructive text-center">
+              {errorMessage}
+            </p>
+          ) : null}
           <Field>
             <Button type="submit" disabled={isSubmitting}>
               Login
