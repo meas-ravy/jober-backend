@@ -1,4 +1,3 @@
-// node js random-generate-otp 4 digit
 import crypto from "crypto";
 import { sha256Base64Url } from "../shared/config/basehash";
 import prisma from "./prisma";
@@ -66,7 +65,7 @@ async function createOTP(phone: string): Promise<string> {
 
 async function verifyAndConsumeOTP(
   phone: string,
-  otp: string
+  otp: string,
 ): Promise<boolean> {
   return prisma.$transaction(async tx => {
     const otpRecord = await tx.phoneOtp.findFirst({
@@ -82,7 +81,7 @@ async function verifyAndConsumeOTP(
 
     if (otpRecord.attempts >= MAX_OTP_ATTEMPTS) {
       throw new Error(
-        "Maximum verification attempts exceeded. Please request a new OTP."
+        "Maximum verification attempts exceeded. Please request a new OTP.",
       );
     }
 
@@ -105,12 +104,4 @@ async function verifyAndConsumeOTP(
   });
 }
 
-async function cleanupExpiredOTP(): Promise<void> {
-  await prisma.phoneOtp.deleteMany({
-    where: {
-      expiresAt: { lt: new Date() },
-    },
-  });
-}
-
-export { generateOTP, createOTP, verifyAndConsumeOTP, cleanupExpiredOTP };
+export { generateOTP, createOTP, verifyAndConsumeOTP };
