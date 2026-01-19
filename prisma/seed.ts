@@ -7,8 +7,8 @@ async function main() {
   const defaultPassword = await bcrypt.hash("password123!", 10);
 
   const admins = [
-    { email: "admin@example.com", password: defaultPassword },
-    { email: "testing@example.com", password: defaultPassword },
+    { email: "admin@gmail.com", password: defaultPassword },
+    { email: "testing@gmail.com", password: defaultPassword },
   ];
 
   for (const admin of admins) {

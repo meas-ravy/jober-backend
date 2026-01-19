@@ -107,7 +107,7 @@ export function LoginForm({
             <Input
               id="email"
               type="email"
-              placeholder="email@example.com"
+              placeholder="email@gmail.com"
               required
               autoComplete="email"
               {...register("email")}
@@ -154,20 +154,6 @@ export function LoginForm({
             />
             <FieldError errors={[errors.password]} />
           </Field>
-          <Controller
-            control={control}
-            name="remember"
-            render={({ field }) => (
-              <div className="flex items-center gap-3">
-                <CheckboxShadcn
-                  id="remember"
-                  checked={field.value ?? false}
-                  onCheckedChange={checked => field.onChange(checked === true)}
-                />
-                <label htmlFor="remember">Remember me</label>
-              </div>
-            )}
-          />{" "}
           {errorMessage ? (
             <p className="text-sm text-destructive text-center">
               {errorMessage}
