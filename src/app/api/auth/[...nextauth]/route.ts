@@ -23,7 +23,13 @@ export const authOptions: NextAuthOptions = {
 
         const admin = await prisma.adminUser.findUnique({
           where: { email },
-          select: { id: true, email: true, passwordHash: true },
+          select: {
+            id: true,
+            email: true,
+            passwordHash: true,
+            name: true,
+            avatarUrl: true,
+          },
         });
 
         if (!admin) return null;
@@ -34,6 +40,8 @@ export const authOptions: NextAuthOptions = {
         return {
           id: admin.id,
           email: admin.email,
+          name: admin.name ?? undefined,
+          image: admin.avatarUrl ?? undefined,
           role: "Admin",
         };
       },

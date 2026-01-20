@@ -1,29 +1,45 @@
 import "dotenv/config";
 import prisma from "@/src/lib/prisma";
-import { email } from "zod";
 import bcrypt from "bcryptjs";
 
 async function main() {
-  const defaultPassword = await bcrypt.hash("password123!", 10);
+  const passwordHash = await bcrypt.hash("iamStudy!", 10);
 
   const admins = [
-    { email: "admin@gmail.com", password: defaultPassword },
-    { email: "testing@gmail.com", password: defaultPassword },
+    {
+      email: "admin@gmail.com",
+      name: "Owner System",
+      avatarUrl: "/image/owner.jpg",
+    },
+    {
+      email: "testing@gmail.com",
+      name: "Testing",
+      avatarUrl: null,
+    },
   ];
 
   for (const admin of admins) {
     const email = admin.email.trim().toLowerCase();
-    const passwordHash = defaultPassword;
 
     await prisma.adminUser.upsert({
       where: { email },
-      update: { passwordHash },
-      create: { email, passwordHash },
+      update: {
+        passwordHash,
+        name: admin.name ?? null,
+        avatarUrl: admin.avatarUrl ?? null,
+      },
+      create: {
+        email,
+        passwordHash,
+        name: admin.name ?? null,
+        avatarUrl: admin.avatarUrl ?? null,
+      },
     });
   }
 
+  const adminEmails = admins.map(admin => admin.email).join(", ");
   // eslint-disable-next-line no-console
-  console.log(`Admin user ready: ${email}`);
+  console.log(`Admin users ready: ${adminEmails}`);
 }
 
 main()
