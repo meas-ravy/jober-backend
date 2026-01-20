@@ -1,7 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-
 const adminLoginPath = "/admin/login";
 const adminDashboardPath = "/admin/dashboard";
 

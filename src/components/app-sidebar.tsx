@@ -19,9 +19,13 @@ import {
   IconChartBar,
   IconDashboard,
   IconFolder,
+  IconHelp,
   IconListDetails,
+  IconSearch,
+  IconSettings,
   IconUsers,
 } from "@tabler/icons-react";
+import { NavSecondary } from "./nav-seconary";
 
 // This is sample data.
 //src\app\(protect)\admin\application
@@ -37,20 +41,32 @@ const data = {
       url: "/admin/application",
       icon: IconListDetails,
     },
+    // {
+    //   title: "Analytics",
+    //   url: "#",
+    //   icon: IconChartBar,
+    // },
+    // {
+    //   title: "Projects",
+    //   url: "#",
+    //   icon: IconFolder,
+    // },
+    // {
+    //   title: "Team",
+    //   url: "#",
+    //   icon: IconUsers,
+    // },
+  ],
+  navSecondary: [
     {
-      title: "Analytics",
+      title: "Settings",
       url: "#",
-      icon: IconChartBar,
+      icon: IconSettings,
     },
     {
-      title: "Projects",
+      title: "Get Help",
       url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      icon: IconHelp,
     },
   ],
   projects: [
@@ -95,6 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
