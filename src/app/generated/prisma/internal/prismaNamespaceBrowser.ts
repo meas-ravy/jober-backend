@@ -56,6 +56,7 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   PhoneOtp: 'PhoneOtp',
   JobSeekerProfile: 'JobSeekerProfile',
+  CompanyProfile: 'CompanyProfile',
   AdminUser: 'AdminUser'
 } as const
 
@@ -132,6 +133,22 @@ export const JobSeekerProfileScalarFieldEnum = {
 } as const
 
 export type JobSeekerProfileScalarFieldEnum = (typeof JobSeekerProfileScalarFieldEnum)[keyof typeof JobSeekerProfileScalarFieldEnum]
+
+
+export const CompanyProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
+  location: 'location',
+  description: 'description',
+  logoUrl: 'logoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyProfileScalarFieldEnum = (typeof CompanyProfileScalarFieldEnum)[keyof typeof CompanyProfileScalarFieldEnum]
 
 
 export const AdminUserScalarFieldEnum = {

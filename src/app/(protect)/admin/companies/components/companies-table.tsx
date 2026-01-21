@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import {
+  type Column,
   type ColumnDef,
   type ColumnFiltersState,
   type FilterFn,
   type SortingState,
-  type Column,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -44,76 +44,82 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 
-export type UserRow = {
+export type CompanyRow = {
   name: string;
-  email: string;
-  phone: string;
-  role: "Job Seeker" | "Recruiter";
-  status: "Active" | "Pending" | "Suspended";
-  joined: string;
+  contactEmail: string;
+  contactPhone: string;
+  recruiters: number;
+  jobsActive: number;
+  status: "Pending" | "Verified" | "Rejected";
+  submitted: string;
 };
 
-const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
+const globalCompanyFilter: FilterFn<CompanyRow> = (
+  row,
+  _columnId,
+  filterValue,
+) => {
   const search = String(filterValue).toLowerCase().trim();
   if (!search) return true;
-  const { name, email, phone } = row.original;
-  return [name, email, phone].some(value =>
+  const { name, contactEmail, contactPhone } = row.original;
+  return [name, contactEmail, contactPhone].some(value =>
     value.toLowerCase().includes(search),
   );
 };
 
-const columns: ColumnDef<UserRow>[] = [
+const columns: ColumnDef<CompanyRow>[] = [
   {
-    id: "user",
-    header: "User",
+    id: "company",
+    header: "Company",
     accessorFn: row => row.name,
     cell: ({ row }) => (
       <div className="flex flex-col">
         <span className="font-medium">{row.original.name}</span>
         <span className="text-muted-foreground text-xs">
-          {row.original.email}
+          {row.original.contactEmail}
         </span>
       </div>
     ),
   },
   {
-    accessorKey: "phone",
+    accessorKey: "contactPhone",
     header: "Phone",
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.phone}</span>
+      <span className="text-muted-foreground">{row.original.contactPhone}</span>
     ),
   },
   {
-    accessorKey: "role",
-    header: "Role",
-    filterFn: "equalsString",
-    cell: ({ row }) => (
-      <Badge
-        variant="ghost"
-        className={
-          row.original.role === "Recruiter"
-            ? "border-blue-200 text-blue-600"
-            : "border-primary/20 text-primary"
-        }
-      >
-        {row.original.role}
-      </Badge>
-    ),
+    accessorKey: "recruiters",
+    header: "Recruiters",
+  },
+  {
+    accessorKey: "jobsActive",
+    header: "Active Jobs",
   },
   {
     accessorKey: "status",
     header: "Status",
     filterFn: "equalsString",
     cell: ({ row }) => (
-      <Badge variant="destructive">{row.original.status}</Badge>
+      <Badge
+        variant={
+          row.original.status === "Rejected"
+            ? "destructive"
+            : row.original.status === "Pending"
+              ? "outline"
+              : "secondary"
+        }
+      >
+        {row.original.status}
+      </Badge>
     ),
   },
   {
-    id: "joined",
-    header: "Joined",
-    accessorFn: row => new Date(row.joined).getTime(),
+    id: "submitted",
+    header: "Submitted",
+    accessorFn: row => new Date(row.submitted).getTime(),
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.joined}</span>
+      <span className="text-muted-foreground">{row.original.submitted}</span>
     ),
   },
   {
@@ -123,22 +129,22 @@ const columns: ColumnDef<UserRow>[] = [
     cell: () => (
       <div className="flex justify-end">
         <Button variant="ghost" size="sm">
-          View
+          Review
         </Button>
       </div>
     ),
   },
 ];
 
-type UsersTableProps = {
-  data: UserRow[];
+type CompaniesTableProps = {
+  data: CompanyRow[];
 };
 
 function SortableHeader({
   column,
   label,
 }: {
-  column: Column<UserRow, unknown>;
+  column: Column<CompanyRow, unknown>;
   label: string;
 }) {
   if (!column.getCanSort()) {
@@ -165,7 +171,7 @@ function SortableHeader({
   );
 }
 
-export function UsersTable({ data }: UsersTableProps) {
+export function CompaniesTable({ data }: CompaniesTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -193,10 +199,9 @@ export function UsersTable({ data }: UsersTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    globalFilterFn: globalUserFilter,
+    globalFilterFn: globalCompanyFilter,
   });
 
-  const roleValue = (table.getColumn("role")?.getFilterValue() as string) ?? "";
   const statusValue =
     (table.getColumn("status")?.getFilterValue() as string) ?? "";
   const totalRows = table.getFilteredRowModel().rows.length;
@@ -210,7 +215,7 @@ export function UsersTable({ data }: UsersTableProps) {
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Input
-            placeholder="Search users"
+            placeholder="Search companies"
             value={globalFilter ?? ""}
             onChange={event => setGlobalFilter(event.target.value)}
             className="pl-9"
@@ -219,23 +224,6 @@ export function UsersTable({ data }: UsersTableProps) {
             <Search className="size-4 opacity-50" />
           </div>
         </div>
-        <Select
-          value={roleValue || "all-roles"}
-          onValueChange={value => {
-            table
-              .getColumn("role")
-              ?.setFilterValue(value === "all-roles" ? "" : value);
-          }}
-        >
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all-roles">All roles</SelectItem>
-            <SelectItem value="Job Seeker">Job Seeker</SelectItem>
-            <SelectItem value="Recruiter">Recruiter</SelectItem>
-          </SelectContent>
-        </Select>
         <Select
           value={statusValue || "all-status"}
           onValueChange={value => {
@@ -249,9 +237,9 @@ export function UsersTable({ data }: UsersTableProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all-status">All status</SelectItem>
-            <SelectItem value="Active">Active</SelectItem>
             <SelectItem value="Pending">Pending</SelectItem>
-            <SelectItem value="Suspended">Suspended</SelectItem>
+            <SelectItem value="Verified">Verified</SelectItem>
+            <SelectItem value="Rejected">Rejected</SelectItem>
           </SelectContent>
         </Select>
         <Button
@@ -273,16 +261,27 @@ export function UsersTable({ data }: UsersTableProps) {
                 {headerGroup.headers.map(header => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : header.column.id ===
-                      "user" ? (
-                      <SortableHeader column={header.column} label="User" />
-                    ) : header.column.id === "phone" ? (
+                      "company" ? (
+                      <SortableHeader column={header.column} label="Company" />
+                    ) : header.column.id === "contactPhone" ? (
                       <SortableHeader column={header.column} label="Phone" />
-                    ) : header.column.id === "role" ? (
-                      <SortableHeader column={header.column} label="Role" />
+                    ) : header.column.id === "recruiters" ? (
+                      <SortableHeader
+                        column={header.column}
+                        label="Recruiters"
+                      />
+                    ) : header.column.id === "jobsActive" ? (
+                      <SortableHeader
+                        column={header.column}
+                        label="Active Jobs"
+                      />
                     ) : header.column.id === "status" ? (
                       <SortableHeader column={header.column} label="Status" />
-                    ) : header.column.id === "joined" ? (
-                      <SortableHeader column={header.column} label="Joined" />
+                    ) : header.column.id === "submitted" ? (
+                      <SortableHeader
+                        column={header.column}
+                        label="Submitted"
+                      />
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -314,7 +313,7 @@ export function UsersTable({ data }: UsersTableProps) {
                   colSpan={columns.length}
                   className="py-6 text-center"
                 >
-                  No users found.
+                  No companies found.
                 </TableCell>
               </TableRow>
             )}

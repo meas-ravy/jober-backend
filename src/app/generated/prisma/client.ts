@@ -65,6 +65,11 @@ export type PhoneOtp = Prisma.PhoneOtpModel
  */
 export type JobSeekerProfile = Prisma.JobSeekerProfileModel
 /**
+ * Model CompanyProfile
+ * 
+ */
+export type CompanyProfile = Prisma.CompanyProfileModel
+/**
  * Model AdminUser
  * 
  */

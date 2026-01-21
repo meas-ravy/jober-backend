@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      sucess: true,
+      success: true,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       roles: tokens.roles,

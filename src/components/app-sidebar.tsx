@@ -16,6 +16,7 @@ import {
   SidebarRail,
 } from "@/src/components/ui/sidebar";
 import {
+  IconBuildingStore,
   IconDashboard,
   IconHelp,
   IconListDetails,
@@ -42,6 +43,11 @@ const data = {
       title: "Users",
       url: "/admin/users",
       icon: IconUsers,
+    },
+    {
+      title: "Companies",
+      url: "/admin/companies",
+      icon: IconBuildingStore,
     },
   ],
   navSecondary: [

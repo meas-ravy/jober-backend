@@ -389,6 +389,7 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   PhoneOtp: 'PhoneOtp',
   JobSeekerProfile: 'JobSeekerProfile',
+  CompanyProfile: 'CompanyProfile',
   AdminUser: 'AdminUser'
 } as const
 
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userRole" | "refreshToken" | "phoneOtp" | "jobSeekerProfile" | "adminUser"
+    modelProps: "user" | "userRole" | "refreshToken" | "phoneOtp" | "jobSeekerProfile" | "companyProfile" | "adminUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -779,6 +780,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CompanyProfile: {
+      payload: Prisma.$CompanyProfilePayload<ExtArgs>
+      fields: Prisma.CompanyProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CompanyProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CompanyProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.CompanyProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CompanyProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        findMany: {
+          args: Prisma.CompanyProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>[]
+        }
+        create: {
+          args: Prisma.CompanyProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        createMany: {
+          args: Prisma.CompanyProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CompanyProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.CompanyProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        update: {
+          args: Prisma.CompanyProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.CompanyProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CompanyProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CompanyProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.CompanyProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.CompanyProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompanyProfile>
+        }
+        groupBy: {
+          args: Prisma.CompanyProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CompanyProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyProfileCountAggregateOutputType> | number
+        }
+      }
+    }
     AdminUser: {
       payload: Prisma.$AdminUserPayload<ExtArgs>
       fields: Prisma.AdminUserFieldRefs
@@ -949,6 +1024,22 @@ export const JobSeekerProfileScalarFieldEnum = {
 } as const
 
 export type JobSeekerProfileScalarFieldEnum = (typeof JobSeekerProfileScalarFieldEnum)[keyof typeof JobSeekerProfileScalarFieldEnum]
+
+
+export const CompanyProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
+  location: 'location',
+  description: 'description',
+  logoUrl: 'logoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyProfileScalarFieldEnum = (typeof CompanyProfileScalarFieldEnum)[keyof typeof CompanyProfileScalarFieldEnum]
 
 
 export const AdminUserScalarFieldEnum = {
@@ -1177,6 +1268,7 @@ export type GlobalOmitConfig = {
   refreshToken?: Prisma.RefreshTokenOmit
   phoneOtp?: Prisma.PhoneOtpOmit
   jobSeekerProfile?: Prisma.JobSeekerProfileOmit
+  companyProfile?: Prisma.CompanyProfileOmit
   adminUser?: Prisma.AdminUserOmit
 }
 

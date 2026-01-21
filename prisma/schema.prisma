@@ -8,12 +8,12 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  phone     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id               String            @id @default(cuid())
+  phone            String            @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   jobSeekerProfile JobSeekerProfile?
+  companyProfile   CompanyProfile?
   roles            UserRole[]
   refreshTokens    RefreshToken[]
 }
@@ -68,6 +68,20 @@ model JobSeekerProfile {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CompanyProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  name         String
+  contactEmail String
+  contactPhone String
+  location     String
+  description  String
+  logoUrl      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AdminUser {

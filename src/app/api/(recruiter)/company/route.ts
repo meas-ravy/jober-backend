@@ -1,0 +1,166 @@
+import { NextResponse } from "next/server";
+
+import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
+import prisma from "@/src/lib/prisma";
+import { RoleName } from "@/src/lib/role";
+
+function hasRecruiterRole(roles: RoleName[]): boolean {
+  return roles.includes("Recruiter");
+}
+
+export async function GET(request: Request) {
+  try {
+    const token = getBearerToken(request);
+    if (!token) {
+      return NextResponse.json(
+        { error: "Authorization token is required" },
+        { status: 401 },
+      );
+    }
+
+    let userId: string;
+    let roles: RoleName[];
+    try {
+      ({ userId, roles } = verifyAccessToken(token));
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Invalid access token";
+      return NextResponse.json({ error: message }, { status: 401 });
+    }
+
+    if (!hasRecruiterRole(roles)) {
+      return NextResponse.json(
+        { error: "Recruiter role required" },
+        { status: 403 },
+      );
+    }
+
+    const company = await prisma.companyProfile.findUnique({
+      where: { userId },
+      select: {
+        id: true,
+        name: true,
+        contactEmail: true,
+        contactPhone: true,
+        location: true,
+        description: true,
+        logoUrl: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return NextResponse.json({ company });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const token = getBearerToken(request);
+    if (!token) {
+      return NextResponse.json(
+        { error: "Authorization token is required" },
+        { status: 401 },
+      );
+    }
+
+    let userId: string;
+    let roles: RoleName[];
+    try {
+      ({ userId, roles } = verifyAccessToken(token));
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Invalid access token";
+      return NextResponse.json({ error: message }, { status: 401 });
+    }
+
+    if (!hasRecruiterRole(roles)) {
+      return NextResponse.json(
+        { error: "Recruiter role required" },
+        { status: 403 },
+      );
+    }
+
+    const body = await request.json();
+
+    const name = body.name;
+    const contactEmail = body.contactEmail;
+    const contactPhone = body.contactPhone;
+    const location = body.location;
+    const description = body.description;
+    const logoUrl = body.logoUrl;
+
+    if (typeof name !== "string" || name.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company name is required" },
+        { status: 400 },
+      );
+    }
+    if (typeof contactEmail !== "string" || contactEmail.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company email is required" },
+        { status: 400 },
+      );
+    }
+    if (typeof contactPhone !== "string" || contactPhone.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company phone is required" },
+        { status: 400 },
+      );
+    }
+    if (typeof location !== "string" || location.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company location is required" },
+        { status: 400 },
+      );
+    }
+    if (typeof description !== "string" || description.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company description is required" },
+        { status: 400 },
+      );
+    }
+    if (typeof logoUrl !== "string" || logoUrl.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Company logo URL is required" },
+        { status: 400 },
+      );
+    }
+
+    const updateData = {
+      name: name.trim(),
+      contactEmail: contactEmail.trim().toLowerCase(),
+      contactPhone: contactPhone.trim(),
+      location: location.trim(),
+      description: description.trim(),
+      logoUrl: logoUrl.trim(),
+    };
+
+    const existing = await prisma.companyProfile.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+
+    if (existing) {
+      return NextResponse.json(
+        { error: "Company profile already exists" },
+        { status: 409 },
+      );
+    }
+
+    const company = await prisma.companyProfile.create({
+      data: {
+        userId,
+        ...updateData,
+      },
+    });
+
+    return NextResponse.json({ success: true, company });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
