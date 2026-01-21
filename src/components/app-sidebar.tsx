@@ -16,12 +16,9 @@ import {
   SidebarRail,
 } from "@/src/components/ui/sidebar";
 import {
-  IconChartBar,
   IconDashboard,
-  IconFolder,
   IconHelp,
   IconListDetails,
-  IconSearch,
   IconSettings,
   IconUsers,
 } from "@tabler/icons-react";
@@ -41,21 +38,11 @@ const data = {
       url: "/admin/application",
       icon: IconListDetails,
     },
-    // {
-    //   title: "Analytics",
-    //   url: "#",
-    //   icon: IconChartBar,
-    // },
-    // {
-    //   title: "Projects",
-    //   url: "#",
-    //   icon: IconFolder,
-    // },
-    // {
-    //   title: "Team",
-    //   url: "#",
-    //   icon: IconUsers,
-    // },
+    {
+      title: "Users",
+      url: "/admin/users",
+      icon: IconUsers,
+    },
   ],
   navSecondary: [
     {

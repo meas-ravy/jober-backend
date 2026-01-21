@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
+
 import { LoginForm } from "@/src/components/login-form";
+
+export const metadata: Metadata = {
+  title: "Login - Jober",
+  description: "Sign in to the Jober admin dashboard.",
+};
 
 export default async function LoginPage() {
   return (

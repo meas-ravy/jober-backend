@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
+
 import { AppSidebar } from "@/src/components/app-sidebar";
 import { ChartAreaInteractive } from "@/src/app/(protect)/admin/dashboard/components/chart-areas";
 import { SectionCards } from "@/src/app/(protect)/admin/dashboard/components/section-card";
 import { SiteHeader } from "@/src/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
+
+export const metadata: Metadata = {
+  title: "Dashboard - Jober",
+  description: "Overview of job seekers, recruiters, jobs, and applications.",
+};
 
 export default function Dashboard() {
   return (
@@ -16,7 +23,7 @@ export default function Dashboard() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader />
+        <SiteHeader title="Dashboard" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
