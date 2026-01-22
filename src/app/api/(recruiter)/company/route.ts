@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
+import { validateCloudinaryUrl } from "@/src/lib/cloudinary";
 
 function hasRecruiterRole(roles: RoleName[]): boolean {
   return roles.includes("Recruiter");
@@ -126,6 +127,17 @@ export async function POST(request: Request) {
     if (typeof logoUrl !== "string" || logoUrl.trim().length === 0) {
       return NextResponse.json(
         { error: "Company logo URL is required" },
+        { status: 400 },
+      );
+    }
+
+    // Validate that the logoUrl is a valid Cloudinary URL
+    if (!validateCloudinaryUrl(logoUrl.trim(), "company-logo")) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid logo URL. Must be a valid Cloudinary URL from the company-logos folder",
+        },
         { status: 400 },
       );
     }

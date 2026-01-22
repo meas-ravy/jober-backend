@@ -54,19 +54,19 @@ export async function POST(request: Request) {
       select: { role: true },
     });
 
-    const hasRole = existingRoles.some(row => row.role === role);
-    if (!hasRole && existingRoles.length > 0) {
-      return NextResponse.json(
-        { error: "Role already selected" },
-        { status: 409 },
-      );
-    }
+    const hasRole = existingRoles.some((row) => row.role === role);
 
+    // If user already has this role, continue (idempotent)
+    // If user has a different role, switch to the new role
     if (!hasRole) {
-      await prisma.userRole.upsert({
-        where: { userId_role: { userId, role } },
-        update: {},
-        create: { userId, role },
+      // Delete all existing roles (user can only have one active role)
+      await prisma.userRole.deleteMany({
+        where: { userId },
+      });
+
+      // Create the new role
+      await prisma.userRole.create({
+        data: { userId, role },
       });
     }
 
