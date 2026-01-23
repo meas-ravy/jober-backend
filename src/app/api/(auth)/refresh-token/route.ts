@@ -1,10 +1,8 @@
 import { rotateRefreshToken } from "@/src/lib/jwt";
 import { NextResponse } from "next/server";
 
-/**
- * Refresh access token using refresh token
- * Returns new access token and refresh token pair
- */
+
+// api/refresh-token
 export async function POST(request: Request) {
   try {
     const body: unknown = await request.json().catch(() => null);

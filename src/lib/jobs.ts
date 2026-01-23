@@ -191,15 +191,17 @@ export function validateJobData(data: Partial<JobData>): ValidationResult {
     } else {
       const now = new Date();
       const minDeadline = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
-      const maxDeadline = new Date(
-        now.getTime() + 365 * 24 * 60 * 60 * 1000,
-      ); // 1 year from now
+      const maxDeadline = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year from now
 
       if (deadline < minDeadline) {
-        errors.push("Application deadline must be at least 24 hours in the future");
+        errors.push(
+          "Application deadline must be at least 24 hours in the future",
+        );
       }
       if (deadline > maxDeadline) {
-        errors.push("Application deadline must not exceed 1 year in the future");
+        errors.push(
+          "Application deadline must not exceed 1 year in the future",
+        );
       }
     }
   }
@@ -336,12 +338,12 @@ export function isValidJobCategory(value: unknown): value is JobCategory {
     "Media",
     "Other",
   ];
-  return typeof value === "string" && validCategories.includes(value as JobCategory);
+  return (
+    typeof value === "string" && validCategories.includes(value as JobCategory)
+  );
 }
 
-export function isValidEmploymentType(
-  value: unknown,
-): value is EmploymentType {
+export function isValidEmploymentType(value: unknown): value is EmploymentType {
   const validTypes: EmploymentType[] = [
     "FullTime",
     "PartTime",
@@ -349,7 +351,9 @@ export function isValidEmploymentType(
     "Internship",
     "Freelance",
   ];
-  return typeof value === "string" && validTypes.includes(value as EmploymentType);
+  return (
+    typeof value === "string" && validTypes.includes(value as EmploymentType)
+  );
 }
 
 export function isValidExperienceLevel(
@@ -362,7 +366,9 @@ export function isValidExperienceLevel(
     "Lead",
     "Executive",
   ];
-  return typeof value === "string" && validLevels.includes(value as ExperienceLevel);
+  return (
+    typeof value === "string" && validLevels.includes(value as ExperienceLevel)
+  );
 }
 
 export function isValidWorkArrangement(
@@ -370,7 +376,8 @@ export function isValidWorkArrangement(
 ): value is WorkArrangement {
   const validArrangements: WorkArrangement[] = ["OnSite", "Remote", "Hybrid"];
   return (
-    typeof value === "string" && validArrangements.includes(value as WorkArrangement)
+    typeof value === "string" &&
+    validArrangements.includes(value as WorkArrangement)
   );
 }
 
@@ -381,7 +388,9 @@ export function isValidSalaryType(value: unknown): value is SalaryType {
 
 export function isValidSalaryPeriod(value: unknown): value is SalaryPeriod {
   const validPeriods: SalaryPeriod[] = ["Hour", "Day", "Week", "Month", "Year"];
-  return typeof value === "string" && validPeriods.includes(value as SalaryPeriod);
+  return (
+    typeof value === "string" && validPeriods.includes(value as SalaryPeriod)
+  );
 }
 
 export function isValidJobStatus(value: unknown): value is JobStatus {
@@ -394,5 +403,7 @@ export function isValidJobStatus(value: unknown): value is JobStatus {
     "Closed",
     "Filled",
   ];
-  return typeof value === "string" && validStatuses.includes(value as JobStatus);
+  return (
+    typeof value === "string" && validStatuses.includes(value as JobStatus)
+  );
 }

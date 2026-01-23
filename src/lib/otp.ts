@@ -40,7 +40,7 @@ async function createOTP(phone: string): Promise<string> {
   }
 
   const otp = generateOTP();
-  const otpHash = hashOTP(otp, phone);
+  const otpHash = hashOTP(phone, otp);
 
   const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
 
