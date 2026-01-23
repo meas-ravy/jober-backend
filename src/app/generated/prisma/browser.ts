@@ -52,3 +52,8 @@ export type CompanyProfile = Prisma.CompanyProfileModel
  * 
  */
 export type AdminUser = Prisma.AdminUserModel
+/**
+ * Model Job
+ * 
+ */
+export type Job = Prisma.JobModel

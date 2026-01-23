@@ -252,6 +252,12 @@ User {
 | `/api/company` | GET/POST | ✅ Allowed |
 | `/api/profile` | GET/POST/PUT | ❌ Denied |
 
+   api/logout
+   api/refresh-token
+   api/sent-otp
+   api/verify-otp
+
+
 ### When Role = "Job_finder"
 
 | Endpoint | Method | Access |

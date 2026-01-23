@@ -57,7 +57,8 @@ export const ModelName = {
   PhoneOtp: 'PhoneOtp',
   JobSeekerProfile: 'JobSeekerProfile',
   CompanyProfile: 'CompanyProfile',
-  AdminUser: 'AdminUser'
+  AdminUser: 'AdminUser',
+  Job: 'Job'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -162,6 +163,45 @@ export const AdminUserScalarFieldEnum = {
 } as const
 
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
+
+
+export const JobScalarFieldEnum = {
+  id: 'id',
+  recruiterId: 'recruiterId',
+  companyProfileId: 'companyProfileId',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  category: 'category',
+  employmentType: 'employmentType',
+  experienceLevel: 'experienceLevel',
+  workArrangement: 'workArrangement',
+  salaryType: 'salaryType',
+  salaryMin: 'salaryMin',
+  salaryMax: 'salaryMax',
+  salaryFixed: 'salaryFixed',
+  salaryCurrency: 'salaryCurrency',
+  salaryPeriod: 'salaryPeriod',
+  requirements: 'requirements',
+  responsibilities: 'responsibilities',
+  benefits: 'benefits',
+  skills: 'skills',
+  applicationDeadline: 'applicationDeadline',
+  positionsAvailable: 'positionsAvailable',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  viewCount: 'viewCount',
+  applicationCount: 'applicationCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt',
+  closedAt: 'closedAt'
+} as const
+
+export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
 
 
 export const SortOrder = {

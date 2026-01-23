@@ -25,3 +25,93 @@ export const Gender = {
 } as const
 
 export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const JobCategory = {
+  Technology: 'Technology',
+  Healthcare: 'Healthcare',
+  Finance: 'Finance',
+  Education: 'Education',
+  Marketing: 'Marketing',
+  Sales: 'Sales',
+  Engineering: 'Engineering',
+  Design: 'Design',
+  CustomerService: 'CustomerService',
+  HumanResources: 'HumanResources',
+  Operations: 'Operations',
+  Legal: 'Legal',
+  Construction: 'Construction',
+  Retail: 'Retail',
+  Hospitality: 'Hospitality',
+  Manufacturing: 'Manufacturing',
+  Transportation: 'Transportation',
+  RealEstate: 'RealEstate',
+  Media: 'Media',
+  Other: 'Other'
+} as const
+
+export type JobCategory = (typeof JobCategory)[keyof typeof JobCategory]
+
+
+export const EmploymentType = {
+  FullTime: 'FullTime',
+  PartTime: 'PartTime',
+  Contract: 'Contract',
+  Internship: 'Internship',
+  Freelance: 'Freelance'
+} as const
+
+export type EmploymentType = (typeof EmploymentType)[keyof typeof EmploymentType]
+
+
+export const ExperienceLevel = {
+  Entry: 'Entry',
+  Mid: 'Mid',
+  Senior: 'Senior',
+  Lead: 'Lead',
+  Executive: 'Executive'
+} as const
+
+export type ExperienceLevel = (typeof ExperienceLevel)[keyof typeof ExperienceLevel]
+
+
+export const WorkArrangement = {
+  OnSite: 'OnSite',
+  Remote: 'Remote',
+  Hybrid: 'Hybrid'
+} as const
+
+export type WorkArrangement = (typeof WorkArrangement)[keyof typeof WorkArrangement]
+
+
+export const SalaryType = {
+  Range: 'Range',
+  Fixed: 'Fixed',
+  Negotiable: 'Negotiable'
+} as const
+
+export type SalaryType = (typeof SalaryType)[keyof typeof SalaryType]
+
+
+export const SalaryPeriod = {
+  Hour: 'Hour',
+  Day: 'Day',
+  Week: 'Week',
+  Month: 'Month',
+  Year: 'Year'
+} as const
+
+export type SalaryPeriod = (typeof SalaryPeriod)[keyof typeof SalaryPeriod]
+
+
+export const JobStatus = {
+  Draft: 'Draft',
+  Pending: 'Pending',
+  Rejected: 'Rejected',
+  Active: 'Active',
+  Paused: 'Paused',
+  Closed: 'Closed',
+  Filled: 'Filled'
+} as const
+
+export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]

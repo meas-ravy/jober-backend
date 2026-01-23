@@ -196,6 +196,152 @@ export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
 }
 
+export type EnumJobCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobCategory | Prisma.EnumJobCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel> | $Enums.JobCategory
+}
+
+export type EnumEmploymentTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmploymentType | Prisma.EnumEmploymentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel> | $Enums.EmploymentType
+}
+
+export type EnumExperienceLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExperienceLevel | Prisma.EnumExperienceLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel> | $Enums.ExperienceLevel
+}
+
+export type EnumWorkArrangementFilter<$PrismaModel = never> = {
+  equals?: $Enums.WorkArrangement | Prisma.EnumWorkArrangementFieldRefInput<$PrismaModel>
+  in?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel> | $Enums.WorkArrangement
+}
+
+export type EnumSalaryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryType | Prisma.EnumSalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel> | $Enums.SalaryType
+}
+
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumSalaryPeriodFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryPeriod | Prisma.EnumSalaryPeriodFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel> | $Enums.SalaryPeriod
+}
+
+export type EnumJobStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobStatus | Prisma.EnumJobStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobStatusFilter<$PrismaModel> | $Enums.JobStatus
+}
+
+export type EnumJobCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobCategory | Prisma.EnumJobCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobCategoryWithAggregatesFilter<$PrismaModel> | $Enums.JobCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel>
+}
+
+export type EnumEmploymentTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmploymentType | Prisma.EnumEmploymentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmploymentTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmploymentType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel>
+}
+
+export type EnumExperienceLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExperienceLevel | Prisma.EnumExperienceLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExperienceLevelWithAggregatesFilter<$PrismaModel> | $Enums.ExperienceLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel>
+}
+
+export type EnumWorkArrangementWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WorkArrangement | Prisma.EnumWorkArrangementFieldRefInput<$PrismaModel>
+  in?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWorkArrangementWithAggregatesFilter<$PrismaModel> | $Enums.WorkArrangement
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel>
+}
+
+export type EnumSalaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryType | Prisma.EnumSalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.SalaryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel>
+}
+
+export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumSalaryPeriodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryPeriod | Prisma.EnumSalaryPeriodFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryPeriodWithAggregatesFilter<$PrismaModel> | $Enums.SalaryPeriod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel>
+}
+
+export type EnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobStatus | Prisma.EnumJobStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.JobStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -389,6 +535,152 @@ export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type NestedEnumJobCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobCategory | Prisma.EnumJobCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel> | $Enums.JobCategory
+}
+
+export type NestedEnumEmploymentTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmploymentType | Prisma.EnumEmploymentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel> | $Enums.EmploymentType
+}
+
+export type NestedEnumExperienceLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExperienceLevel | Prisma.EnumExperienceLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel> | $Enums.ExperienceLevel
+}
+
+export type NestedEnumWorkArrangementFilter<$PrismaModel = never> = {
+  equals?: $Enums.WorkArrangement | Prisma.EnumWorkArrangementFieldRefInput<$PrismaModel>
+  in?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel> | $Enums.WorkArrangement
+}
+
+export type NestedEnumSalaryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryType | Prisma.EnumSalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel> | $Enums.SalaryType
+}
+
+export type NestedEnumSalaryPeriodFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryPeriod | Prisma.EnumSalaryPeriodFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel> | $Enums.SalaryPeriod
+}
+
+export type NestedEnumJobStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobStatus | Prisma.EnumJobStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobStatusFilter<$PrismaModel> | $Enums.JobStatus
+}
+
+export type NestedEnumJobCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobCategory | Prisma.EnumJobCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobCategory[] | Prisma.ListEnumJobCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobCategoryWithAggregatesFilter<$PrismaModel> | $Enums.JobCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobCategoryFilter<$PrismaModel>
+}
+
+export type NestedEnumEmploymentTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmploymentType | Prisma.EnumEmploymentTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmploymentType[] | Prisma.ListEnumEmploymentTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmploymentTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmploymentType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmploymentTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumExperienceLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExperienceLevel | Prisma.EnumExperienceLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExperienceLevel[] | Prisma.ListEnumExperienceLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExperienceLevelWithAggregatesFilter<$PrismaModel> | $Enums.ExperienceLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExperienceLevelFilter<$PrismaModel>
+}
+
+export type NestedEnumWorkArrangementWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WorkArrangement | Prisma.EnumWorkArrangementFieldRefInput<$PrismaModel>
+  in?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WorkArrangement[] | Prisma.ListEnumWorkArrangementFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWorkArrangementWithAggregatesFilter<$PrismaModel> | $Enums.WorkArrangement
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWorkArrangementFilter<$PrismaModel>
+}
+
+export type NestedEnumSalaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryType | Prisma.EnumSalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryType[] | Prisma.ListEnumSalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.SalaryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSalaryTypeFilter<$PrismaModel>
+}
+
+export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumSalaryPeriodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SalaryPeriod | Prisma.EnumSalaryPeriodFieldRefInput<$PrismaModel>
+  in?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SalaryPeriod[] | Prisma.ListEnumSalaryPeriodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSalaryPeriodWithAggregatesFilter<$PrismaModel> | $Enums.SalaryPeriod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSalaryPeriodFilter<$PrismaModel>
+}
+
+export type NestedEnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobStatus | Prisma.EnumJobStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.JobStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobStatusFilter<$PrismaModel>
 }
 
 

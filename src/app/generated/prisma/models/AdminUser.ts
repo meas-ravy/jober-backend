@@ -198,6 +198,7 @@ export type AdminUserWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
+  reviewedJobs?: Prisma.JobListRelationFilter
 }
 
 export type AdminUserOrderByWithRelationInput = {
@@ -208,6 +209,7 @@ export type AdminUserOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewedJobs?: Prisma.JobOrderByRelationAggregateInput
 }
 
 export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
@@ -221,6 +223,7 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
+  reviewedJobs?: Prisma.JobListRelationFilter
 }, "id" | "email">
 
 export type AdminUserOrderByWithAggregationInput = {
@@ -257,6 +260,7 @@ export type AdminUserCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
 }
 
 export type AdminUserUncheckedCreateInput = {
@@ -267,6 +271,7 @@ export type AdminUserUncheckedCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
 }
 
 export type AdminUserUpdateInput = {
@@ -277,6 +282,7 @@ export type AdminUserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
 }
 
 export type AdminUserUncheckedUpdateInput = {
@@ -287,6 +293,7 @@ export type AdminUserUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
 }
 
 export type AdminUserCreateManyInput = {
@@ -349,6 +356,112 @@ export type AdminUserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type AdminUserNullableScalarRelationFilter = {
+  is?: Prisma.AdminUserWhereInput | null
+  isNot?: Prisma.AdminUserWhereInput | null
+}
+
+export type AdminUserCreateNestedOneWithoutReviewedJobsInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedCreateWithoutReviewedJobsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutReviewedJobsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneWithoutReviewedJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedCreateWithoutReviewedJobsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutReviewedJobsInput
+  upsert?: Prisma.AdminUserUpsertWithoutReviewedJobsInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutReviewedJobsInput, Prisma.AdminUserUpdateWithoutReviewedJobsInput>, Prisma.AdminUserUncheckedUpdateWithoutReviewedJobsInput>
+}
+
+export type AdminUserCreateWithoutReviewedJobsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AdminUserUncheckedCreateWithoutReviewedJobsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AdminUserCreateOrConnectWithoutReviewedJobsInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedCreateWithoutReviewedJobsInput>
+}
+
+export type AdminUserUpsertWithoutReviewedJobsInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedUpdateWithoutReviewedJobsInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedCreateWithoutReviewedJobsInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutReviewedJobsInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutReviewedJobsInput, Prisma.AdminUserUncheckedUpdateWithoutReviewedJobsInput>
+}
+
+export type AdminUserUpdateWithoutReviewedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AdminUserUncheckedUpdateWithoutReviewedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type AdminUserCountOutputType
+ */
+
+export type AdminUserCountOutputType = {
+  reviewedJobs: number
+}
+
+export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reviewedJobs?: boolean | AdminUserCountOutputTypeCountReviewedJobsArgs
+}
+
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdminUserCountOutputType
+   */
+  select?: Prisma.AdminUserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountReviewedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
 
 
 export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -359,6 +472,8 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   avatarUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  reviewedJobs?: boolean | Prisma.AdminUser$reviewedJobsArgs<ExtArgs>
+  _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
 export type AdminUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -392,10 +507,18 @@ export type AdminUserSelectScalar = {
 }
 
 export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "avatarUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
+export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reviewedJobs?: boolean | Prisma.AdminUser$reviewedJobsArgs<ExtArgs>
+  _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type AdminUserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AdminUser"
-  objects: {}
+  objects: {
+    reviewedJobs: Prisma.$JobPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
@@ -798,6 +921,7 @@ readonly fields: AdminUserFieldRefs;
  */
 export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  reviewedJobs<T extends Prisma.AdminUser$reviewedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$reviewedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -851,6 +975,10 @@ export type AdminUserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * Filter, which AdminUser to fetch.
    */
   where: Prisma.AdminUserWhereUniqueInput
@@ -869,6 +997,10 @@ export type AdminUserFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * Filter, which AdminUser to fetch.
    */
   where: Prisma.AdminUserWhereUniqueInput
@@ -886,6 +1018,10 @@ export type AdminUserFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the AdminUser
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
   /**
    * Filter, which AdminUser to fetch.
    */
@@ -935,6 +1071,10 @@ export type AdminUserFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * Filter, which AdminUser to fetch.
    */
   where?: Prisma.AdminUserWhereInput
@@ -983,6 +1123,10 @@ export type AdminUserFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * Filter, which AdminUsers to fetch.
    */
   where?: Prisma.AdminUserWhereInput
@@ -1025,6 +1169,10 @@ export type AdminUserCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the AdminUser
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
   /**
    * The data needed to create a AdminUser.
    */
@@ -1073,6 +1221,10 @@ export type AdminUserUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the AdminUser
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
   /**
    * The data needed to update a AdminUser.
    */
@@ -1140,6 +1292,10 @@ export type AdminUserUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * The filter to search for the AdminUser to update in case it exists.
    */
   where: Prisma.AdminUserWhereUniqueInput
@@ -1166,6 +1322,10 @@ export type AdminUserDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  /**
    * Filter which AdminUser to delete.
    */
   where: Prisma.AdminUserWhereUniqueInput
@@ -1186,6 +1346,30 @@ export type AdminUserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * AdminUser.reviewedJobs
+ */
+export type AdminUser$reviewedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
  * AdminUser without action
  */
 export type AdminUserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1197,4 +1381,8 @@ export type AdminUserDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the AdminUser
    */
   omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
 }

@@ -223,6 +223,7 @@ export type CompanyProfileWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  jobs?: Prisma.JobListRelationFilter
 }
 
 export type CompanyProfileOrderByWithRelationInput = {
@@ -237,6 +238,7 @@ export type CompanyProfileOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  jobs?: Prisma.JobOrderByRelationAggregateInput
 }
 
 export type CompanyProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -254,6 +256,7 @@ export type CompanyProfileWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  jobs?: Prisma.JobListRelationFilter
 }, "id" | "userId">
 
 export type CompanyProfileOrderByWithAggregationInput = {
@@ -299,6 +302,7 @@ export type CompanyProfileCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUncheckedCreateInput = {
@@ -312,6 +316,7 @@ export type CompanyProfileUncheckedCreateInput = {
   logoUrl: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUpdateInput = {
@@ -325,6 +330,7 @@ export type CompanyProfileUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileUncheckedUpdateInput = {
@@ -338,6 +344,7 @@ export type CompanyProfileUncheckedUpdateInput = {
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileCreateManyInput = {
@@ -422,6 +429,11 @@ export type CompanyProfileMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type CompanyProfileScalarRelationFilter = {
+  is?: Prisma.CompanyProfileWhereInput
+  isNot?: Prisma.CompanyProfileWhereInput
+}
+
 export type CompanyProfileCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutUserInput, Prisma.CompanyProfileUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutUserInput
@@ -454,6 +466,20 @@ export type CompanyProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyProfileUpdateToOneWithWhereWithoutUserInput, Prisma.CompanyProfileUpdateWithoutUserInput>, Prisma.CompanyProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type CompanyProfileCreateNestedOneWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutJobsInput, Prisma.CompanyProfileUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutJobsInput
+  connect?: Prisma.CompanyProfileWhereUniqueInput
+}
+
+export type CompanyProfileUpdateOneRequiredWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutJobsInput, Prisma.CompanyProfileUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutJobsInput
+  upsert?: Prisma.CompanyProfileUpsertWithoutJobsInput
+  connect?: Prisma.CompanyProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyProfileUpdateToOneWithWhereWithoutJobsInput, Prisma.CompanyProfileUpdateWithoutJobsInput>, Prisma.CompanyProfileUncheckedUpdateWithoutJobsInput>
+}
+
 export type CompanyProfileCreateWithoutUserInput = {
   id?: string
   name: string
@@ -464,6 +490,7 @@ export type CompanyProfileCreateWithoutUserInput = {
   logoUrl: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUncheckedCreateWithoutUserInput = {
@@ -476,6 +503,7 @@ export type CompanyProfileUncheckedCreateWithoutUserInput = {
   logoUrl: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileCreateOrConnectWithoutUserInput = {
@@ -504,6 +532,7 @@ export type CompanyProfileUpdateWithoutUserInput = {
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileUncheckedUpdateWithoutUserInput = {
@@ -516,8 +545,106 @@ export type CompanyProfileUncheckedUpdateWithoutUserInput = {
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
 }
 
+export type CompanyProfileCreateWithoutJobsInput = {
+  id?: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+}
+
+export type CompanyProfileUncheckedCreateWithoutJobsInput = {
+  id?: string
+  userId: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CompanyProfileCreateOrConnectWithoutJobsInput = {
+  where: Prisma.CompanyProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutJobsInput, Prisma.CompanyProfileUncheckedCreateWithoutJobsInput>
+}
+
+export type CompanyProfileUpsertWithoutJobsInput = {
+  update: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutJobsInput, Prisma.CompanyProfileUncheckedUpdateWithoutJobsInput>
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutJobsInput, Prisma.CompanyProfileUncheckedCreateWithoutJobsInput>
+  where?: Prisma.CompanyProfileWhereInput
+}
+
+export type CompanyProfileUpdateToOneWithWhereWithoutJobsInput = {
+  where?: Prisma.CompanyProfileWhereInput
+  data: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutJobsInput, Prisma.CompanyProfileUncheckedUpdateWithoutJobsInput>
+}
+
+export type CompanyProfileUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileUncheckedUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type CompanyProfileCountOutputType
+ */
+
+export type CompanyProfileCountOutputType = {
+  jobs: number
+}
+
+export type CompanyProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  jobs?: boolean | CompanyProfileCountOutputTypeCountJobsArgs
+}
+
+/**
+ * CompanyProfileCountOutputType without action
+ */
+export type CompanyProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompanyProfileCountOutputType
+   */
+  select?: Prisma.CompanyProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CompanyProfileCountOutputType without action
+ */
+export type CompanyProfileCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
 
 
 export type CompanyProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -532,6 +659,8 @@ export type CompanyProfileSelect<ExtArgs extends runtime.Types.Extensions.Intern
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  jobs?: boolean | Prisma.CompanyProfile$jobsArgs<ExtArgs>
+  _count?: boolean | Prisma.CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companyProfile"]>
 
 export type CompanyProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -578,6 +707,8 @@ export type CompanyProfileSelectScalar = {
 export type CompanyProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "contactEmail" | "contactPhone" | "location" | "description" | "logoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["companyProfile"]>
 export type CompanyProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  jobs?: boolean | Prisma.CompanyProfile$jobsArgs<ExtArgs>
+  _count?: boolean | Prisma.CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -590,6 +721,7 @@ export type $CompanyProfilePayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "CompanyProfile"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    jobs: Prisma.$JobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -997,6 +1129,7 @@ readonly fields: CompanyProfileFieldRefs;
 export interface Prisma__CompanyProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  jobs<T extends Prisma.CompanyProfile$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyProfile$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1429,6 +1562,30 @@ export type CompanyProfileDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many CompanyProfiles to delete.
    */
   limit?: number
+}
+
+/**
+ * CompanyProfile.jobs
+ */
+export type CompanyProfile$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
 }
 
 /**

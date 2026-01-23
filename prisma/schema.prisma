@@ -16,6 +16,7 @@ model User {
   companyProfile   CompanyProfile?
   roles            UserRole[]
   refreshTokens    RefreshToken[]
+  postedJobs       Job[]             @relation("PostedJobs")
 }
 
 model UserRole {
@@ -82,6 +83,7 @@ model CompanyProfile {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs         Job[]
 }
 
 model AdminUser {
@@ -92,6 +94,7 @@ model AdminUser {
   avatarUrl    String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  reviewedJobs Job[]
 }
 
 enum RoleName {
@@ -104,4 +107,137 @@ enum Gender {
   Male
   Female
   Other
+}
+
+model Job {
+  id               String @id @default(cuid())
+  recruiterId      String
+  companyProfileId String
+
+  // Basic Info (ALL REQUIRED)
+  title       String
+  description String      @db.Text
+  location    String
+  category    JobCategory
+
+  // Job Details (REQUIRED)
+  employmentType  EmploymentType
+  experienceLevel ExperienceLevel
+  workArrangement WorkArrangement @default(OnSite)
+
+  // Salary (REQUIRED - but can be "Negotiable")
+  salaryType     SalaryType   @default(Range)
+  salaryMin      Int?
+  salaryMax      Int?
+  salaryFixed    Int?
+  salaryCurrency String       @default("USD")
+  salaryPeriod   SalaryPeriod @default(Year)
+
+  // Additional Details
+  requirements     String  @db.Text
+  responsibilities String  @db.Text
+  benefits         String? @db.Text
+  skills           String?
+
+  // Application (DEADLINE REQUIRED)
+  applicationDeadline DateTime
+  positionsAvailable  Int      @default(1)
+
+  // Status & Lifecycle
+  status JobStatus @default(Draft)
+
+  // Admin Approval
+  rejectionReason String?   @db.Text
+  submittedAt     DateTime?
+  reviewedAt      DateTime?
+  reviewedBy      String?
+
+  // Metadata
+  viewCount        Int       @default(0)
+  applicationCount Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  publishedAt      DateTime?
+  closedAt         DateTime?
+
+  // Relations
+  recruiter      User           @relation("PostedJobs", fields: [recruiterId], references: [id], onDelete: Cascade)
+  companyProfile CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+  reviewer       AdminUser?     @relation(fields: [reviewedBy], references: [id])
+
+  @@index([recruiterId])
+  @@index([companyProfileId])
+  @@index([status, publishedAt])
+  @@index([category])
+  @@index([employmentType])
+  @@index([experienceLevel])
+}
+
+enum JobCategory {
+  Technology
+  Healthcare
+  Finance
+  Education
+  Marketing
+  Sales
+  Engineering
+  Design
+  CustomerService
+  HumanResources
+  Operations
+  Legal
+  Construction
+  Retail
+  Hospitality
+  Manufacturing
+  Transportation
+  RealEstate
+  Media
+  Other
+}
+
+enum EmploymentType {
+  FullTime
+  PartTime
+  Contract
+  Internship
+  Freelance
+}
+
+enum ExperienceLevel {
+  Entry
+  Mid
+  Senior
+  Lead
+  Executive
+}
+
+enum WorkArrangement {
+  OnSite
+  Remote
+  Hybrid
+}
+
+enum SalaryType {
+  Range
+  Fixed
+  Negotiable
+}
+
+enum SalaryPeriod {
+  Hour
+  Day
+  Week
+  Month
+  Year
+}
+
+enum JobStatus {
+  Draft
+  Pending
+  Rejected
+  Active
+  Paused
+  Closed
+  Filled
 }
