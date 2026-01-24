@@ -432,10 +432,6 @@ export type JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSeekerProfileUpdateToOneWithWhereWithoutUserInput, Prisma.JobSeekerProfileUpdateWithoutUserInput>, Prisma.JobSeekerProfileUncheckedUpdateWithoutUserInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type EnumGenderFieldUpdateOperationsInput = {
   set?: $Enums.Gender
 }

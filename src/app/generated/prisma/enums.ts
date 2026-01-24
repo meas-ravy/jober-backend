@@ -27,6 +27,14 @@ export const Gender = {
 export type Gender = (typeof Gender)[keyof typeof Gender]
 
 
+export const OAuthProvider = {
+  Google: 'Google',
+  LinkedIn: 'LinkedIn'
+} as const
+
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider]
+
+
 export const JobCategory = {
   Technology: 'Technology',
   Healthcare: 'Healthcare',

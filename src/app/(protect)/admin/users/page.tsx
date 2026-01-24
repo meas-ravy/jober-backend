@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AppSidebar } from "@/src/components/app-sidebar";
 import { SiteHeader } from "@/src/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
 import {
   Card,
   CardContent,
@@ -8,69 +10,66 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
-import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
 import {
   type UserRow,
   UsersTable,
 } from "@/src/app/(protect)/admin/users/components/users-table";
+import { TableSkeleton } from "@/src/components/ui/table-skeleton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Users - Jober",
   description: "Manage job seekers and recruiters in one place.",
 };
 
-const users: UserRow[] = [
-  {
-    name: "Sok Dara",
-    email: "dara@jober.app",
-    phone: "+855 12 345 678",
-    role: "Job Seeker",
-    status: "Active",
-    joined: "Jun 12, 2024",
-  },
-  {
-    name: "Lina Phan",
-    email: "lina@brightway.co",
-    phone: "+855 77 913 222",
-    role: "Recruiter",
-    status: "Pending",
-    joined: "Jun 18, 2024",
-  },
-  {
-    name: "Vannak Lim",
-    email: "vannak@gmail.com",
-    phone: "+855 17 210 998",
-    role: "Job Seeker",
-    status: "Active",
-    joined: "Jun 21, 2024",
-  },
-  {
-    name: "Sreyneang Touch",
-    email: "sreyneang@tonica.io",
-    phone: "+855 15 601 431",
-    role: "Recruiter",
-    status: "Active",
-    joined: "Jun 25, 2024",
-  },
-  {
-    name: "Chenda Khiev",
-    email: "chenda@jober.app",
-    phone: "+855 96 880 112",
-    role: "Job Seeker",
-    status: "Suspended",
-    joined: "Jun 27, 2024",
-  },
-  {
-    name: "Rith Sok",
-    email: "rith@northstar.dev",
-    phone: "+855 10 522 884",
-    role: "Recruiter",
-    status: "Active",
-    joined: "Jun 30, 2024",
-  },
-];
+async function fetchUsers(): Promise<UserRow[]> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return [];
+    }
 
-export default function UsersPage() {
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/admin/users`, {
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+    return data.users || [];
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return [];
+  }
+}
+
+async function UsersContent() {
+  const users = await fetchUsers();
+  
+  return (
+    <Card>
+      <CardHeader className="border-b">
+        <CardTitle>User Directory</CardTitle>
+        <CardDescription>
+          Manage job seekers and recruiters. Filter by role, status, and search
+          by name, email, or phone.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="py-4">
+        <UsersTable data={users} />
+      </CardContent>
+    </Card>
+  );
+}
+
+export default async function UsersPage() {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || !session.user || session.user.role !== "Admin") {
+    redirect("/admin/login");
+  }
+
   return (
     <SidebarProvider
       style={
@@ -87,18 +86,9 @@ export default function UsersPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-                <Card>
-                  <CardHeader className="gap-2 border-b">
-                    <CardTitle>User Directory</CardTitle>
-                    <CardDescription>
-                      Filter by role, status, and search by name, email, or
-                      phone.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="py-4">
-                    <UsersTable data={users} />
-                  </CardContent>
-                </Card>
+                <Suspense fallback={<TableSkeleton />}>
+                  <UsersContent />
+                </Suspense>
               </div>
             </div>
           </div>

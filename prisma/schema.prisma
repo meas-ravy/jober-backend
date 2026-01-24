@@ -9,13 +9,16 @@ datasource db {
 
 model User {
   id               String            @id @default(cuid())
-  phone            String            @unique
+  phone            String?           @unique
+  email            String?           @unique
+  name             String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   jobSeekerProfile JobSeekerProfile?
   companyProfile   CompanyProfile?
   roles            UserRole[]
   refreshTokens    RefreshToken[]
+  oauthAccounts    OAuthAccount[]
   postedJobs       Job[]             @relation("PostedJobs")
   applications     JobApplication[]  @relation("JobApplications")
 }
@@ -108,6 +111,31 @@ enum Gender {
   Male
   Female
   Other
+}
+
+model OAuthAccount {
+  id                   String        @id @default(cuid())
+  userId               String
+  provider             OAuthProvider
+  providerId           String
+  email                String
+  name                 String?
+  avatarUrl            String?
+  providerAccessToken  String?       @db.Text
+  providerRefreshToken String?       @db.Text
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+enum OAuthProvider {
+  Google
+  LinkedIn
 }
 
 model Job {

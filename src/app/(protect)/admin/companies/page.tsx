@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import { Suspense } from "react";
 import { AppSidebar } from "@/src/components/app-sidebar";
 import { SiteHeader } from "@/src/components/site-header";
 import {
@@ -14,70 +14,62 @@ import {
   type CompanyRow,
   CompaniesTable,
 } from "@/src/app/(protect)/admin/companies/components/companies-table";
+import { TableSkeleton } from "@/src/components/ui/table-skeleton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Companies | Jober Admin",
   description: "Verify recruiter companies and moderate job postings.",
 };
 
-const companies: CompanyRow[] = [
-  {
-    name: "Brightway Co.",
-    contactEmail: "contact@brightway.co",
-    contactPhone: "+855 77 913 222",
-    recruiters: 5,
-    jobsActive: 18,
-    status: "Pending",
-    submitted: "Jun 12, 2024",
-  },
-  {
-    name: "Northstar Labs",
-    contactEmail: "hello@northstar.dev",
-    contactPhone: "+855 10 522 884",
-    recruiters: 3,
-    jobsActive: 7,
-    status: "Verified",
-    submitted: "Jun 14, 2024",
-  },
-  {
-    name: "Tonica Studio",
-    contactEmail: "team@tonica.io",
-    contactPhone: "+855 15 601 431",
-    recruiters: 2,
-    jobsActive: 3,
-    status: "Verified",
-    submitted: "Jun 20, 2024",
-  },
-  {
-    name: "Evergreen Retail",
-    contactEmail: "jobs@evergreen.asia",
-    contactPhone: "+855 96 880 112",
-    recruiters: 4,
-    jobsActive: 10,
-    status: "Rejected",
-    submitted: "Jun 22, 2024",
-  },
-  {
-    name: "Sunrise Digital",
-    contactEmail: "careers@sunrise.digital",
-    contactPhone: "+855 12 345 678",
-    recruiters: 6,
-    jobsActive: 14,
-    status: "Pending",
-    submitted: "Jun 25, 2024",
-  },
-  {
-    name: "Jober Labs",
-    contactEmail: "admin@jober.app",
-    contactPhone: "+855 17 210 998",
-    recruiters: 2,
-    jobsActive: 5,
-    status: "Verified",
-    submitted: "Jun 28, 2024",
-  },
-];
+async function fetchCompanies(): Promise<CompanyRow[]> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return [];
+    }
 
-export default function CompaniesPage() {
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/admin/companies`, {
+      cache: "no-store",
+    });
+
+
+    const data = await res.json();
+    return data.companies || [];
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+    return [];
+  }
+}
+
+async function CompaniesContent() {
+  const companies = await fetchCompanies();
+  
+  return (
+    <Card>
+      <CardHeader className="border-b">
+        <CardTitle>Company Verification</CardTitle>
+        <CardDescription>
+          Review recruiter companies, verify profiles, and monitor active jobs.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="py-4">
+        <CompaniesTable data={companies} />
+      </CardContent>
+    </Card>
+  );
+}
+
+export default async function CompaniesPage() {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || !session.user || session.user.role !== "Admin") {
+    redirect("/admin/login");
+  }
+
   return (
     <SidebarProvider
       style={
@@ -94,18 +86,9 @@ export default function CompaniesPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-                <Card>
-                  <CardHeader className="gap-2 border-b">
-                    <CardTitle>Company Verification</CardTitle>
-                    <CardDescription>
-                      Review recruiter companies, verify profiles, and monitor
-                      active jobs.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="py-4">
-                    <CompaniesTable data={companies} />
-                  </CardContent>
-                </Card>
+                <Suspense fallback={<TableSkeleton />}>
+                  <CompaniesContent />
+                </Suspense>
               </div>
             </div>
           </div>

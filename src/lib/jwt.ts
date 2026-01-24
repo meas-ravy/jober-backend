@@ -86,4 +86,21 @@ async function revokeRefreshToken(refreshToken: string): Promise<boolean> {
   return result.count > 0;
 }
 
+export async function verifyAccessToken(
+  accessToken: string,
+): Promise<{ userId: string; roles: RoleName[] }> {
+  const secret = process.env.JWT_ACCESS_SECRET;
+  const decoded = jwt.verify(accessToken, secret!) as {
+    sub: string;
+    roles: unknown[];
+  };
+
+  const roles = decoded.roles.filter(isRoleName);
+
+  return {
+    userId: decoded.sub,
+    roles,
+  };
+}
+
 export { issueTokensForUser, revokeRefreshToken };

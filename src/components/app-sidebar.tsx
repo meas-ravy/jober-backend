@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Frame, Map, PieChart } from "lucide-react";
 import { NavMain } from "@/src/components/nav-main";
-import { NavProjects } from "@/src/components/nav-projects";
 import { NavUser } from "@/src/components/nav-user";
 import {
   Sidebar,
@@ -19,14 +17,13 @@ import {
   IconBuildingStore,
   IconDashboard,
   IconHelp,
+  IconBriefcase,
   IconListDetails,
   IconSettings,
   IconUsers,
 } from "@tabler/icons-react";
 import { NavSecondary } from "./nav-seconary";
 
-// This is sample data.
-//src\app\(protect)\admin\application
 const data = {
   navMain: [
     {
@@ -35,7 +32,12 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Application",
+      title: "Jobs",
+      url: "/admin/jobs",
+      icon: IconBriefcase,
+    },
+    {
+      title: "Applications",
       url: "/admin/application",
       icon: IconListDetails,
     },
@@ -62,23 +64,6 @@ const data = {
       icon: IconHelp,
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -93,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <img
                 src="/image/app_background.png"
-                alt="Jobber"
+                alt="Jober"
                 className="size-11"
               />
               <span className="text-base font-semibold">Jober</span>
@@ -103,7 +88,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

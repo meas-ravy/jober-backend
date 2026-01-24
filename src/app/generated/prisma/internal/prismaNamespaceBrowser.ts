@@ -58,6 +58,7 @@ export const ModelName = {
   JobSeekerProfile: 'JobSeekerProfile',
   CompanyProfile: 'CompanyProfile',
   AdminUser: 'AdminUser',
+  OAuthAccount: 'OAuthAccount',
   Job: 'Job',
   JobApplication: 'JobApplication'
 } as const
@@ -81,6 +82,8 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   phone: 'phone',
+  email: 'email',
+  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -164,6 +167,23 @@ export const AdminUserScalarFieldEnum = {
 } as const
 
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
+
+
+export const OAuthAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  providerId: 'providerId',
+  email: 'email',
+  name: 'name',
+  avatarUrl: 'avatarUrl',
+  providerAccessToken: 'providerAccessToken',
+  providerRefreshToken: 'providerRefreshToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[keyof typeof OAuthAccountScalarFieldEnum]
 
 
 export const JobScalarFieldEnum = {

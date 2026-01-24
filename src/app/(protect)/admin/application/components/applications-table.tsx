@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import {
+  type Column,
   type ColumnDef,
   type ColumnFiltersState,
   type FilterFn,
   type SortingState,
-  type Column,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -22,6 +22,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   ChevronsUpDown,
+  ExternalLink,
   Search,
 } from "lucide-react";
 
@@ -43,69 +44,61 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { UserAvatar } from "@/src/components/ui/user-avatar";
-import { UserDetailDialog } from "./user-detail-dialog";
 
-export type UserRow = {
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: "Job Seeker" | "Recruiter";
-  status: "Active" | "Pending" | "Suspended";
-  joined: string;
+export type ApplicationRow = {
+  id: string;
+  applicantName: string;
+  applicantEmail: string;
+  jobTitle: string;
+  company: string;
+  status:
+    | "Submitted"
+    | "UnderReview"
+    | "Shortlisted"
+    | "Rejected"
+    | "Hired"
+    | "Withdrawn";
+  submittedAt: string;
+  resumeUrl: string;
 };
 
-const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
+const globalApplicationFilter: FilterFn<ApplicationRow> = (
+  row,
+  _columnId,
+  filterValue,
+) => {
   const search = String(filterValue).toLowerCase().trim();
   if (!search) return true;
-  const { name, email, phone } = row.original;
-  return [name, email, phone].some(value =>
+  const { applicantName, applicantEmail, jobTitle, company } = row.original;
+  return [applicantName, applicantEmail, jobTitle, company].some((value) =>
     value.toLowerCase().includes(search),
   );
 };
 
-const createColumns = (
-  onViewUser: (user: UserRow) => void,
-): ColumnDef<UserRow>[] => [
+const columns: ColumnDef<ApplicationRow>[] = [
   {
-    id: "user",
-    header: "User",
-    accessorFn: row => row.name,
+    id: "applicant",
+    header: "Applicant",
+    accessorFn: (row) => row.applicantName,
     cell: ({ row }) => (
-      <div className="flex items-center gap-3">
-        <UserAvatar name={row.original.name} className="h-10 w-10" />
-        <div className="flex flex-col">
-          <span className="font-medium">{row.original.name}</span>
-          <span className="text-muted-foreground text-xs">
-            {row.original.email}
-          </span>
-        </div>
+      <div className="flex flex-col">
+        <span className="font-medium">{row.original.applicantName}</span>
+        <span className="text-muted-foreground text-xs">
+          {row.original.applicantEmail}
+        </span>
       </div>
     ),
   },
   {
-    accessorKey: "phone",
-    header: "Phone",
+    accessorKey: "jobTitle",
+    header: "Job Title",
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.phone}</span>
-    ),
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-    filterFn: "equalsString",
-    cell: ({ row }) => (
-      <Badge
-        variant="outline"
-        className={
-          row.original.role === "Recruiter"
-            ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-            : "border-purple-500 bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300"
-        }
-      >
-        {row.original.role}
-      </Badge>
+      <div className="flex flex-col">
+        <span className="font-medium">{row.original.jobTitle}</span>
+        <span className="text-muted-foreground text-xs">
+          {row.original.company}
+        </span>
+      </div>
     ),
   },
   {
@@ -118,37 +111,45 @@ const createColumns = (
         <Badge
           variant="outline"
           className={
-            status === "Active"
+            status === "Hired"
               ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-              : status === "Pending"
-                ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-                : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+              : status === "Shortlisted"
+                ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                : status === "UnderReview"
+                  ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
+                  : status === "Rejected" || status === "Withdrawn"
+                    ? "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                    : "border-gray-500 bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300"
           }
         >
-          {status}
+          {status === "UnderReview" ? "Under Review" : status}
         </Badge>
       );
     },
   },
   {
-    id: "joined",
-    header: "Joined",
-    accessorFn: row => new Date(row.joined).getTime(),
+    id: "submittedAt",
+    header: "Submitted",
+    accessorFn: (row) => new Date(row.submittedAt).getTime(),
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.joined}</span>
+      <span className="text-muted-foreground">{row.original.submittedAt}</span>
     ),
   },
   {
     id: "actions",
-    header: () => <div className="text-right">Action</div>,
+    header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
     cell: ({ row }) => (
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onViewUser(row.original)}
+          onClick={() => window.open(row.original.resumeUrl, "_blank")}
         >
+          <ExternalLink className="mr-1 size-3" />
+          Resume
+        </Button>
+        <Button variant="ghost" size="sm">
           View
         </Button>
       </div>
@@ -156,15 +157,15 @@ const createColumns = (
   },
 ];
 
-type UsersTableProps = {
-  data: UserRow[];
+type ApplicationsTableProps = {
+  data: ApplicationRow[];
 };
 
 function SortableHeader({
   column,
   label,
 }: {
-  column: Column<UserRow, unknown>;
+  column: Column<ApplicationRow, unknown>;
   label: string;
 }) {
   if (!column.getCanSort()) {
@@ -191,7 +192,7 @@ function SortableHeader({
   );
 }
 
-export function UsersTable({ data }: UsersTableProps) {
+export function ApplicationsTable({ data }: ApplicationsTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -199,17 +200,8 @@ export function UsersTable({ data }: UsersTableProps) {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 8,
+    pageSize: 10,
   });
-  const [selectedUser, setSelectedUser] = React.useState<UserRow | null>(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const handleViewUser = (user: UserRow) => {
-    setSelectedUser(user);
-    setDialogOpen(true);
-  };
-
-  const columns = React.useMemo(() => createColumns(handleViewUser), []);
 
   const table = useReactTable({
     data,
@@ -228,10 +220,9 @@ export function UsersTable({ data }: UsersTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    globalFilterFn: globalUserFilter,
+    globalFilterFn: globalApplicationFilter,
   });
 
-  const roleValue = (table.getColumn("role")?.getFilterValue() as string) ?? "";
   const statusValue =
     (table.getColumn("status")?.getFilterValue() as string) ?? "";
   const totalRows = table.getFilteredRowModel().rows.length;
@@ -241,19 +232,13 @@ export function UsersTable({ data }: UsersTableProps) {
   const endRow = Math.min(totalRows, (pageIndex + 1) * pageSize);
 
   return (
-    <>
-      <UserDetailDialog
-        user={selectedUser}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
-      <div className="space-y-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Input
-            placeholder="Search users"
+            placeholder="Search applications"
             value={globalFilter ?? ""}
-            onChange={event => setGlobalFilter(event.target.value)}
+            onChange={(event) => setGlobalFilter(event.target.value)}
             className="pl-9"
           />
           <div className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2">
@@ -261,25 +246,8 @@ export function UsersTable({ data }: UsersTableProps) {
           </div>
         </div>
         <Select
-          value={roleValue || "all-roles"}
-          onValueChange={value => {
-            table
-              .getColumn("role")
-              ?.setFilterValue(value === "all-roles" ? "" : value);
-          }}
-        >
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all-roles">All roles</SelectItem>
-            <SelectItem value="Job Seeker">Job Seeker</SelectItem>
-            <SelectItem value="Recruiter">Recruiter</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
           value={statusValue || "all-status"}
-          onValueChange={value => {
+          onValueChange={(value) => {
             table
               .getColumn("status")
               ?.setFilterValue(value === "all-status" ? "" : value);
@@ -290,9 +258,12 @@ export function UsersTable({ data }: UsersTableProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all-status">All status</SelectItem>
-            <SelectItem value="Active">Active</SelectItem>
-            <SelectItem value="Pending">Pending</SelectItem>
-            <SelectItem value="Suspended">Suspended</SelectItem>
+            <SelectItem value="Submitted">Submitted</SelectItem>
+            <SelectItem value="UnderReview">Under Review</SelectItem>
+            <SelectItem value="Shortlisted">Shortlisted</SelectItem>
+            <SelectItem value="Rejected">Rejected</SelectItem>
+            <SelectItem value="Hired">Hired</SelectItem>
+            <SelectItem value="Withdrawn">Withdrawn</SelectItem>
           </SelectContent>
         </Select>
         <Button
@@ -309,21 +280,19 @@ export function UsersTable({ data }: UsersTableProps) {
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
+                {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : header.column.id ===
-                      "user" ? (
-                      <SortableHeader column={header.column} label="User" />
-                    ) : header.column.id === "phone" ? (
-                      <SortableHeader column={header.column} label="Phone" />
-                    ) : header.column.id === "role" ? (
-                      <SortableHeader column={header.column} label="Role" />
+                      "applicant" ? (
+                      <SortableHeader column={header.column} label="Applicant" />
+                    ) : header.column.id === "jobTitle" ? (
+                      <SortableHeader column={header.column} label="Job Title" />
                     ) : header.column.id === "status" ? (
                       <SortableHeader column={header.column} label="Status" />
-                    ) : header.column.id === "joined" ? (
-                      <SortableHeader column={header.column} label="Joined" />
+                    ) : header.column.id === "submittedAt" ? (
+                      <SortableHeader column={header.column} label="Submitted" />
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -337,9 +306,9 @@ export function UsersTable({ data }: UsersTableProps) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
-                  {row.getVisibleCells().map(cell => (
+                  {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -355,7 +324,7 @@ export function UsersTable({ data }: UsersTableProps) {
                   colSpan={columns.length}
                   className="py-6 text-center"
                 >
-                  No users found.
+                  No applications found.
                 </TableCell>
               </TableRow>
             )}
@@ -413,7 +382,6 @@ export function UsersTable({ data }: UsersTableProps) {
           </Button>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 }

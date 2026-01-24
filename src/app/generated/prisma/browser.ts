@@ -53,6 +53,11 @@ export type CompanyProfile = Prisma.CompanyProfileModel
  */
 export type AdminUser = Prisma.AdminUserModel
 /**
+ * Model OAuthAccount
+ * 
+ */
+export type OAuthAccount = Prisma.OAuthAccountModel
+/**
  * Model Job
  * 
  */

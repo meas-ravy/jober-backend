@@ -4,6 +4,8 @@ import prisma from "@/src/lib/prisma";
 import { isRoleName } from "@/src/lib/role";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 
+// src/app/api/select-role/route.ts
+
 export async function POST(request: Request) {
   try {
     const token = getBearerToken(request);

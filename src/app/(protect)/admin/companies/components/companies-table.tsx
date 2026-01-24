@@ -43,8 +43,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
+import { CompanyDetailDialog } from "./company-detail-dialog";
 
 export type CompanyRow = {
+  id?: string;
   name: string;
   contactEmail: string;
   contactPhone: string;
@@ -67,7 +69,9 @@ const globalCompanyFilter: FilterFn<CompanyRow> = (
   );
 };
 
-const columns: ColumnDef<CompanyRow>[] = [
+const createColumns = (
+  onReviewCompany: (company: CompanyRow) => void,
+): ColumnDef<CompanyRow>[] => [
   {
     id: "company",
     header: "Company",
@@ -100,19 +104,23 @@ const columns: ColumnDef<CompanyRow>[] = [
     accessorKey: "status",
     header: "Status",
     filterFn: "equalsString",
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.status === "Rejected"
-            ? "destructive"
-            : row.original.status === "Pending"
-              ? "outline"
-              : "secondary"
-        }
-      >
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const status = row.original.status;
+      return (
+        <Badge
+          variant="outline"
+          className={
+            status === "Verified"
+              ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+              : status === "Pending"
+                ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
+                : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+          }
+        >
+          {status}
+        </Badge>
+      );
+    },
   },
   {
     id: "submitted",
@@ -126,9 +134,13 @@ const columns: ColumnDef<CompanyRow>[] = [
     id: "actions",
     header: () => <div className="text-right">Action</div>,
     enableSorting: false,
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex justify-end">
-        <Button variant="ghost" size="sm">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onReviewCompany(row.original)}
+        >
           Review
         </Button>
       </div>
@@ -181,6 +193,16 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
+  const [selectedCompany, setSelectedCompany] =
+    React.useState<CompanyRow | null>(null);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleReviewCompany = (company: CompanyRow) => {
+    setSelectedCompany(company);
+    setDialogOpen(true);
+  };
+
+  const columns = React.useMemo(() => createColumns(handleReviewCompany), []);
 
   const table = useReactTable({
     data,
@@ -211,8 +233,14 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
   const endRow = Math.min(totalRows, (pageIndex + 1) * pageSize);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+    <>
+      <CompanyDetailDialog
+        company={selectedCompany}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+      <div className="space-y-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Input
             placeholder="Search companies"
@@ -371,6 +399,7 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
