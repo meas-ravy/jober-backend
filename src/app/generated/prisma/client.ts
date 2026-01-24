@@ -79,3 +79,8 @@ export type AdminUser = Prisma.AdminUserModel
  * 
  */
 export type Job = Prisma.JobModel
+/**
+ * Model JobApplication
+ * 
+ */
+export type JobApplication = Prisma.JobApplicationModel

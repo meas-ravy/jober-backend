@@ -249,6 +249,7 @@ Content-Type: application/json
 1. ✅ `src/lib/otp.ts` - Fixed parameter order bug
 2. ✅ `src/app/api/(auth)/verify-otp/route.ts` - Added refresh token, validation, better errors
 3. ✅ `src/app/api/(auth)/sent-otp/route.ts` - Added validation, better errors, SMS error handling
+4. ✅ `src/app/api/(auth)/resend-otp/route.ts` - New endpoint for resending OTP
 
 ---
 
@@ -256,9 +257,18 @@ Content-Type: application/json
 
 Your OTP authentication flow is now fully functional! Users can:
 1. ✅ Request OTP with valid Cambodian phone numbers (+855)
-2. ✅ Verify OTP and receive both access + refresh tokens
-3. ✅ Get clear error messages when something goes wrong
-4. ✅ Be protected from rate limiting abuse
+2. ✅ Resend OTP if they didn't receive it or it expired
+3. ✅ Verify OTP and receive both access + refresh tokens
+4. ✅ Get clear error messages when something goes wrong
+5. ✅ Be protected from rate limiting abuse
+
+## Available OTP Endpoints
+
+1. **`POST /api/sent-otp`** - Initial OTP request
+2. **`POST /api/resend-otp`** - Resend OTP (invalidates previous OTP)
+3. **`POST /api/verify-otp`** - Verify OTP and authenticate
+
+See [RESEND_OTP_GUIDE.md](./RESEND_OTP_GUIDE.md) for detailed documentation on the resend endpoint.
 
 ## Phone Number Requirements
 

@@ -16,14 +16,16 @@ export const IMAGE_UPLOAD_CONFIG = {
   FOLDERS: {
     COMPANY_LOGO: "company-logos",
     JOB_SEEKER_AVATAR: "job-seeker-avatars",
+    RESUME: "resumes",
   },
   TRANSFORMATIONS: {
     COMPANY_LOGO: "c_limit,w_1000,h_1000,q_auto,f_auto",
     JOB_SEEKER_AVATAR: "c_limit,w_1000,h_1000,q_auto,f_auto",
+    RESUME: "q_auto,f_auto",
   },
 } as const;
 
-export type ImageType = "company-logo" | "job-seeker-avatar";
+export type ImageType = "company-logo" | "job-seeker-avatar" | "resume";
 
 interface UploadSignatureParams {
   timestamp: number;
@@ -52,12 +54,16 @@ export function generateUploadSignature(
   const folder =
     imageType === "company-logo"
       ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
-      : IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR;
+      : imageType === "job-seeker-avatar"
+      ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+      : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
   const transformation =
     imageType === "company-logo"
       ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.COMPANY_LOGO
-      : IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_SEEKER_AVATAR;
+      : imageType === "job-seeker-avatar"
+      ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_SEEKER_AVATAR
+      : IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.RESUME;
 
   // Parameters to sign
   const paramsToSign: UploadSignatureParams = {
@@ -112,7 +118,9 @@ export function validateCloudinaryUrl(
     const expectedFolder =
       imageType === "company-logo"
         ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
-        : IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR;
+        : imageType === "job-seeker-avatar"
+        ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+        : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
     if (!url.includes(`/${expectedFolder}/`)) {
       return false;

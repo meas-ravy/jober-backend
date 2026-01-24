@@ -17,6 +17,7 @@ model User {
   roles            UserRole[]
   refreshTokens    RefreshToken[]
   postedJobs       Job[]             @relation("PostedJobs")
+  applications     JobApplication[]  @relation("JobApplications")
 }
 
 model UserRole {
@@ -161,9 +162,10 @@ model Job {
   closedAt         DateTime?
 
   // Relations
-  recruiter      User           @relation("PostedJobs", fields: [recruiterId], references: [id], onDelete: Cascade)
-  companyProfile CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
-  reviewer       AdminUser?     @relation(fields: [reviewedBy], references: [id])
+  recruiter      User             @relation("PostedJobs", fields: [recruiterId], references: [id], onDelete: Cascade)
+  companyProfile CompanyProfile   @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+  reviewer       AdminUser?       @relation(fields: [reviewedBy], references: [id])
+  applications   JobApplication[]
 
   @@index([recruiterId])
   @@index([companyProfileId])
@@ -240,4 +242,41 @@ enum JobStatus {
   Paused
   Closed
   Filled
+}
+
+model JobApplication {
+  id          String @id @default(cuid())
+  jobId       String
+  jobSeekerId String
+
+  // Application Data
+  resumeUrl   String // Cloudinary URL (required)
+  coverLetter String? @db.Text
+
+  // Status & Tracking
+  status         ApplicationStatus @default(Submitted)
+  recruiterNotes String?           @db.Text
+
+  // Timestamps
+  submittedAt DateTime  @default(now())
+  reviewedAt  DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  job       Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobSeeker User @relation("JobApplications", fields: [jobSeekerId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, status])
+  @@index([jobSeekerId, status])
+  @@index([status])
+  @@index([submittedAt])
+}
+
+enum ApplicationStatus {
+  Submitted
+  UnderReview
+  Shortlisted
+  Rejected
+  Hired
+  Withdrawn
 }
