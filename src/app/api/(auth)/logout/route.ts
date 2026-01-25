@@ -3,6 +3,8 @@ import { revokeAccessToken } from "@/src/lib/jwt";
 import { revokeAllUserOAuthTokens } from "@/src/lib/oauth";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 
 export async function POST(request: Request) {
   try {

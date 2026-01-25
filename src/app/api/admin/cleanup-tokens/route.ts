@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
 import { cleanupRevokedTokens } from "@/src/lib/jwt";
 
-/**
- * Admin endpoint to manually trigger token cleanup
- * This can be called via cron job or manually
- * 
- * Usage:
- * POST /api/admin/cleanup-tokens
- * 
- * Optional: Add authentication/authorization for production
- */
+// Force Node.js runtime (required for Prisma and crypto)
+export const runtime = "nodejs";
+
 export async function POST() {
   try {
     const deletedCount = await cleanupRevokedTokens();

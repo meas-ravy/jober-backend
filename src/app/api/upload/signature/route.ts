@@ -7,6 +7,8 @@ import {
 } from "@/src/lib/cloudinary";
 import { RoleName } from "@/src/lib/role";
 
+export const runtime = "nodejs";
+
 // Simple in-memory rate limiter
 // In production, use Redis or a proper rate limiting solution
 const rateLimitMap = new Map<

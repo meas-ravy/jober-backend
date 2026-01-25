@@ -4,11 +4,14 @@
  * https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
  */
 
-import { runStartupTasks, schedulePeriodicCleanup } from "./src/lib/startup";
-
 export async function register() {
-  // Only run on the server side
+  // Only run on the server side (Node.js runtime, not Edge)
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    // Use dynamic import to avoid loading Node.js modules in Edge Runtime
+    const { runStartupTasks, schedulePeriodicCleanup } = await import(
+      "./src/lib/startup"
+    );
+
     // Run startup tasks
     await runStartupTasks();
 

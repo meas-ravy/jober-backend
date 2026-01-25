@@ -3,6 +3,8 @@ import { verifyAndConsumeOTP } from "@/src/lib/otp";
 import prisma from "@/src/lib/prisma";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 
 function isValidCambodianPhone(phone: string): boolean {
   const phoneRegex = /^\+855\d{8,9}$/;

@@ -11,6 +11,8 @@ import { issueTokensForUser } from "@/src/lib/jwt";
 import prisma from "@/src/lib/prisma";
 import { OAuthProvider } from "@/src/app/generated/prisma/client";
 
+export const runtime = "nodejs";
+
 interface OAuthRequestBody {
   provider?: unknown;
   idToken?: unknown;

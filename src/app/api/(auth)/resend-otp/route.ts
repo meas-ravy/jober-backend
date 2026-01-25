@@ -2,6 +2,8 @@ import { createOTP } from "@/src/lib/otp";
 import { sendOTP } from "@/src/lib/plategate";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 function isValidCambodianPhone(phone: string): boolean {
   const phoneRegex = /^\+855\d{8,9}$/;
   return phoneRegex.test(phone);

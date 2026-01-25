@@ -5,6 +5,8 @@ import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
 import { validateCloudinaryUrl } from "@/src/lib/cloudinary";
 
+export const runtime = "nodejs";
+
 function hasJobFinderRole(roles: RoleName[]): boolean {
   return roles.includes("Job_finder");
 }

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
+
+export const runtime = "nodejs";
 import {
   validateJobData,
   canRecruiterManageJob,

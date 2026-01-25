@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 
+export const runtime = "nodejs";
+
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> },
