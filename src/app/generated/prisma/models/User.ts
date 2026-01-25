@@ -193,7 +193,6 @@ export type UserWhereInput = {
   jobSeekerProfile?: Prisma.XOR<Prisma.JobSeekerProfileNullableScalarRelationFilter, Prisma.JobSeekerProfileWhereInput> | null
   companyProfile?: Prisma.XOR<Prisma.CompanyProfileNullableScalarRelationFilter, Prisma.CompanyProfileWhereInput> | null
   roles?: Prisma.UserRoleListRelationFilter
-  refreshTokens?: Prisma.RefreshTokenListRelationFilter
   oauthAccounts?: Prisma.OAuthAccountListRelationFilter
   postedJobs?: Prisma.JobListRelationFilter
   applications?: Prisma.JobApplicationListRelationFilter
@@ -209,7 +208,6 @@ export type UserOrderByWithRelationInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileOrderByWithRelationInput
   companyProfile?: Prisma.CompanyProfileOrderByWithRelationInput
   roles?: Prisma.UserRoleOrderByRelationAggregateInput
-  refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   oauthAccounts?: Prisma.OAuthAccountOrderByRelationAggregateInput
   postedJobs?: Prisma.JobOrderByRelationAggregateInput
   applications?: Prisma.JobApplicationOrderByRelationAggregateInput
@@ -228,7 +226,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   jobSeekerProfile?: Prisma.XOR<Prisma.JobSeekerProfileNullableScalarRelationFilter, Prisma.JobSeekerProfileWhereInput> | null
   companyProfile?: Prisma.XOR<Prisma.CompanyProfileNullableScalarRelationFilter, Prisma.CompanyProfileWhereInput> | null
   roles?: Prisma.UserRoleListRelationFilter
-  refreshTokens?: Prisma.RefreshTokenListRelationFilter
   oauthAccounts?: Prisma.OAuthAccountListRelationFilter
   postedJobs?: Prisma.JobListRelationFilter
   applications?: Prisma.JobApplicationListRelationFilter
@@ -268,7 +265,6 @@ export type UserCreateInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
@@ -284,7 +280,6 @@ export type UserUncheckedCreateInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
@@ -300,7 +295,6 @@ export type UserUpdateInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
@@ -316,7 +310,6 @@ export type UserUncheckedUpdateInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
@@ -407,20 +400,6 @@ export type UserUpdateOneRequiredWithoutRolesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRolesInput, Prisma.UserUpdateWithoutRolesInput>, Prisma.UserUncheckedUpdateWithoutRolesInput>
 }
 
-export type UserCreateNestedOneWithoutRefreshTokensInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
-  upsert?: Prisma.UserUpsertWithoutRefreshTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
-}
-
 export type UserCreateNestedOneWithoutJobSeekerProfileInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutJobSeekerProfileInput, Prisma.UserUncheckedCreateWithoutJobSeekerProfileInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutJobSeekerProfileInput
@@ -500,7 +479,6 @@ export type UserCreateWithoutRolesInput = {
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
@@ -515,7 +493,6 @@ export type UserUncheckedCreateWithoutRolesInput = {
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
@@ -546,7 +523,6 @@ export type UserUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
@@ -561,83 +537,6 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
-  postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
-  applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
-}
-
-export type UserCreateWithoutRefreshTokensInput = {
-  id?: string
-  phone?: string | null
-  email?: string | null
-  name?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
-  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
-  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
-  postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
-  applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
-}
-
-export type UserUncheckedCreateWithoutRefreshTokensInput = {
-  id?: string
-  phone?: string | null
-  email?: string | null
-  name?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
-  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
-  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
-  postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
-  applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
-}
-
-export type UserCreateOrConnectWithoutRefreshTokensInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
-}
-
-export type UserUpsertWithoutRefreshTokensInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutRefreshTokensInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
-}
-
-export type UserUpdateWithoutRefreshTokensInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
-  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
-  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
-  postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
-  applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutRefreshTokensInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
-  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
-  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
@@ -652,7 +551,6 @@ export type UserCreateWithoutJobSeekerProfileInput = {
   updatedAt?: Date | string
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
@@ -667,7 +565,6 @@ export type UserUncheckedCreateWithoutJobSeekerProfileInput = {
   updatedAt?: Date | string
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
@@ -698,7 +595,6 @@ export type UserUpdateWithoutJobSeekerProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
@@ -713,7 +609,6 @@ export type UserUncheckedUpdateWithoutJobSeekerProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
@@ -728,7 +623,6 @@ export type UserCreateWithoutCompanyProfileInput = {
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
@@ -743,7 +637,6 @@ export type UserUncheckedCreateWithoutCompanyProfileInput = {
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
@@ -774,7 +667,6 @@ export type UserUpdateWithoutCompanyProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
@@ -789,7 +681,6 @@ export type UserUncheckedUpdateWithoutCompanyProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
@@ -805,7 +696,6 @@ export type UserCreateWithoutOauthAccountsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
 }
@@ -820,7 +710,6 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
 }
@@ -851,7 +740,6 @@ export type UserUpdateWithoutOauthAccountsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
 }
@@ -866,7 +754,6 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
 }
@@ -881,7 +768,6 @@ export type UserCreateWithoutPostedJobsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
 }
@@ -896,7 +782,6 @@ export type UserUncheckedCreateWithoutPostedJobsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
 }
@@ -927,7 +812,6 @@ export type UserUpdateWithoutPostedJobsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
 }
@@ -942,7 +826,6 @@ export type UserUncheckedUpdateWithoutPostedJobsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
 }
@@ -957,7 +840,6 @@ export type UserCreateWithoutApplicationsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
 }
@@ -972,7 +854,6 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
   companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
 }
@@ -1003,7 +884,6 @@ export type UserUpdateWithoutApplicationsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
 }
@@ -1018,7 +898,6 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
   companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
 }
@@ -1030,7 +909,6 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
 
 export type UserCountOutputType = {
   roles: number
-  refreshTokens: number
   oauthAccounts: number
   postedJobs: number
   applications: number
@@ -1038,7 +916,6 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   roles?: boolean | UserCountOutputTypeCountRolesArgs
-  refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   oauthAccounts?: boolean | UserCountOutputTypeCountOauthAccountsArgs
   postedJobs?: boolean | UserCountOutputTypeCountPostedJobsArgs
   applications?: boolean | UserCountOutputTypeCountApplicationsArgs
@@ -1059,13 +936,6 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type UserCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserRoleWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.RefreshTokenWhereInput
 }
 
 /**
@@ -1100,7 +970,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   jobSeekerProfile?: boolean | Prisma.User$jobSeekerProfileArgs<ExtArgs>
   companyProfile?: boolean | Prisma.User$companyProfileArgs<ExtArgs>
   roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
-  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
   postedJobs?: boolean | Prisma.User$postedJobsArgs<ExtArgs>
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
@@ -1139,7 +1008,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   jobSeekerProfile?: boolean | Prisma.User$jobSeekerProfileArgs<ExtArgs>
   companyProfile?: boolean | Prisma.User$companyProfileArgs<ExtArgs>
   roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
-  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
   postedJobs?: boolean | Prisma.User$postedJobsArgs<ExtArgs>
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
@@ -1154,7 +1022,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     jobSeekerProfile: Prisma.$JobSeekerProfilePayload<ExtArgs> | null
     companyProfile: Prisma.$CompanyProfilePayload<ExtArgs> | null
     roles: Prisma.$UserRolePayload<ExtArgs>[]
-    refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     oauthAccounts: Prisma.$OAuthAccountPayload<ExtArgs>[]
     postedJobs: Prisma.$JobPayload<ExtArgs>[]
     applications: Prisma.$JobApplicationPayload<ExtArgs>[]
@@ -1563,7 +1430,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   jobSeekerProfile<T extends Prisma.User$jobSeekerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$jobSeekerProfileArgs<ExtArgs>>): Prisma.Prisma__JobSeekerProfileClient<runtime.Types.Result.GetResult<Prisma.$JobSeekerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   companyProfile<T extends Prisma.User$companyProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$companyProfileArgs<ExtArgs>>): Prisma.Prisma__CompanyProfileClient<runtime.Types.Result.GetResult<Prisma.$CompanyProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roles<T extends Prisma.User$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   oauthAccounts<T extends Prisma.User$oauthAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$oauthAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   postedJobs<T extends Prisma.User$postedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   applications<T extends Prisma.User$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2049,30 +1915,6 @@ export type User$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.UserRoleScalarFieldEnum | Prisma.UserRoleScalarFieldEnum[]
-}
-
-/**
- * User.refreshTokens
- */
-export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the RefreshToken
-   */
-  select?: Prisma.RefreshTokenSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the RefreshToken
-   */
-  omit?: Prisma.RefreshTokenOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.RefreshTokenInclude<ExtArgs> | null
-  where?: Prisma.RefreshTokenWhereInput
-  orderBy?: Prisma.RefreshTokenOrderByWithRelationInput | Prisma.RefreshTokenOrderByWithRelationInput[]
-  cursor?: Prisma.RefreshTokenWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
 }
 
 /**

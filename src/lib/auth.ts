@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 import { isRoleName, RoleName } from "./role";
+import { isTokenRevoked } from "./jwt";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -18,10 +19,17 @@ function getBearerToken(request: Request): string | undefined {
   return token;
 }
 
-function verifyAccessToken(token: string): {
+async function verifyAccessToken(token: string): Promise<{
   userId: string;
   roles: RoleName[];
-} {
+}> {
+  // First check if token is revoked
+  const revoked = await isTokenRevoked(token);
+  if (revoked) {
+    throw new Error("Token has been revoked");
+  }
+
+  // Then verify JWT signature
   const secret = requireEnv("JWT_ACCESS_SECRET");
   const decoded = jwt.verify(token, secret);
 

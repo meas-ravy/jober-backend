@@ -136,7 +136,6 @@ export async function POST(request: Request) {
           roles: user.roles.map((r) => r.role),
         },
         accessToken: jwtTokens.accessToken,
-        refreshToken: jwtTokens.refreshToken,
       },
       { status: isNewUser ? 201 : 200 },
     );

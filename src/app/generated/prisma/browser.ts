@@ -28,15 +28,15 @@ export type User = Prisma.UserModel
  */
 export type UserRole = Prisma.UserRoleModel
 /**
- * Model RefreshToken
- * 
- */
-export type RefreshToken = Prisma.RefreshTokenModel
-/**
  * Model PhoneOtp
  * 
  */
 export type PhoneOtp = Prisma.PhoneOtpModel
+/**
+ * Model RevokedToken
+ * 
+ */
+export type RevokedToken = Prisma.RevokedTokenModel
 /**
  * Model JobSeekerProfile
  * 

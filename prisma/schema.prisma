@@ -17,7 +17,6 @@ model User {
   jobSeekerProfile JobSeekerProfile?
   companyProfile   CompanyProfile?
   roles            UserRole[]
-  refreshTokens    RefreshToken[]
   oauthAccounts    OAuthAccount[]
   postedJobs       Job[]             @relation("PostedJobs")
   applications     JobApplication[]  @relation("JobApplications")
@@ -34,20 +33,6 @@ model UserRole {
   @@index([role])
 }
 
-model RefreshToken {
-  id        String    @id @default(cuid())
-  userId    String
-  tokenHash String
-  createdAt DateTime  @default(now())
-  expiresAt DateTime
-  revokedAt DateTime?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([expiresAt])
-}
-
 model PhoneOtp {
   id         String    @id @default(cuid())
   phone      String
@@ -59,6 +44,19 @@ model PhoneOtp {
 
   @@index([phone, expiresAt])
   @@index([phone, consumedAt])
+  @@index([expiresAt])
+}
+
+model RevokedToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  reason    String?
+
+  @@index([tokenHash])
+  @@index([userId])
   @@index([expiresAt])
 }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { issueTokensForUser } from "@/src/lib/jwt";
+import { issueTokensForUser, revokeAccessToken } from "@/src/lib/jwt";
 import prisma from "@/src/lib/prisma";
 import { isRoleName } from "@/src/lib/role";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     let userId: string;
     try {
-      ({ userId } = verifyAccessToken(token));
+      ({ userId } = await verifyAccessToken(token));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
@@ -42,15 +42,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
     const existingRoles = await prisma.userRole.findMany({
       where: { userId },
       select: { role: true },
@@ -58,30 +49,44 @@ export async function POST(request: Request) {
 
     const hasRole = existingRoles.some((row) => row.role === role);
 
-    // If user already has this role, continue (idempotent)
-    // If user has a different role, switch to the new role
-    if (!hasRole) {
-      // Delete all existing roles (user can only have one active role)
-      await prisma.userRole.deleteMany({
-        where: { userId },
-      });
-
-      // Create the new role
-      await prisma.userRole.create({
-        data: { userId, role },
+    // If user already has this role, return success without new token
+    if (hasRole) {
+      return NextResponse.json({
+        success: true,
+        message: "Role confirmed",
+        user: {
+          id: userId,
+          roles: existingRoles.map((r) => r.role),
+        },
+        tokenUpdated: false,
       });
     }
 
+    // Role is changing - switch role and issue new token
+    await prisma.$transaction([
+      prisma.userRole.deleteMany({
+        where: { userId },
+      }),
+      prisma.userRole.create({
+        data: { userId, role },
+      }),
+    ]);
+
+    // Revoke old token before issuing new one
+    await revokeAccessToken(token, "role_switch");
+
+    // Issue new access token with updated role
     const tokens = await issueTokensForUser(userId);
 
     return NextResponse.json({
       success: true,
+      message: "Role switched successfully. Please use the new token.",
       user: {
         id: userId,
         roles: tokens.roles,
       },
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
+      tokenUpdated: true,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

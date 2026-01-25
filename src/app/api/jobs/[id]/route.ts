@@ -35,7 +35,7 @@ export async function GET(
     let userId: string;
     let roles: RoleName[];
     try {
-      ({ userId, roles } = verifyAccessToken(token));
+      ({ userId, roles } = await verifyAccessToken(token));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
@@ -129,7 +129,7 @@ export async function PUT(
     let userId: string;
     let roles: RoleName[];
     try {
-      ({ userId, roles } = verifyAccessToken(token));
+      ({ userId, roles } = await verifyAccessToken(token));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
@@ -262,7 +262,7 @@ export async function DELETE(
     let userId: string;
     let roles: RoleName[];
     try {
-      ({ userId, roles } = verifyAccessToken(token));
+      ({ userId, roles } = await verifyAccessToken(token));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";

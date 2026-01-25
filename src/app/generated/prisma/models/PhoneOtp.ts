@@ -393,6 +393,10 @@ export type PhoneOtpSumOrderByAggregateInput = {
   attempts?: Prisma.SortOrder
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     let userId: string;
     let roles: string[];
     try {
-      ({ userId, roles } = verifyAccessToken(token));
+      ({ userId, roles } = await verifyAccessToken(token));
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";

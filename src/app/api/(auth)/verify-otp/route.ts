@@ -113,7 +113,6 @@ export async function POST(request: Request) {
         roles: tokens.roles,
       },
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -132,9 +131,6 @@ export async function POST(request: Request) {
         details: message
       }, { status: 429 });
     }
-
-    // Log error for debugging
-    console.error("OTP verification error:", error);
 
     return NextResponse.json({ 
       error: "Verification failed",
