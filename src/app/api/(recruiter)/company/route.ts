@@ -4,8 +4,11 @@ import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
 import { validateCloudinaryUrl } from "@/src/lib/cloudinary";
+import { success } from "zod";
 
 export const runtime = "nodejs";
+
+// src\app\api\(recruiter)\company\route.ts
 
 function hasRecruiterRole(roles: RoleName[]): boolean {
   return roles.includes("Recruiter");
@@ -16,7 +19,7 @@ export async function GET(request: Request) {
     const token = getBearerToken(request);
     if (!token) {
       return NextResponse.json(
-        { error: "Authorization token is required" },
+        { success: false, error: "Authorization token is required" },
         { status: 401 },
       );
     }
@@ -28,12 +31,12 @@ export async function GET(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ error: message }, { status: 401 });
+        return NextResponse.json({ success: false, error: message }, { status: 401 });
     }
 
     if (!hasRecruiterRole(roles)) {
       return NextResponse.json(
-        { error: "Recruiter role required" },
+        { success: false, error: "Recruiter role required" },
         { status: 403 },
       );
     }
@@ -53,10 +56,10 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ company });
+    return NextResponse.json( { success: true, company }, { status: 200 } );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -65,7 +68,7 @@ export async function POST(request: Request) {
     const token = getBearerToken(request);
     if (!token) {
       return NextResponse.json(
-        { error: "Authorization token is required" },
+        { success: false, error: "Authorization token is required" },
         { status: 401 },
       );
     }
@@ -77,12 +80,12 @@ export async function POST(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ error: message }, { status: 401 });
+      return NextResponse.json({ success: false, error: message }, { status: 401 });
     }
 
     if (!hasRecruiterRole(roles)) {
       return NextResponse.json(
-        { error: "Recruiter role required" },
+        { success: false, error: "Recruiter role required" },
         { status: 403 },
       );
     }
@@ -98,37 +101,37 @@ export async function POST(request: Request) {
 
     if (typeof name !== "string" || name.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company name is required" },
+        { success: false, error: "Company name is required" },
         { status: 400 },
       );
     }
     if (typeof contactEmail !== "string" || contactEmail.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company email is required" },
+        { success: false, error: "Company email is required" },
         { status: 400 },
       );
     }
     if (typeof contactPhone !== "string" || contactPhone.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company phone is required" },
+        { success: false, error: "Company phone is required" },
         { status: 400 },
       );
     }
     if (typeof location !== "string" || location.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company location is required" },
+        { success: false, error: "Company location is required" },
         { status: 400 },
       );
     }
     if (typeof description !== "string" || description.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company description is required" },
+        { success: false, error: "Company description is required" },
         { status: 400 },
       );
     }
     if (typeof logoUrl !== "string" || logoUrl.trim().length === 0) {
       return NextResponse.json(
-        { error: "Company logo URL is required" },
+        { success: false, error: "Company logo URL is required" },
         { status: 400 },
       );
     }
@@ -137,7 +140,7 @@ export async function POST(request: Request) {
     if (!validateCloudinaryUrl(logoUrl.trim(), "company-logo")) {
       return NextResponse.json(
         {
-          error:
+          success: false, error:
             "Invalid logo URL. Must be a valid Cloudinary URL from the company-logos folder",
         },
         { status: 400 },
@@ -160,8 +163,8 @@ export async function POST(request: Request) {
 
     if (existing) {
       return NextResponse.json(
-        { error: "Company profile already exists" },
-        { status: 409 },
+          { success: false, error: "Company profile already exists" },
+          { status: 409 },
       );
     }
 

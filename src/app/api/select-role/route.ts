@@ -44,6 +44,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Verify user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "User not found. Please login again." },
+        { status: 404 },
+      );
+    }
+
     const existingRoles = await prisma.userRole.findMany({
       where: { userId },
       select: { role: true },

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     const token = getBearerToken(request);
     if (!token) {
       return NextResponse.json(
-        { error: "Authorization token is required" },
+        { success: false, error: "Authorization token is required" },
         { status: 401 },
       );
     }
@@ -32,12 +32,12 @@ export async function GET(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ error: message }, { status: 401 });
+      return NextResponse.json({ success: false, error: message }, { status: 401 });
     }
 
     if (!hasJobFinderRole(roles)) {
       return NextResponse.json(
-        { error: "Job_finder role required" },
+        { success: false, error: "Job_finder role required" },
         { status: 403 },
       );
     }
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     const token = getBearerToken(request);
     if (!token) {
       return NextResponse.json(
-        { error: "Authorization token is required" },
+        { success: false, error: "Authorization token is required" },
         { status: 401 },
       );
     }
@@ -80,12 +80,12 @@ export async function POST(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ error: message }, { status: 401 });
+      return NextResponse.json({ success: false, error: message }, { status: 401 });
     }
 
     if (!hasJobFinderRole(roles)) {
       return NextResponse.json(
-        { error: "Job_finder role required" },
+        { success: false, error: "Job_finder role required" },
         { status: 403 },
       );
     }
@@ -343,6 +343,7 @@ export async function PUT(request: Request) {
           if (!validateCloudinaryUrl(body.avatarUrl.trim(), "job-seeker-avatar")) {
             return NextResponse.json(
               {
+                success: false,
                 error:
                   "Invalid avatar URL. Must be a valid Cloudinary URL from the job-seeker-avatars folder",
               },
