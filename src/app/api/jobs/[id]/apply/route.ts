@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
+import { createNotification } from "@/src/lib/notifications";
 
 export const runtime = "nodejs";
 import {
@@ -93,6 +94,13 @@ export async function POST(
 
     // Create application and increment job application count in a transaction
     const application = await prisma.$transaction(async (tx) => {
+      // Fetch applicant name for better notification
+      const applicantProfile = await tx.jobSeekerProfile.findUnique({
+        where: { userId },
+        select: { fullName: true }
+      });
+      const applicantName = applicantProfile?.fullName || "A job seeker";
+
       // Create the application
       const newApplication = await tx.jobApplication.create({
         data: {
@@ -110,6 +118,7 @@ export async function POST(
             select: {
               id: true,
               title: true,
+              recruiterId: true,
               category: true,
               employmentType: true,
               location: true,
@@ -130,6 +139,20 @@ export async function POST(
         where: { id: jobId },
         data: { applicationCount: { increment: 1 } },
       });
+
+      // Send Notification to Recruiter
+      try {
+        await createNotification({
+          userId: newApplication.job.recruiterId,
+          title: "New Job Application",
+          content: `${applicantName} has applied for your job: ${newApplication.job.title}`,
+          type: "NEW_APPLICATION",
+          link: `/dashboard/jobs/${jobId}/applications`
+        });
+      } catch (notifError) {
+        // Log notification error but don't fail the application transaction
+        console.error("Failed to create application notification:", notifError);
+      }
 
       return newApplication;
     });

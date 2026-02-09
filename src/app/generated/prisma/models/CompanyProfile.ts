@@ -20,8 +20,20 @@ export type CompanyProfileModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregateCompanyProfile = {
   _count: CompanyProfileCountAggregateOutputType | null
+  _avg: CompanyProfileAvgAggregateOutputType | null
+  _sum: CompanyProfileSumAggregateOutputType | null
   _min: CompanyProfileMinAggregateOutputType | null
   _max: CompanyProfileMaxAggregateOutputType | null
+}
+
+export type CompanyProfileAvgAggregateOutputType = {
+  followerCount: number | null
+  hireRating: number | null
+}
+
+export type CompanyProfileSumAggregateOutputType = {
+  followerCount: number | null
+  hireRating: number | null
 }
 
 export type CompanyProfileMinAggregateOutputType = {
@@ -33,6 +45,11 @@ export type CompanyProfileMinAggregateOutputType = {
   location: string | null
   description: string | null
   logoUrl: string | null
+  isVerified: boolean | null
+  verifiedAt: Date | null
+  verifiedBy: string | null
+  followerCount: number | null
+  hireRating: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +63,11 @@ export type CompanyProfileMaxAggregateOutputType = {
   location: string | null
   description: string | null
   logoUrl: string | null
+  isVerified: boolean | null
+  verifiedAt: Date | null
+  verifiedBy: string | null
+  followerCount: number | null
+  hireRating: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,11 +81,26 @@ export type CompanyProfileCountAggregateOutputType = {
   location: number
   description: number
   logoUrl: number
+  isVerified: number
+  verifiedAt: number
+  verifiedBy: number
+  followerCount: number
+  hireRating: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type CompanyProfileAvgAggregateInputType = {
+  followerCount?: true
+  hireRating?: true
+}
+
+export type CompanyProfileSumAggregateInputType = {
+  followerCount?: true
+  hireRating?: true
+}
 
 export type CompanyProfileMinAggregateInputType = {
   id?: true
@@ -74,6 +111,11 @@ export type CompanyProfileMinAggregateInputType = {
   location?: true
   description?: true
   logoUrl?: true
+  isVerified?: true
+  verifiedAt?: true
+  verifiedBy?: true
+  followerCount?: true
+  hireRating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,6 +129,11 @@ export type CompanyProfileMaxAggregateInputType = {
   location?: true
   description?: true
   logoUrl?: true
+  isVerified?: true
+  verifiedAt?: true
+  verifiedBy?: true
+  followerCount?: true
+  hireRating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +147,11 @@ export type CompanyProfileCountAggregateInputType = {
   location?: true
   description?: true
   logoUrl?: true
+  isVerified?: true
+  verifiedAt?: true
+  verifiedBy?: true
+  followerCount?: true
+  hireRating?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -143,6 +195,18 @@ export type CompanyProfileAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CompanyProfileAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CompanyProfileSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CompanyProfileMinAggregateInputType
@@ -173,6 +237,8 @@ export type CompanyProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: CompanyProfileCountAggregateInputType | true
+  _avg?: CompanyProfileAvgAggregateInputType
+  _sum?: CompanyProfileSumAggregateInputType
   _min?: CompanyProfileMinAggregateInputType
   _max?: CompanyProfileMaxAggregateInputType
 }
@@ -186,9 +252,16 @@ export type CompanyProfileGroupByOutputType = {
   location: string
   description: string
   logoUrl: string
+  isVerified: boolean
+  verifiedAt: Date | null
+  verifiedBy: string | null
+  followerCount: number
+  hireRating: number
   createdAt: Date
   updatedAt: Date
   _count: CompanyProfileCountAggregateOutputType | null
+  _avg: CompanyProfileAvgAggregateOutputType | null
+  _sum: CompanyProfileSumAggregateOutputType | null
   _min: CompanyProfileMinAggregateOutputType | null
   _max: CompanyProfileMaxAggregateOutputType | null
 }
@@ -220,10 +293,17 @@ export type CompanyProfileWhereInput = {
   location?: Prisma.StringFilter<"CompanyProfile"> | string
   description?: Prisma.StringFilter<"CompanyProfile"> | string
   logoUrl?: Prisma.StringFilter<"CompanyProfile"> | string
+  isVerified?: Prisma.BoolFilter<"CompanyProfile"> | boolean
+  verifiedAt?: Prisma.DateTimeNullableFilter<"CompanyProfile"> | Date | string | null
+  verifiedBy?: Prisma.StringNullableFilter<"CompanyProfile"> | string | null
+  followerCount?: Prisma.IntFilter<"CompanyProfile"> | number
+  hireRating?: Prisma.FloatFilter<"CompanyProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  verifier?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
   jobs?: Prisma.JobListRelationFilter
+  followers?: Prisma.FollowListRelationFilter
 }
 
 export type CompanyProfileOrderByWithRelationInput = {
@@ -235,10 +315,17 @@ export type CompanyProfileOrderByWithRelationInput = {
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  verifier?: Prisma.AdminUserOrderByWithRelationInput
   jobs?: Prisma.JobOrderByRelationAggregateInput
+  followers?: Prisma.FollowOrderByRelationAggregateInput
 }
 
 export type CompanyProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -253,10 +340,17 @@ export type CompanyProfileWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.StringFilter<"CompanyProfile"> | string
   description?: Prisma.StringFilter<"CompanyProfile"> | string
   logoUrl?: Prisma.StringFilter<"CompanyProfile"> | string
+  isVerified?: Prisma.BoolFilter<"CompanyProfile"> | boolean
+  verifiedAt?: Prisma.DateTimeNullableFilter<"CompanyProfile"> | Date | string | null
+  verifiedBy?: Prisma.StringNullableFilter<"CompanyProfile"> | string | null
+  followerCount?: Prisma.IntFilter<"CompanyProfile"> | number
+  hireRating?: Prisma.FloatFilter<"CompanyProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  verifier?: Prisma.XOR<Prisma.AdminUserNullableScalarRelationFilter, Prisma.AdminUserWhereInput> | null
   jobs?: Prisma.JobListRelationFilter
+  followers?: Prisma.FollowListRelationFilter
 }, "id" | "userId">
 
 export type CompanyProfileOrderByWithAggregationInput = {
@@ -268,11 +362,18 @@ export type CompanyProfileOrderByWithAggregationInput = {
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CompanyProfileCountOrderByAggregateInput
+  _avg?: Prisma.CompanyProfileAvgOrderByAggregateInput
   _max?: Prisma.CompanyProfileMaxOrderByAggregateInput
   _min?: Prisma.CompanyProfileMinOrderByAggregateInput
+  _sum?: Prisma.CompanyProfileSumOrderByAggregateInput
 }
 
 export type CompanyProfileScalarWhereWithAggregatesInput = {
@@ -287,6 +388,11 @@ export type CompanyProfileScalarWhereWithAggregatesInput = {
   location?: Prisma.StringWithAggregatesFilter<"CompanyProfile"> | string
   description?: Prisma.StringWithAggregatesFilter<"CompanyProfile"> | string
   logoUrl?: Prisma.StringWithAggregatesFilter<"CompanyProfile"> | string
+  isVerified?: Prisma.BoolWithAggregatesFilter<"CompanyProfile"> | boolean
+  verifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CompanyProfile"> | Date | string | null
+  verifiedBy?: Prisma.StringNullableWithAggregatesFilter<"CompanyProfile"> | string | null
+  followerCount?: Prisma.IntWithAggregatesFilter<"CompanyProfile"> | number
+  hireRating?: Prisma.FloatWithAggregatesFilter<"CompanyProfile"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyProfile"> | Date | string
 }
@@ -299,10 +405,16 @@ export type CompanyProfileCreateInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+  verifier?: Prisma.AdminUserCreateNestedOneWithoutVerifiedCompaniesInput
   jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUncheckedCreateInput = {
@@ -314,9 +426,15 @@ export type CompanyProfileUncheckedCreateInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  verifiedBy?: string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUpdateInput = {
@@ -327,10 +445,16 @@ export type CompanyProfileUpdateInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+  verifier?: Prisma.AdminUserUpdateOneWithoutVerifiedCompaniesNestedInput
   jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileUncheckedUpdateInput = {
@@ -342,9 +466,15 @@ export type CompanyProfileUncheckedUpdateInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileCreateManyInput = {
@@ -356,6 +486,11 @@ export type CompanyProfileCreateManyInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  verifiedBy?: string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -368,6 +503,10 @@ export type CompanyProfileUpdateManyMutationInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,6 +520,11 @@ export type CompanyProfileUncheckedUpdateManyInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -399,8 +543,18 @@ export type CompanyProfileCountOrderByAggregateInput = {
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  verifiedBy?: Prisma.SortOrder
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanyProfileAvgOrderByAggregateInput = {
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
 }
 
 export type CompanyProfileMaxOrderByAggregateInput = {
@@ -412,6 +566,11 @@ export type CompanyProfileMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  verifiedBy?: Prisma.SortOrder
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -425,8 +584,28 @@ export type CompanyProfileMinOrderByAggregateInput = {
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  verifiedBy?: Prisma.SortOrder
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanyProfileSumOrderByAggregateInput = {
+  followerCount?: Prisma.SortOrder
+  hireRating?: Prisma.SortOrder
+}
+
+export type CompanyProfileListRelationFilter = {
+  every?: Prisma.CompanyProfileWhereInput
+  some?: Prisma.CompanyProfileWhereInput
+  none?: Prisma.CompanyProfileWhereInput
+}
+
+export type CompanyProfileOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type CompanyProfileScalarRelationFilter = {
@@ -466,6 +645,60 @@ export type CompanyProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyProfileUpdateToOneWithWhereWithoutUserInput, Prisma.CompanyProfileUpdateWithoutUserInput>, Prisma.CompanyProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type CompanyProfileCreateNestedManyWithoutVerifierInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput> | Prisma.CompanyProfileCreateWithoutVerifierInput[] | Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput | Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput[]
+  createMany?: Prisma.CompanyProfileCreateManyVerifierInputEnvelope
+  connect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+}
+
+export type CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput> | Prisma.CompanyProfileCreateWithoutVerifierInput[] | Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput | Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput[]
+  createMany?: Prisma.CompanyProfileCreateManyVerifierInputEnvelope
+  connect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+}
+
+export type CompanyProfileUpdateManyWithoutVerifierNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput> | Prisma.CompanyProfileCreateWithoutVerifierInput[] | Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput | Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput[]
+  upsert?: Prisma.CompanyProfileUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CompanyProfileUpsertWithWhereUniqueWithoutVerifierInput[]
+  createMany?: Prisma.CompanyProfileCreateManyVerifierInputEnvelope
+  set?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  disconnect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  delete?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  connect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  update?: Prisma.CompanyProfileUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CompanyProfileUpdateWithWhereUniqueWithoutVerifierInput[]
+  updateMany?: Prisma.CompanyProfileUpdateManyWithWhereWithoutVerifierInput | Prisma.CompanyProfileUpdateManyWithWhereWithoutVerifierInput[]
+  deleteMany?: Prisma.CompanyProfileScalarWhereInput | Prisma.CompanyProfileScalarWhereInput[]
+}
+
+export type CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput> | Prisma.CompanyProfileCreateWithoutVerifierInput[] | Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput | Prisma.CompanyProfileCreateOrConnectWithoutVerifierInput[]
+  upsert?: Prisma.CompanyProfileUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CompanyProfileUpsertWithWhereUniqueWithoutVerifierInput[]
+  createMany?: Prisma.CompanyProfileCreateManyVerifierInputEnvelope
+  set?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  disconnect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  delete?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  connect?: Prisma.CompanyProfileWhereUniqueInput | Prisma.CompanyProfileWhereUniqueInput[]
+  update?: Prisma.CompanyProfileUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CompanyProfileUpdateWithWhereUniqueWithoutVerifierInput[]
+  updateMany?: Prisma.CompanyProfileUpdateManyWithWhereWithoutVerifierInput | Prisma.CompanyProfileUpdateManyWithWhereWithoutVerifierInput[]
+  deleteMany?: Prisma.CompanyProfileScalarWhereInput | Prisma.CompanyProfileScalarWhereInput[]
+}
+
 export type CompanyProfileCreateNestedOneWithoutJobsInput = {
   create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutJobsInput, Prisma.CompanyProfileUncheckedCreateWithoutJobsInput>
   connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutJobsInput
@@ -480,6 +713,20 @@ export type CompanyProfileUpdateOneRequiredWithoutJobsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyProfileUpdateToOneWithWhereWithoutJobsInput, Prisma.CompanyProfileUpdateWithoutJobsInput>, Prisma.CompanyProfileUncheckedUpdateWithoutJobsInput>
 }
 
+export type CompanyProfileCreateNestedOneWithoutFollowersInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutFollowersInput, Prisma.CompanyProfileUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutFollowersInput
+  connect?: Prisma.CompanyProfileWhereUniqueInput
+}
+
+export type CompanyProfileUpdateOneRequiredWithoutFollowersNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyProfileCreateWithoutFollowersInput, Prisma.CompanyProfileUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.CompanyProfileCreateOrConnectWithoutFollowersInput
+  upsert?: Prisma.CompanyProfileUpsertWithoutFollowersInput
+  connect?: Prisma.CompanyProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyProfileUpdateToOneWithWhereWithoutFollowersInput, Prisma.CompanyProfileUpdateWithoutFollowersInput>, Prisma.CompanyProfileUncheckedUpdateWithoutFollowersInput>
+}
+
 export type CompanyProfileCreateWithoutUserInput = {
   id?: string
   name: string
@@ -488,9 +735,15 @@ export type CompanyProfileCreateWithoutUserInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifier?: Prisma.AdminUserCreateNestedOneWithoutVerifiedCompaniesInput
   jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUncheckedCreateWithoutUserInput = {
@@ -501,9 +754,15 @@ export type CompanyProfileUncheckedCreateWithoutUserInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  verifiedBy?: string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileCreateOrConnectWithoutUserInput = {
@@ -530,9 +789,15 @@ export type CompanyProfileUpdateWithoutUserInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifier?: Prisma.AdminUserUpdateOneWithoutVerifiedCompaniesNestedInput
   jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileUncheckedUpdateWithoutUserInput = {
@@ -543,9 +808,100 @@ export type CompanyProfileUncheckedUpdateWithoutUserInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileCreateWithoutVerifierInput = {
+  id?: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowCreateNestedManyWithoutCompanyProfileInput
+}
+
+export type CompanyProfileUncheckedCreateWithoutVerifierInput = {
+  id?: string
+  userId: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutCompanyProfileInput
+}
+
+export type CompanyProfileCreateOrConnectWithoutVerifierInput = {
+  where: Prisma.CompanyProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput>
+}
+
+export type CompanyProfileCreateManyVerifierInputEnvelope = {
+  data: Prisma.CompanyProfileCreateManyVerifierInput | Prisma.CompanyProfileCreateManyVerifierInput[]
+  skipDuplicates?: boolean
+}
+
+export type CompanyProfileUpsertWithWhereUniqueWithoutVerifierInput = {
+  where: Prisma.CompanyProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutVerifierInput, Prisma.CompanyProfileUncheckedUpdateWithoutVerifierInput>
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutVerifierInput, Prisma.CompanyProfileUncheckedCreateWithoutVerifierInput>
+}
+
+export type CompanyProfileUpdateWithWhereUniqueWithoutVerifierInput = {
+  where: Prisma.CompanyProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutVerifierInput, Prisma.CompanyProfileUncheckedUpdateWithoutVerifierInput>
+}
+
+export type CompanyProfileUpdateManyWithWhereWithoutVerifierInput = {
+  where: Prisma.CompanyProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.CompanyProfileUpdateManyMutationInput, Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierInput>
+}
+
+export type CompanyProfileScalarWhereInput = {
+  AND?: Prisma.CompanyProfileScalarWhereInput | Prisma.CompanyProfileScalarWhereInput[]
+  OR?: Prisma.CompanyProfileScalarWhereInput[]
+  NOT?: Prisma.CompanyProfileScalarWhereInput | Prisma.CompanyProfileScalarWhereInput[]
+  id?: Prisma.StringFilter<"CompanyProfile"> | string
+  userId?: Prisma.StringFilter<"CompanyProfile"> | string
+  name?: Prisma.StringFilter<"CompanyProfile"> | string
+  contactEmail?: Prisma.StringFilter<"CompanyProfile"> | string
+  contactPhone?: Prisma.StringFilter<"CompanyProfile"> | string
+  location?: Prisma.StringFilter<"CompanyProfile"> | string
+  description?: Prisma.StringFilter<"CompanyProfile"> | string
+  logoUrl?: Prisma.StringFilter<"CompanyProfile"> | string
+  isVerified?: Prisma.BoolFilter<"CompanyProfile"> | boolean
+  verifiedAt?: Prisma.DateTimeNullableFilter<"CompanyProfile"> | Date | string | null
+  verifiedBy?: Prisma.StringNullableFilter<"CompanyProfile"> | string | null
+  followerCount?: Prisma.IntFilter<"CompanyProfile"> | number
+  hireRating?: Prisma.FloatFilter<"CompanyProfile"> | number
+  createdAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"CompanyProfile"> | Date | string
 }
 
 export type CompanyProfileCreateWithoutJobsInput = {
@@ -556,9 +912,15 @@ export type CompanyProfileCreateWithoutJobsInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+  verifier?: Prisma.AdminUserCreateNestedOneWithoutVerifiedCompaniesInput
+  followers?: Prisma.FollowCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileUncheckedCreateWithoutJobsInput = {
@@ -570,8 +932,14 @@ export type CompanyProfileUncheckedCreateWithoutJobsInput = {
   location: string
   description: string
   logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  verifiedBy?: string | null
+  followerCount?: number
+  hireRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutCompanyProfileInput
 }
 
 export type CompanyProfileCreateOrConnectWithoutJobsInput = {
@@ -598,9 +966,15 @@ export type CompanyProfileUpdateWithoutJobsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+  verifier?: Prisma.AdminUserUpdateOneWithoutVerifiedCompaniesNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutCompanyProfileNestedInput
 }
 
 export type CompanyProfileUncheckedUpdateWithoutJobsInput = {
@@ -612,6 +986,176 @@ export type CompanyProfileUncheckedUpdateWithoutJobsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileCreateWithoutFollowersInput = {
+  id?: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCompanyProfileInput
+  verifier?: Prisma.AdminUserCreateNestedOneWithoutVerifiedCompaniesInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCompanyProfileInput
+}
+
+export type CompanyProfileUncheckedCreateWithoutFollowersInput = {
+  id?: string
+  userId: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  verifiedBy?: string | null
+  followerCount?: number
+  hireRating?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCompanyProfileInput
+}
+
+export type CompanyProfileCreateOrConnectWithoutFollowersInput = {
+  where: Prisma.CompanyProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutFollowersInput, Prisma.CompanyProfileUncheckedCreateWithoutFollowersInput>
+}
+
+export type CompanyProfileUpsertWithoutFollowersInput = {
+  update: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutFollowersInput, Prisma.CompanyProfileUncheckedUpdateWithoutFollowersInput>
+  create: Prisma.XOR<Prisma.CompanyProfileCreateWithoutFollowersInput, Prisma.CompanyProfileUncheckedCreateWithoutFollowersInput>
+  where?: Prisma.CompanyProfileWhereInput
+}
+
+export type CompanyProfileUpdateToOneWithWhereWithoutFollowersInput = {
+  where?: Prisma.CompanyProfileWhereInput
+  data: Prisma.XOR<Prisma.CompanyProfileUpdateWithoutFollowersInput, Prisma.CompanyProfileUncheckedUpdateWithoutFollowersInput>
+}
+
+export type CompanyProfileUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+  verifier?: Prisma.AdminUserUpdateOneWithoutVerifiedCompaniesNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileUncheckedUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileCreateManyVerifierInput = {
+  id?: string
+  userId: string
+  name: string
+  contactEmail: string
+  contactPhone: string
+  location: string
+  description: string
+  logoUrl: string
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  followerCount?: number
+  hireRating?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CompanyProfileUpdateWithoutVerifierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileUncheckedUpdateWithoutVerifierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCompanyProfileNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutCompanyProfileNestedInput
+}
+
+export type CompanyProfileUncheckedUpdateManyWithoutVerifierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  contactPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followerCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hireRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -623,10 +1167,12 @@ export type CompanyProfileUncheckedUpdateWithoutJobsInput = {
 
 export type CompanyProfileCountOutputType = {
   jobs: number
+  followers: number
 }
 
 export type CompanyProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jobs?: boolean | CompanyProfileCountOutputTypeCountJobsArgs
+  followers?: boolean | CompanyProfileCountOutputTypeCountFollowersArgs
 }
 
 /**
@@ -646,6 +1192,13 @@ export type CompanyProfileCountOutputTypeCountJobsArgs<ExtArgs extends runtime.T
   where?: Prisma.JobWhereInput
 }
 
+/**
+ * CompanyProfileCountOutputType without action
+ */
+export type CompanyProfileCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FollowWhereInput
+}
+
 
 export type CompanyProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -656,10 +1209,17 @@ export type CompanyProfileSelect<ExtArgs extends runtime.Types.Extensions.Intern
   location?: boolean
   description?: boolean
   logoUrl?: boolean
+  isVerified?: boolean
+  verifiedAt?: boolean
+  verifiedBy?: boolean
+  followerCount?: boolean
+  hireRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
   jobs?: boolean | Prisma.CompanyProfile$jobsArgs<ExtArgs>
+  followers?: boolean | Prisma.CompanyProfile$followersArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companyProfile"]>
 
@@ -672,9 +1232,15 @@ export type CompanyProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   location?: boolean
   description?: boolean
   logoUrl?: boolean
+  isVerified?: boolean
+  verifiedAt?: boolean
+  verifiedBy?: boolean
+  followerCount?: boolean
+  hireRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
 }, ExtArgs["result"]["companyProfile"]>
 
 export type CompanyProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -686,9 +1252,15 @@ export type CompanyProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   location?: boolean
   description?: boolean
   logoUrl?: boolean
+  isVerified?: boolean
+  verifiedAt?: boolean
+  verifiedBy?: boolean
+  followerCount?: boolean
+  hireRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
 }, ExtArgs["result"]["companyProfile"]>
 
 export type CompanyProfileSelectScalar = {
@@ -700,28 +1272,39 @@ export type CompanyProfileSelectScalar = {
   location?: boolean
   description?: boolean
   logoUrl?: boolean
+  isVerified?: boolean
+  verifiedAt?: boolean
+  verifiedBy?: boolean
+  followerCount?: boolean
+  hireRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "contactEmail" | "contactPhone" | "location" | "description" | "logoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["companyProfile"]>
+export type CompanyProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "contactEmail" | "contactPhone" | "location" | "description" | "logoUrl" | "isVerified" | "verifiedAt" | "verifiedBy" | "followerCount" | "hireRating" | "createdAt" | "updatedAt", ExtArgs["result"]["companyProfile"]>
 export type CompanyProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
   jobs?: boolean | Prisma.CompanyProfile$jobsArgs<ExtArgs>
+  followers?: boolean | Prisma.CompanyProfile$followersArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
 }
 export type CompanyProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  verifier?: boolean | Prisma.CompanyProfile$verifierArgs<ExtArgs>
 }
 
 export type $CompanyProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CompanyProfile"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    verifier: Prisma.$AdminUserPayload<ExtArgs> | null
     jobs: Prisma.$JobPayload<ExtArgs>[]
+    followers: Prisma.$FollowPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -732,6 +1315,11 @@ export type $CompanyProfilePayload<ExtArgs extends runtime.Types.Extensions.Inte
     location: string
     description: string
     logoUrl: string
+    isVerified: boolean
+    verifiedAt: Date | null
+    verifiedBy: string | null
+    followerCount: number
+    hireRating: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["companyProfile"]>
@@ -1129,7 +1717,9 @@ readonly fields: CompanyProfileFieldRefs;
 export interface Prisma__CompanyProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  verifier<T extends Prisma.CompanyProfile$verifierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyProfile$verifierArgs<ExtArgs>>): Prisma.Prisma__AdminUserClient<runtime.Types.Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   jobs<T extends Prisma.CompanyProfile$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyProfile$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  followers<T extends Prisma.CompanyProfile$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyProfile$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1167,6 +1757,11 @@ export interface CompanyProfileFieldRefs {
   readonly location: Prisma.FieldRef<"CompanyProfile", 'String'>
   readonly description: Prisma.FieldRef<"CompanyProfile", 'String'>
   readonly logoUrl: Prisma.FieldRef<"CompanyProfile", 'String'>
+  readonly isVerified: Prisma.FieldRef<"CompanyProfile", 'Boolean'>
+  readonly verifiedAt: Prisma.FieldRef<"CompanyProfile", 'DateTime'>
+  readonly verifiedBy: Prisma.FieldRef<"CompanyProfile", 'String'>
+  readonly followerCount: Prisma.FieldRef<"CompanyProfile", 'Int'>
+  readonly hireRating: Prisma.FieldRef<"CompanyProfile", 'Float'>
   readonly createdAt: Prisma.FieldRef<"CompanyProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CompanyProfile", 'DateTime'>
 }
@@ -1565,6 +2160,25 @@ export type CompanyProfileDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * CompanyProfile.verifier
+ */
+export type CompanyProfile$verifierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdminUser
+   */
+  select?: Prisma.AdminUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdminUser
+   */
+  omit?: Prisma.AdminUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminUserInclude<ExtArgs> | null
+  where?: Prisma.AdminUserWhereInput
+}
+
+/**
  * CompanyProfile.jobs
  */
 export type CompanyProfile$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1586,6 +2200,30 @@ export type CompanyProfile$jobsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * CompanyProfile.followers
+ */
+export type CompanyProfile$followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Follow
+   */
+  select?: Prisma.FollowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Follow
+   */
+  omit?: Prisma.FollowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FollowInclude<ExtArgs> | null
+  where?: Prisma.FollowWhereInput
+  orderBy?: Prisma.FollowOrderByWithRelationInput | Prisma.FollowOrderByWithRelationInput[]
+  cursor?: Prisma.FollowWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FollowScalarFieldEnum | Prisma.FollowScalarFieldEnum[]
 }
 
 /**

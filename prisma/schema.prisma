@@ -20,6 +20,9 @@ model User {
   oauthAccounts    OAuthAccount[]
   postedJobs       Job[]             @relation("PostedJobs")
   applications     JobApplication[]  @relation("JobApplications")
+  follows          Follow[]          @relation("UserFollows")
+  notifications    Notification[]
+  deviceTokens     DeviceToken[]
 }
 
 model UserRole {
@@ -74,29 +77,41 @@ model JobSeekerProfile {
 }
 
 model CompanyProfile {
-  id           String   @id @default(cuid())
-  userId       String   @unique
+  id           String @id @default(cuid())
+  userId       String @unique
   name         String
   contactEmail String
   contactPhone String
   location     String
   description  String
   logoUrl      String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobs         Job[]
+
+  // Reputation & Verification
+  isVerified    Boolean   @default(false)
+  verifiedAt    DateTime?
+  verifiedBy    String?
+  followerCount Int       @default(0)
+  hireRating    Float     @default(0)
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verifier  AdminUser? @relation("VerifiedCompanies", fields: [verifiedBy], references: [id])
+  jobs      Job[]
+  followers Follow[]   @relation("CompanyFollowers")
 }
 
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  name         String?
-  avatarUrl    String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  reviewedJobs Job[]
+  id                String           @id @default(cuid())
+  email             String           @unique
+  passwordHash      String
+  name              String?
+  avatarUrl         String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  reviewedJobs      Job[]
+  verifiedCompanies CompanyProfile[] @relation("VerifiedCompanies")
+  notifications     Notification[]
 }
 
 enum RoleName {
@@ -145,6 +160,7 @@ model Job {
   title       String
   description String      @db.Text
   location    String
+  jobImageUrl String? // Specific image for this job post (Optional)
   category    JobCategory
 
   // Job Details (REQUIRED)
@@ -305,4 +321,68 @@ enum ApplicationStatus {
   Rejected
   Hired
   Withdrawn
+}
+
+model Follow {
+  followerId       String
+  companyProfileId String
+  createdAt        DateTime @default(now())
+
+  follower       User           @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  companyProfile CompanyProfile @relation("CompanyFollowers", fields: [companyProfileId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, companyProfileId])
+  @@index([companyProfileId])
+  @@index([followerId])
+}
+
+model DeviceToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  platform  String? // "iOS", "Android", "Web"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String? // Recipient (Recruiter or Seeker)
+  adminId   String? // Recipient (Admin)
+  title     String
+  content   String           @db.Text
+  type      NotificationType
+  link      String? // Deep link or URL
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin AdminUser? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([adminId])
+  @@index([isRead])
+}
+
+enum NotificationType {
+  // Common
+  INFO
+  SYSTEM
+
+  // Recruiter specific
+  NEW_APPLICATION
+  VERIFICATION_STATUS
+  JOB_STATUS_CHANGE
+
+  // Job Seeker specific
+  APPLICATION_UPDATE
+  NEW_JOB_FROM_FOLLOW
+
+  // Admin specific
+  NEW_JOB_SUBMISSION
+  NEW_VERIFICATION_REQUEST
 }

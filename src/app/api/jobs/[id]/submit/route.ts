@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
+import { createNotification } from "@/src/lib/notifications";
 
 export const runtime = "nodejs";
 import { canRecruiterManageJob } from "@/src/lib/jobs";
@@ -95,13 +96,24 @@ export async function PATCH(
       },
     });
 
-    // TODO: Create notification for admins (implement when notification system is ready)
-    // await createNotification({
-    //   targetRole: "Admin",
-    //   type: "job_submitted",
-    //   content: `New job "${existingJob.title}" submitted for review`,
-    //   link: `/admin/jobs/${jobId}`
-    // });
+    // Create notifications for all admins
+    try {
+      const admins = await prisma.adminUser.findMany({
+        select: { id: true }
+      });
+
+      for (const admin of admins) {
+        await createNotification({
+          adminId: admin.id,
+          title: "New Job Submission",
+          content: `A new job "${existingJob.title}" has been submitted for review.`,
+          type: "NEW_JOB_SUBMISSION",
+          link: `/admin/jobs/${jobId}`
+        });
+      }
+    } catch (notifError) {
+      console.error("Failed to notify admins of job submission:", notifError);
+    }
 
     return NextResponse.json({
       success: true,

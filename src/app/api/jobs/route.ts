@@ -116,6 +116,7 @@ export async function POST(request: Request) {
         skills: jobData.skills?.trim() || null,
         applicationDeadline: new Date(jobData.applicationDeadline!),
         positionsAvailable: jobData.positionsAvailable || 1,
+        jobImageUrl: jobData.jobImageUrl?.trim() || null,
         status: "Draft",
       },
       include: {

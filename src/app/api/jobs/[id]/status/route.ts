@@ -72,6 +72,7 @@ export async function PATCH(
       select: {
         id: true,
         recruiterId: true,
+        companyProfileId: true,
         status: true,
         title: true,
       },
@@ -107,28 +108,58 @@ export async function PATCH(
     // Prepare update data
     const updateData: {
       status: JobStatus;
-      closedAt?: Date;
+      closedAt?: Date | null;
     } = {
       status: newStatus,
     };
 
-    // Set closedAt timestamp when closing or filling
+    // Set closedAt timestamp when closing or filling, or clear it if reopening
     if (newStatus === "Closed" || newStatus === "Filled") {
       updateData.closedAt = new Date();
+    } else if (newStatus === "Active") {
+      updateData.closedAt = null;
     }
 
-    // Update job status
-    const updatedJob = await prisma.job.update({
-      where: { id: jobId },
-      data: updateData,
-      include: {
-        companyProfile: {
-          select: {
-            name: true,
-            logoUrl: true,
+    // Update job status and potentially recalculate hire rating in a transaction
+    const updatedJob = await prisma.$transaction(async (tx) => {
+      const job = await tx.job.update({
+        where: { id: jobId },
+        data: updateData,
+        include: {
+          companyProfile: {
+            select: {
+              name: true,
+              logoUrl: true,
+            },
           },
         },
-      },
+      });
+
+      // Recalculate Hire Rating if status is moving to/from Filled or if it's a closed job
+      // We count all jobs that are "Final" (Active, Paused, Closed, Filled)
+      const [totalCount, filledCount] = await Promise.all([
+        tx.job.count({
+          where: {
+            companyProfileId: existingJob.companyProfileId,
+            status: { in: ["Active", "Paused", "Closed", "Filled"] },
+          },
+        }),
+        tx.job.count({
+          where: {
+            companyProfileId: existingJob.companyProfileId,
+            status: "Filled",
+          },
+        }),
+      ]);
+
+      const newHireRating = totalCount > 0 ? (filledCount / totalCount) * 100 : 0;
+
+      await tx.companyProfile.update({
+        where: { id: existingJob.companyProfileId },
+        data: { hireRating: newHireRating },
+      });
+
+      return job;
     });
 
     const statusMessages: Record<JobStatus, string> = {
@@ -138,7 +169,7 @@ export async function PATCH(
       Active: "Job is now active and visible to job seekers",
       Paused: "Job paused. It's no longer visible to job seekers.",
       Closed: "Job closed. No longer accepting applications.",
-      Filled: "Job marked as filled.",
+      Filled: "Job marked as filled. Your hire rating has been updated.",
     };
 
     return NextResponse.json({

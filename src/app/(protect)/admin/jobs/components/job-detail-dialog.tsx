@@ -103,25 +103,62 @@ export function JobDetailDialog({
   };
 
   const formatSalary = (job: JobRow) => {
-    // This would need the actual salary data from the job
+    if (job.salaryType === "Negotiable") return "Negotiable";
+    
+    const currency = job.salaryCurrency || "USD";
+    const period = job.salaryPeriod ? `/${job.salaryPeriod.toLowerCase()}` : "";
+    
+    if (job.salaryType === "Fixed" && job.salaryFixed) {
+      return `${currency} ${job.salaryFixed.toLocaleString()}${period}`;
+    }
+    
+    if (job.salaryType === "Range" && (job.salaryMin || job.salaryMax)) {
+      const min = job.salaryMin ? job.salaryMin.toLocaleString() : "0";
+      const max = job.salaryMax ? job.salaryMax.toLocaleString() : "Any";
+      return `${currency} ${min} - ${max}${period}`;
+    }
+    
     return "Competitive";
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">{job.title}</DialogTitle>
-          <DialogDescription className="flex items-center gap-2 pt-1">
-            <span className="font-medium">{job.company}</span>
-            <span>•</span>
-            <span>{job.location}</span>
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0">
+        {/* Banner Image */}
+        {job.jobImageUrl && (
+          <div className="relative w-full h-48 bg-muted overflow-hidden">
+            <img 
+              src={job.jobImageUrl} 
+              alt={job.title} 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/90 to-transparent" />
+          </div>
+        )}
 
-        <div className="space-y-6">
+        <div className="p-6 pt-0 space-y-6">
+          <DialogHeader className={job.jobImageUrl ? "-mt-12" : "pt-6"}>
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <DialogTitle className="text-2xl font-bold">{job.title}</DialogTitle>
+                <DialogDescription className="flex items-center gap-2 pt-1 text-base">
+                  <span className="font-semibold text-foreground">{job.company}</span>
+                  <span className="text-muted-foreground">•</span>
+                  <span className="text-muted-foreground">{job.location}</span>
+                </DialogDescription>
+              </div>
+              {job.companyLogo && (
+                <img 
+                  src={job.companyLogo} 
+                  alt={job.company} 
+                  className="h-12 w-12 rounded-lg border bg-white object-contain p-1 shadow-sm"
+                />
+              )}
+            </div>
+          </DialogHeader>
+
           {/* Status and Metrics */}
-          <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg">
+          <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg md:grid-cols-3">
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">
                 Status
@@ -143,27 +180,29 @@ export function JobDetailDialog({
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">
-                Employment Type
+                Employment
               </p>
               <Badge variant="outline">{job.employmentType}</Badge>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">
+                Salary
+              </p>
+              <p className="text-sm font-semibold text-green-600">
+                {formatSalary(job)}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">
                 Applications
               </p>
-              <p className="text-lg font-semibold">{job.applicationCount}</p>
+              <p className="text-base font-semibold">{job.applicationCount}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">
                 Views
               </p>
-              <p className="text-lg font-semibold">{job.viewCount}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">
-                Category
-              </p>
-              <Badge variant="outline">{job.category}</Badge>
+              <p className="text-base font-semibold">{job.viewCount}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">

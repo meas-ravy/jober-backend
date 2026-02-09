@@ -42,7 +42,7 @@ function checkRateLimit(userId: string): boolean {
 }
 
 function hasRequiredRole(roles: RoleName[], imageType: ImageType): boolean {
-  if (imageType === "company-logo") {
+  if (imageType === "company-logo" || imageType === "job-image") {
     return roles.includes("Recruiter");
   }
   if (imageType === "job-seeker-avatar") {

@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-
 function isValidCambodianPhone(phone: string): boolean {
   const phoneRegex = /^\+855\d{8,9}$/;
   return phoneRegex.test(phone);
@@ -36,9 +35,10 @@ export async function POST(request: Request) {
 
     if (!isValidCambodianPhone(trimmedPhone)) {
       return NextResponse.json(
-        { 
+        {
           error: "Invalid phone number format",
-          details: "Phone number must be a valid Cambodian number starting with +855 followed by 8-9 digits (e.g., +855964519228)"
+          details:
+            "Phone number must be a valid Cambodian number starting with +855 followed by 8-9 digits (e.g., +855964519228)",
         },
         { status: 400 },
       );
@@ -61,9 +61,10 @@ export async function POST(request: Request) {
 
     if (!isValid) {
       return NextResponse.json(
-        { 
+        {
           error: "Invalid or expired OTP code",
-          details: "The OTP code is incorrect or has expired. Please request a new code."
+          details:
+            "The OTP code is incorrect or has expired. Please request a new code.",
         },
         { status: 401 },
       );
@@ -84,9 +85,10 @@ export async function POST(request: Request) {
         });
       } catch (error) {
         return NextResponse.json(
-          { 
+          {
             error: "Failed to create user account",
-            details: "An error occurred while creating your account. Please try again."
+            details:
+              "An error occurred while creating your account. Please try again.",
           },
           { status: 500 },
         );
@@ -95,9 +97,9 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { 
+        {
           error: "Authentication failed",
-          details: "Unable to authenticate user. Please try again."
+          details: "Unable to authenticate user. Please try again.",
         },
         { status: 500 },
       );
@@ -105,7 +107,7 @@ export async function POST(request: Request) {
 
     // Issue authentication tokens
     const tokens = await issueTokensForUser(user.id);
-    
+
     return NextResponse.json({
       success: true,
       message: "Authentication successful",
@@ -121,22 +123,34 @@ export async function POST(request: Request) {
 
     // Handle specific errors with better messages
     if (message.includes("Maximum verification attempts")) {
-      return NextResponse.json({ 
-        error: "Too many failed attempts",
-        details: message
-      }, { status: 429 });
+      return NextResponse.json(
+        {
+          error: "Too many failed attempts",
+          details: message,
+        },
+        { status: 429 },
+      );
     }
 
     if (message.includes("rate limit") || message.includes("Too many")) {
-      return NextResponse.json({ 
-        error: "Too many requests",
-        details: message
-      }, { status: 429 });
+      return NextResponse.json(
+        {
+          error: "Too many requests",
+          details: message,
+        },
+        { status: 429 },
+      );
     }
 
-    return NextResponse.json({ 
-      error: "Verification failed",
-      details: process.env.NODE_ENV === 'development' ? message : "An error occurred during verification. Please try again."
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Verification failed",
+        details:
+          process.env.NODE_ENV === "development"
+            ? message
+            : "An error occurred during verification. Please try again.",
+      },
+      { status: 500 },
+    );
   }
 }

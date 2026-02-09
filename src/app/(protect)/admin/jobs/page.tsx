@@ -52,6 +52,13 @@ async function fetchJobs(): Promise<JobRow[]> {
       category: job.category,
       employmentType: job.employmentType,
       status: job.status,
+      jobImageUrl: job.jobImageUrl,
+      salaryType: job.salaryType,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      salaryFixed: job.salaryFixed,
+      salaryCurrency: job.salaryCurrency,
+      salaryPeriod: job.salaryPeriod,
       submittedAt: job.submittedAt
         ? new Date(job.submittedAt).toLocaleDateString("en-US", {
             month: "short",

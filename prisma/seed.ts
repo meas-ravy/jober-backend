@@ -9,7 +9,7 @@ async function main() {
     {
       email: "admin@gmail.com",
       name: "Owner System",
-      avatarUrl: "/image/owner.jpg",
+      avatarUrl: null,
     },
     {
       email: "testing@gmail.com",

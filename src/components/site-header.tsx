@@ -12,6 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { ModeToggle } from "./mode-toggle";
+import { NotificationBell } from "./notification-bell";
 
 type SiteHeaderProps = {
   title?: string;
@@ -59,7 +60,8 @@ export function SiteHeader({
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <NotificationBell />
           <ModeToggle />
         </div>
       </div>

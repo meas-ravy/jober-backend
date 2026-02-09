@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import prisma from "@/src/lib/prisma";
+import { createNotification } from "@/src/lib/notifications";
 
 // POST /api/admin/jobs/:id/reject - Reject a pending job (admin only)
 export async function POST(
@@ -94,13 +95,18 @@ export async function POST(
       },
     });
 
-    // TODO: Create notification for recruiter (implement when notification system is ready)
-    // await createNotification({
-    //   userId: existingJob.recruiterId,
-    //   type: "job_rejected",
-    //   content: `Your job "${existingJob.title}" has been rejected`,
-    //   link: `/jobs/${jobId}`
-    // });
+    // Notify recruiter
+    try {
+      await createNotification({
+        userId: existingJob.recruiterId,
+        title: "Job Rejected",
+        content: `Your job post "${existingJob.title}" was not approved. Reason: ${reason.trim()}`,
+        type: "JOB_STATUS_CHANGE",
+        link: `/dashboard/jobs/${jobId}`
+      });
+    } catch (notifError) {
+      console.error("Failed to notify recruiter of job rejection:", notifError);
+    }
 
     return NextResponse.json({
       success: true,

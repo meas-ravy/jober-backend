@@ -62,6 +62,13 @@ export type JobRow = {
     | "Paused"
     | "Closed"
     | "Filled";
+  jobImageUrl?: string;
+  salaryType: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  salaryFixed?: number;
+  salaryCurrency: string;
+  salaryPeriod: string;
   submittedAt?: string;
   createdAt: string;
   applicationCount: number;

@@ -67,3 +67,18 @@ export type Job = Prisma.JobModel
  * 
  */
 export type JobApplication = Prisma.JobApplicationModel
+/**
+ * Model Follow
+ * 
+ */
+export type Follow = Prisma.FollowModel
+/**
+ * Model DeviceToken
+ * 
+ */
+export type DeviceToken = Prisma.DeviceTokenModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

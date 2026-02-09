@@ -1,3 +1,4 @@
+import { validateCloudinaryUrl } from "./cloudinary";
 import { RoleName } from "./role";
 
 // Job validation types
@@ -67,6 +68,7 @@ export interface JobData {
   skills?: string;
   applicationDeadline: string | Date;
   positionsAvailable?: number;
+  jobImageUrl?: string | null;
 }
 
 export interface ValidationResult {
@@ -103,6 +105,13 @@ export function validateJobData(data: Partial<JobData>): ValidationResult {
     errors.push("Job location is required");
   } else if (data.location.trim().length < 3) {
     errors.push("Location must be at least 3 characters");
+  }
+  
+  // Job image validation (optional)
+  if (data.jobImageUrl) {
+    if (!validateCloudinaryUrl(data.jobImageUrl, "job-image")) {
+      errors.push("Invalid job image URL. Must be a valid Cloudinary URL from the job-images folder");
+    }
   }
 
   // Category validation

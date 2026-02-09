@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
+import { createNotification } from "@/src/lib/notifications";
 
 export const runtime = "nodejs";
 import {
@@ -171,6 +172,33 @@ export async function PATCH(
         },
       },
     });
+
+    // Notify Job Seeker
+    try {
+      let statusTitle = "Application Updated";
+      let statusContent = `The status of your application for "${updatedApplication.job.title}" has changed to ${status}.`;
+
+      if (status === "Shortlisted") {
+        statusTitle = "Application Shortlisted! 🎉";
+        statusContent = `Congratulations! You have been shortlisted for the "${updatedApplication.job.title}" position. The recruiter will be in touch.`;
+      } else if (status === "Rejected") {
+        statusTitle = "Application Update";
+        statusContent = `Thank you for your interest in the "${updatedApplication.job.title}" position. Unfortunately, the recruiter has decided not to move forward with your application at this time.`;
+      } else if (status === "Hired") {
+        statusTitle = "You're Hired! 🎊";
+        statusContent = `Great news! You have been hired for the "${updatedApplication.job.title}" position. Congratulations on your new job!`;
+      }
+
+      await createNotification({
+        userId: updatedApplication.jobSeeker.id,
+        title: statusTitle,
+        content: statusContent,
+        type: "APPLICATION_UPDATE",
+        link: `/my-applications/${applicationId}`
+      });
+    } catch (notifError) {
+      console.error("Failed to notify seeker of application status update:", notifError);
+    }
 
     return NextResponse.json({
       success: true,

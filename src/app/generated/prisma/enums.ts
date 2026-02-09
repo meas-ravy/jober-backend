@@ -135,3 +135,18 @@ export const ApplicationStatus = {
 } as const
 
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
+export const NotificationType = {
+  INFO: 'INFO',
+  SYSTEM: 'SYSTEM',
+  NEW_APPLICATION: 'NEW_APPLICATION',
+  VERIFICATION_STATUS: 'VERIFICATION_STATUS',
+  JOB_STATUS_CHANGE: 'JOB_STATUS_CHANGE',
+  APPLICATION_UPDATE: 'APPLICATION_UPDATE',
+  NEW_JOB_FROM_FOLLOW: 'NEW_JOB_FROM_FOLLOW',
+  NEW_JOB_SUBMISSION: 'NEW_JOB_SUBMISSION',
+  NEW_VERIFICATION_REQUEST: 'NEW_VERIFICATION_REQUEST'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

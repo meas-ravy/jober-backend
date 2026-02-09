@@ -223,6 +223,7 @@ export async function PUT(
         skills: jobData.skills?.trim() || null,
         applicationDeadline: new Date(jobData.applicationDeadline!),
         positionsAvailable: jobData.positionsAvailable || 1,
+        jobImageUrl: jobData.jobImageUrl?.trim() || null,
       },
       include: {
         companyProfile: {

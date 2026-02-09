@@ -60,7 +60,10 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   OAuthAccount: 'OAuthAccount',
   Job: 'Job',
-  JobApplication: 'JobApplication'
+  JobApplication: 'JobApplication',
+  Follow: 'Follow',
+  DeviceToken: 'DeviceToken',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -149,6 +152,11 @@ export const CompanyProfileScalarFieldEnum = {
   location: 'location',
   description: 'description',
   logoUrl: 'logoUrl',
+  isVerified: 'isVerified',
+  verifiedAt: 'verifiedAt',
+  verifiedBy: 'verifiedBy',
+  followerCount: 'followerCount',
+  hireRating: 'hireRating',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -193,6 +201,7 @@ export const JobScalarFieldEnum = {
   title: 'title',
   description: 'description',
   location: 'location',
+  jobImageUrl: 'jobImageUrl',
   category: 'category',
   employmentType: 'employmentType',
   experienceLevel: 'experienceLevel',
@@ -239,6 +248,42 @@ export const JobApplicationScalarFieldEnum = {
 } as const
 
 export type JobApplicationScalarFieldEnum = (typeof JobApplicationScalarFieldEnum)[keyof typeof JobApplicationScalarFieldEnum]
+
+
+export const FollowScalarFieldEnum = {
+  followerId: 'followerId',
+  companyProfileId: 'companyProfileId',
+  createdAt: 'createdAt'
+} as const
+
+export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
+
+
+export const DeviceTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceTokenScalarFieldEnum = (typeof DeviceTokenScalarFieldEnum)[keyof typeof DeviceTokenScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  adminId: 'adminId',
+  title: 'title',
+  content: 'content',
+  type: 'type',
+  link: 'link',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {

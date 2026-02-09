@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import prisma from "@/src/lib/prisma";
+import { createNotification } from "@/src/lib/notifications";
 
 // POST /api/admin/jobs/:id/approve - Approve a pending job (admin only)
 export async function POST(
@@ -61,13 +62,18 @@ export async function POST(
       },
     });
 
-    // TODO: Create notification for recruiter (implement when notification system is ready)
-    // await createNotification({
-    //   userId: existingJob.recruiterId,
-    //   type: "job_approved",
-    //   content: `Your job "${existingJob.title}" has been approved and is now live`,
-    //   link: `/jobs/${jobId}`
-    // });
+    // Notify recruiter
+    try {
+      await createNotification({
+        userId: existingJob.recruiterId,
+        title: "Job Approved",
+        content: `Your job post "${existingJob.title}" has been approved and is now live!`,
+        type: "JOB_STATUS_CHANGE",
+        link: `/dashboard/jobs/${jobId}`
+      });
+    } catch (notifError) {
+      console.error("Failed to notify recruiter of job approval:", notifError);
+    }
 
     return NextResponse.json({
       success: true,

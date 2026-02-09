@@ -16,16 +16,18 @@ export const IMAGE_UPLOAD_CONFIG = {
   FOLDERS: {
     COMPANY_LOGO: "company-logos",
     JOB_SEEKER_AVATAR: "job-seeker-avatars",
+    JOB_IMAGE: "job-images",
     RESUME: "resumes",
   },
   TRANSFORMATIONS: {
     COMPANY_LOGO: "c_limit,w_1000,h_1000,q_auto,f_auto",
     JOB_SEEKER_AVATAR: "c_limit,w_1000,h_1000,q_auto,f_auto",
+    JOB_IMAGE: "c_limit,w_1200,h_800,q_auto,f_auto",
     RESUME: "q_auto,f_auto",
   },
 } as const;
 
-export type ImageType = "company-logo" | "job-seeker-avatar" | "resume";
+export type ImageType = "company-logo" | "job-seeker-avatar" | "job-image" | "resume";
 
 interface UploadSignatureParams {
   timestamp: number;
@@ -56,6 +58,8 @@ export function generateUploadSignature(
       ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
       : imageType === "job-seeker-avatar"
       ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+      : imageType === "job-image"
+      ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
       : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
   const transformation =
@@ -63,6 +67,8 @@ export function generateUploadSignature(
       ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.COMPANY_LOGO
       : imageType === "job-seeker-avatar"
       ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_SEEKER_AVATAR
+      : imageType === "job-image"
+      ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_IMAGE
       : IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.RESUME;
 
   // Parameters to sign
@@ -120,6 +126,8 @@ export function validateCloudinaryUrl(
         ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
         : imageType === "job-seeker-avatar"
         ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+        : imageType === "job-image"
+        ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
         : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
     if (!url.includes(`/${expectedFolder}/`)) {
@@ -136,5 +144,9 @@ export function validateCloudinaryUrl(
  * Check if image type is valid
  */
 export function isValidImageType(type: unknown): type is ImageType {
-  return type === "company-logo" || type === "job-seeker-avatar";
+  return (
+    type === "company-logo" ||
+    type === "job-seeker-avatar" ||
+    type === "job-image"
+  );
 }
