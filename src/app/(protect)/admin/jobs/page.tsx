@@ -4,10 +4,7 @@ import { AppSidebar } from "@/src/components/app-sidebar";
 import { SiteHeader } from "@/src/components/site-header";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/src/components/ui/card";
 import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
 import {
@@ -18,6 +15,13 @@ import { TableSkeleton } from "@/src/components/ui/table-skeleton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/src/lib/prisma";
+import {
+  IconBriefcase,
+  IconClock,
+  IconCircleCheck,
+  IconCircleX,
+} from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "Jobs Management - Jober",
@@ -27,38 +31,56 @@ export const metadata: Metadata = {
 async function fetchJobs(): Promise<JobRow[]> {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
+    if (!session || !session.user || session.user.role !== "Admin") {
       return [];
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/admin/jobs?limit=100`, {
-      cache: "no-store",
+    // Fetch jobs directly from DB — exclude Draft (recruiter's private WIP)
+    const jobs = await prisma.job.findMany({
+      where: {
+        status: { not: "Draft" },
+      },
+      orderBy: [
+        { status: "desc" },
+        { createdAt: "desc" },
+      ],
+      include: {
+        companyProfile: {
+          select: {
+            name: true,
+            logoUrl: true,
+          },
+        },
+      },
     });
 
-    const data = await res.json();
-    
-    if (!data.jobs) {
-      return [];
-    }
-
-    // Transform API data to match JobRow type
-    return data.jobs.map((job: any) => ({
+    return jobs.map((job) => ({
       id: job.id,
       title: job.title,
+      description: job.description || undefined,
       company: job.companyProfile?.name || "Unknown Company",
-      companyLogo: job.companyProfile?.logoUrl,
+      companyLogo: job.companyProfile?.logoUrl || undefined,
       location: job.location,
       category: job.category,
       employmentType: job.employmentType,
-      status: job.status,
-      jobImageUrl: job.jobImageUrl,
+      experienceLevel: job.experienceLevel || undefined,
+      workArrangement: job.workArrangement || undefined,
+      status: job.status as any,
+      jobImageUrl: job.jobImageUrl || undefined,
       salaryType: job.salaryType,
-      salaryMin: job.salaryMin,
-      salaryMax: job.salaryMax,
-      salaryFixed: job.salaryFixed,
+      salaryMin: job.salaryMin || undefined,
+      salaryMax: job.salaryMax || undefined,
+      salaryFixed: job.salaryFixed || undefined,
       salaryCurrency: job.salaryCurrency,
       salaryPeriod: job.salaryPeriod,
+      requirements: job.requirements || undefined,
+      responsibilities: job.responsibilities || undefined,
+      benefits: job.benefits || undefined,
+      skills: job.skills || undefined,
+      applicationDeadline: job.applicationDeadline
+        ? job.applicationDeadline.toISOString()
+        : undefined,
+      positionsAvailable: job.positionsAvailable || 1,
       submittedAt: job.submittedAt
         ? new Date(job.submittedAt).toLocaleDateString("en-US", {
             month: "short",
@@ -73,7 +95,7 @@ async function fetchJobs(): Promise<JobRow[]> {
       }),
       applicationCount: job.applicationCount || 0,
       viewCount: job.viewCount || 0,
-      rejectionReason: job.rejectionReason,
+      rejectionReason: job.rejectionReason || undefined,
     }));
   } catch (error) {
     console.error("Error fetching jobs:", error);
@@ -84,7 +106,6 @@ async function fetchJobs(): Promise<JobRow[]> {
 async function JobsContent() {
   const jobs = await fetchJobs();
 
-  // Calculate quick stats
   const stats = {
     total: jobs.length,
     pending: jobs.filter((j) => j.status === "Pending").length,
@@ -93,54 +114,57 @@ async function JobsContent() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Total Jobs</CardDescription>
-            <CardTitle className="text-3xl">{stats.total}</CardTitle>
+        <Card className="border-l-4 border-l-blue-500">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Total Jobs</p>
+              <p className="text-3xl font-bold">{stats.total}</p>
+            </div>
+            <div className="rounded-lg bg-blue-500/10 p-2.5">
+              <IconBriefcase className="h-5 w-5 text-blue-500" />
+            </div>
           </CardHeader>
         </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Pending Review</CardDescription>
-            <CardTitle className="text-3xl text-yellow-600">
-              {stats.pending}
-            </CardTitle>
+        <Card className="border-l-4 border-l-yellow-500">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Pending Review</p>
+              <p className="text-3xl font-bold text-yellow-600">{stats.pending}</p>
+            </div>
+            <div className="rounded-lg bg-yellow-500/10 p-2.5">
+              <IconClock className="h-5 w-5 text-yellow-600" />
+            </div>
           </CardHeader>
         </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Active Jobs</CardDescription>
-            <CardTitle className="text-3xl text-green-600">
-              {stats.active}
-            </CardTitle>
+        <Card className="border-l-4 border-l-green-500">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Active Jobs</p>
+              <p className="text-3xl font-bold text-green-600">{stats.active}</p>
+            </div>
+            <div className="rounded-lg bg-green-500/10 p-2.5">
+              <IconCircleCheck className="h-5 w-5 text-green-600" />
+            </div>
           </CardHeader>
         </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Rejected</CardDescription>
-            <CardTitle className="text-3xl text-red-600">
-              {stats.rejected}
-            </CardTitle>
+        <Card className="border-l-4 border-l-red-500">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Rejected</p>
+              <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
+            </div>
+            <div className="rounded-lg bg-red-500/10 p-2.5">
+              <IconCircleX className="h-5 w-5 text-red-600" />
+            </div>
           </CardHeader>
         </Card>
       </div>
 
       {/* Jobs Table */}
-      <Card>
-        <CardHeader className="border-b">
-          <CardTitle>Jobs Management</CardTitle>
-          <CardDescription>
-            Review job postings, approve pending submissions, and manage all
-            active listings.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="py-4">
-          <JobsTable data={jobs} />
-        </CardContent>
-      </Card>
+      <JobsTable data={jobs} />
     </div>
   );
 }

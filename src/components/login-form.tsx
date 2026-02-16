@@ -166,7 +166,14 @@ export function LoginForm({
       </form>
       <FieldDescription className="px-6 text-center">
         Designed and Maintained by{" "}
-        <a href="https://measravy-site.vercel.app/">Meas Ravy</a>.
+        <a
+          href="https://measravy-site.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Meas Ravy
+        </a>
+        .
       </FieldDescription>
     </div>
   );

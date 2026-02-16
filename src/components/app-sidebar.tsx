@@ -21,6 +21,7 @@ import {
   IconListDetails,
   IconSettings,
   IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import { NavSecondary } from "./nav-seconary";
 
@@ -53,15 +54,20 @@ const data = {
     },
   ],
   navSecondary: [
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: IconSettings,
+    // },
+    // {
+    //   title: "Get Help",
+    //   url: "#",
+    //   icon: IconHelp,
+    // },
     {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
+      title: "About",
+      url: "https://measravy-site.vercel.app/",
+      icon: IconInfoCircle,
     },
   ],
 };

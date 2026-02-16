@@ -44,7 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { JobDetailDialog } from "./job-detail-dialog";
+import Link from "next/link";
 
 export type JobRow = {
   id: string;
@@ -69,12 +69,26 @@ export type JobRow = {
   salaryFixed?: number;
   salaryCurrency: string;
   salaryPeriod: string;
+  description?: string;
+  requirements?: string;
+  responsibilities?: string;
+  benefits?: string;
+  skills?: string;
+  experienceLevel?: string;
+  workArrangement?: string;
+  applicationDeadline?: string;
+  positionsAvailable?: number;
   submittedAt?: string;
   createdAt: string;
   applicationCount: number;
   viewCount: number;
   rejectionReason?: string;
 };
+
+// Format employment type for display: FullTime -> Full Time
+function formatEmploymentType(type: string): string {
+  return type.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
 
 const globalJobFilter: FilterFn<JobRow> = (row, _columnId, filterValue) => {
   const search = String(filterValue).toLowerCase().trim();
@@ -85,19 +99,30 @@ const globalJobFilter: FilterFn<JobRow> = (row, _columnId, filterValue) => {
   );
 };
 
-const createColumns = (
-  onViewJob: (job: JobRow) => void,
-): ColumnDef<JobRow>[] => [
+const createColumns = (): ColumnDef<JobRow>[] => [
   {
     id: "job",
     header: "Job",
     accessorFn: (row) => row.title,
     cell: ({ row }) => (
-      <div className="flex flex-col min-w-[200px]">
-        <span className="font-medium">{row.original.title}</span>
-        <span className="text-muted-foreground text-xs">
-          {row.original.company}
-        </span>
+      <div className="flex items-center gap-3 min-w-[220px]">
+        {row.original.companyLogo ? (
+          <img
+            src={row.original.companyLogo}
+            alt={row.original.company}
+            className="h-9 w-9 shrink-0 rounded-lg border bg-white object-contain p-0.5"
+          />
+        ) : (
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-muted text-xs font-bold text-muted-foreground">
+            {row.original.company.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.title}</span>
+          <span className="text-muted-foreground text-xs">
+            {row.original.company}
+          </span>
+        </div>
       </div>
     ),
   },
@@ -129,7 +154,7 @@ const createColumns = (
           variant="outline"
           className="whitespace-nowrap border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
         >
-          {type}
+          {formatEmploymentType(type)}
         </Badge>
       );
     },
@@ -141,39 +166,34 @@ const createColumns = (
     cell: ({ row }) => {
       const status = row.original.status;
       return (
-        <Badge
-          variant="outline"
-          className={
-            status === "Active"
-              ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-              : status === "Pending"
-                ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-                : status === "Rejected"
-                  ? "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
-                  : status === "Filled"
-                    ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-                    : "border-gray-500 bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300"
-          }
-        >
-          {status}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {status === "Pending" && (
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-500" />
+            </span>
+          )}
+          <Badge
+            variant="outline"
+            className={
+              status === "Active"
+                ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                : status === "Pending"
+                  ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
+                  : status === "Rejected"
+                    ? "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                    : status === "Filled"
+                      ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                      : "border-gray-500 bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300"
+            }
+          >
+            {status}
+          </Badge>
+        </div>
       );
     },
   },
-  {
-    accessorKey: "applicationCount",
-    header: "Applications",
-    cell: ({ row }) => (
-      <span className="font-medium">{row.original.applicationCount}</span>
-    ),
-  },
-  {
-    accessorKey: "viewCount",
-    header: "Views",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.viewCount}</span>
-    ),
-  },
+
   {
     id: "submittedAt",
     header: "Submitted",
@@ -194,10 +214,12 @@ const createColumns = (
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onViewJob(row.original)}
+          asChild
+          className="gap-1.5 text-xs font-medium"
         >
-          <Eye className="mr-1 size-3" />
-          Review
+          <Link href={`/admin/jobs/${row.original.id}`}>
+            <Eye className="size-3.5" />
+          </Link>
         </Button>
       </div>
     ),
@@ -249,15 +271,7 @@ export function JobsTable({ data }: JobsTableProps) {
     pageIndex: 0,
     pageSize: 10,
   });
-  const [selectedJob, setSelectedJob] = React.useState<JobRow | null>(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const handleViewJob = (job: JobRow) => {
-    setSelectedJob(job);
-    setDialogOpen(true);
-  };
-
-  const columns = React.useMemo(() => createColumns(handleViewJob), []);
+  const columns = React.useMemo(() => createColumns(), []);
 
   const table = useReactTable({
     data,
@@ -289,14 +303,9 @@ export function JobsTable({ data }: JobsTableProps) {
 
   return (
     <>
-      <JobDetailDialog
-        job={selectedJob}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
       <div className="space-y-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="relative flex-1">
+          <div className="relative w-full md:max-w-sm">
             <Input
               placeholder="Search jobs by title, company, or location..."
               value={globalFilter ?? ""}
@@ -322,7 +331,6 @@ export function JobsTable({ data }: JobsTableProps) {
               <SelectItem value="all-status">All Status</SelectItem>
               <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Draft">Draft</SelectItem>
               <SelectItem value="Rejected">Rejected</SelectItem>
               <SelectItem value="Paused">Paused</SelectItem>
               <SelectItem value="Closed">Closed</SelectItem>
@@ -364,13 +372,6 @@ export function JobsTable({ data }: JobsTableProps) {
                         <SortableHeader column={header.column} label="Type" />
                       ) : header.column.id === "status" ? (
                         <SortableHeader column={header.column} label="Status" />
-                      ) : header.column.id === "applicationCount" ? (
-                        <SortableHeader
-                          column={header.column}
-                          label="Applications"
-                        />
-                      ) : header.column.id === "viewCount" ? (
-                        <SortableHeader column={header.column} label="Views" />
                       ) : header.column.id === "submittedAt" ? (
                         <SortableHeader
                           column={header.column}
@@ -390,7 +391,14 @@ export function JobsTable({ data }: JobsTableProps) {
             <TableBody>
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow 
+                    key={row.id}
+                    className={
+                      row.original.status === "Pending"
+                        ? "border-l-2 border-l-yellow-500 bg-yellow-500/5"
+                        : ""
+                    }
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(

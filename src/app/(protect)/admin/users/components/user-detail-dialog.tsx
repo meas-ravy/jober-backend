@@ -84,20 +84,10 @@ export function UserDetailDialog({
             </div>
           </div>
 
-          <div className="border-t pt-4 flex justify-end gap-2">
+          <div className="border-t pt-4 flex justify-end">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Close
             </Button>
-            {user.status === "Pending" && (
-              <>
-                <Button variant="destructive">Reject</Button>
-                <Button>Approve</Button>
-              </>
-            )}
-            {user.status === "Active" && (
-              <Button variant="destructive">Suspend</Button>
-            )}
-            {user.status === "Suspended" && <Button>Reactivate</Button>}
           </div>
         </div>
       </DialogContent>

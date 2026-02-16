@@ -1,21 +1,22 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import {
+  IconTrendingDown,
+  IconTrendingUp,
+  IconUsers,
+  IconBuilding,
+  IconBriefcase,
+  IconFileDescription,
+} from "@tabler/icons-react";
 
 import { Badge } from "@/src/components/ui/badge";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
+import { Card, CardHeader } from "@/src/components/ui/card";
+import { cn } from "@/src/lib/utils";
 
 type DashboardStats = {
-  jobSeekers: {
+  totalUsers: {
     total: number;
     growth: number;
   };
-  recruiters: {
+  companies: {
     total: number;
     growth: number;
   };
@@ -29,6 +30,61 @@ type DashboardStats = {
   };
 };
 
+const statCards = [
+  {
+    key: "totalUsers" as const,
+    label: "Total Users",
+    icon: IconUsers,
+    borderColor: "border-l-blue-500",
+    iconBg: "bg-blue-500/10",
+    iconColor: "text-blue-500",
+    growthUpColor:
+      "text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 dark:text-green-400",
+    growthDownColor:
+      "text-red-600 bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800 dark:text-red-400",
+    growthLabel: "vs last month",
+  },
+  {
+    key: "companies" as const,
+    label: "Companies",
+    icon: IconBuilding,
+    borderColor: "border-l-purple-500",
+    iconBg: "bg-purple-500/10",
+    iconColor: "text-purple-500",
+    growthUpColor:
+      "text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 dark:text-green-400",
+    growthDownColor:
+      "text-red-600 bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800 dark:text-red-400",
+    growthLabel: "vs last month",
+  },
+  {
+    key: "activeJobs" as const,
+    label: "Active Jobs",
+    icon: IconBriefcase,
+    borderColor: "border-l-green-500",
+    iconBg: "bg-green-500/10",
+    iconColor: "text-green-500",
+    growthUpColor:
+      "text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 dark:text-green-400",
+    growthDownColor:
+      "text-red-600 bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800 dark:text-red-400",
+    growthLabel: "vs last week",
+  },
+  {
+    key: "applicationsToday" as const,
+    label: "Applications Today",
+    icon: IconFileDescription,
+    borderColor: "border-l-orange-500",
+    iconBg: "bg-orange-500/10",
+    iconColor: "text-orange-500",
+    growthUpColor:
+      "text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 dark:text-green-400",
+    growthDownColor:
+      "text-red-600 bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800 dark:text-red-400",
+    growthLabel: "vs yesterday",
+  },
+];
+
 export function SectionCards({ stats }: { stats: DashboardStats }) {
   const formatNumber = (num: number) => num.toLocaleString();
   const formatGrowth = (growth: number) => {
@@ -37,125 +93,53 @@ export function SectionCards({ stats }: { stats: DashboardStats }) {
   };
 
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Job Seekers</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {formatNumber(stats.jobSeekers.total)}
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {stats.jobSeekers.growth >= 0 ? (
-                <IconTrendingUp />
-              ) : (
-                <IconTrendingDown />
-              )}
-              {formatGrowth(stats.jobSeekers.growth)}
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            New registrations this month{" "}
-            {stats.jobSeekers.growth >= 0 ? (
-              <IconTrendingUp className="size-4" />
-            ) : (
-              <IconTrendingDown className="size-4" />
-            )}
-          </div>
-          <div className="text-muted-foreground">Active job seeker growth</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Recruiters</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {formatNumber(stats.recruiters.total)}
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {stats.recruiters.growth >= 0 ? (
-                <IconTrendingUp />
-              ) : (
-                <IconTrendingDown />
-              )}
-              {formatGrowth(stats.recruiters.growth)}
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Verified companies rising{" "}
-            {stats.recruiters.growth >= 0 ? (
-              <IconTrendingUp className="size-4" />
-            ) : (
-              <IconTrendingDown className="size-4" />
-            )}
-          </div>
-          <div className="text-muted-foreground">
-            Recruiter onboarding progress
-          </div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Active Jobs</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {formatNumber(stats.activeJobs.total)}
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {stats.activeJobs.growth >= 0 ? (
-                <IconTrendingUp />
-              ) : (
-                <IconTrendingDown />
-              )}
-              {formatGrowth(stats.activeJobs.growth)}
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Jobs approved this week{" "}
-            {stats.activeJobs.growth >= 0 ? (
-              <IconTrendingUp className="size-4" />
-            ) : (
-              <IconTrendingDown className="size-4" />
-            )}
-          </div>
-          <div className="text-muted-foreground">Hiring activity is stable</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Applications Today</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {formatNumber(stats.applicationsToday.total)}
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {stats.applicationsToday.growth >= 0 ? (
-                <IconTrendingUp />
-              ) : (
-                <IconTrendingDown />
-              )}
-              {formatGrowth(stats.applicationsToday.growth)}
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong application volume{" "}
-            {stats.applicationsToday.growth >= 0 ? (
-              <IconTrendingUp className="size-4" />
-            ) : (
-              <IconTrendingDown className="size-4" />
-            )}
-          </div>
-          <div className="text-muted-foreground">Review queue keeps moving</div>
-        </CardFooter>
-      </Card>
+    <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+      {statCards.map(card => {
+        const statData = stats[card.key];
+        const Icon = card.icon;
+        const isPositive = statData.growth >= 0;
+
+        return (
+          <Card key={card.key} className={cn("border-l-4", card.borderColor)}>
+            <CardHeader className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground font-medium">
+                    {card.label}
+                  </p>
+                  <p className="text-3xl font-bold tabular-nums tracking-tight">
+                    {formatNumber(statData.total)}
+                  </p>
+                </div>
+                <div className={cn("rounded-lg p-2.5", card.iconBg)}>
+                  <Icon className={cn("h-5 w-5", card.iconColor)} />
+                </div>
+              </div>
+
+              {/* Growth Badge */}
+              <div className="flex items-center gap-2 pt-2">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "gap-1 text-xs font-semibold border",
+                    isPositive ? card.growthUpColor : card.growthDownColor,
+                  )}
+                >
+                  {isPositive ? (
+                    <IconTrendingUp className="size-3.5" />
+                  ) : (
+                    <IconTrendingDown className="size-3.5" />
+                  )}
+                  {formatGrowth(statData.growth)}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  {card.growthLabel}
+                </span>
+              </div>
+            </CardHeader>
+          </Card>
+        );
+      })}
     </div>
   );
 }

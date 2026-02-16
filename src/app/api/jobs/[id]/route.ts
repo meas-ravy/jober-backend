@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
 import { RoleName } from "@/src/lib/role";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 
 export const runtime = "nodejs";
 import {
@@ -26,22 +28,33 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const token = getBearerToken(request);
-    if (!token) {
-      return NextResponse.json(
-        { error: "Authorization token is required" },
-        { status: 401 },
-      );
-    }
-
     let userId: string;
-    let roles: RoleName[];
-    try {
-      ({ userId, roles } = await verifyAccessToken(token));
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ error: message }, { status: 401 });
+    let roles: RoleName[] = [];
+    
+    // 1. Check for Admin Session first (React Web)
+    const session = await getServerSession(authOptions);
+    if (session?.user?.role === "Admin" && session.user.id) {
+      userId = session.user.id;
+      roles = ["Admin"];
+    } else {
+      // 2. Check for Token (Flutter Mobile or Web Seeker/Recruiter)
+      const token = getBearerToken(request);
+      if (!token) {
+        return NextResponse.json(
+          { error: "Authorization token is required" },
+          { status: 401 },
+        );
+      }
+
+      try {
+        const verified = await verifyAccessToken(token);
+        userId = verified.userId;
+        roles = verified.roles;
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Invalid access token";
+        return NextResponse.json({ error: message }, { status: 401 });
+      }
     }
 
     const { id: jobId } = await params;
@@ -75,9 +88,12 @@ export async function GET(
     // Access control
     const isRecruiter = hasRecruiterRole(roles);
     const isJobFinder = hasJobFinderRole(roles);
+    const isAdmin = roles.includes("Admin");
     const isOwner = job.recruiterId === userId;
 
-    if (isRecruiter) {
+    if (isAdmin) {
+      // Admins can see everything
+    } else if (isRecruiter) {
       // Recruiters can only view their own jobs
       if (!isOwner) {
         return NextResponse.json(

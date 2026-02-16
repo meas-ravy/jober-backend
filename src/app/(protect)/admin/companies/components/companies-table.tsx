@@ -23,6 +23,7 @@ import {
   ChevronsRight,
   ChevronsUpDown,
   Search,
+  Eye,
 } from "lucide-react";
 
 import { Badge } from "@/src/components/ui/badge";
@@ -43,7 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { CompanyDetailDialog } from "./company-detail-dialog";
+import Link from "next/link";
 
 export type CompanyRow = {
   id?: string;
@@ -69,9 +70,7 @@ const globalCompanyFilter: FilterFn<CompanyRow> = (
   );
 };
 
-const createColumns = (
-  onReviewCompany: (company: CompanyRow) => void,
-): ColumnDef<CompanyRow>[] => [
+const columns: ColumnDef<CompanyRow>[] = [
   {
     id: "company",
     header: "Company",
@@ -92,14 +91,7 @@ const createColumns = (
       <span className="text-muted-foreground">{row.original.contactPhone}</span>
     ),
   },
-  {
-    accessorKey: "recruiters",
-    header: "Recruiters",
-  },
-  {
-    accessorKey: "jobsActive",
-    header: "Active Jobs",
-  },
+
   {
     accessorKey: "status",
     header: "Status",
@@ -138,10 +130,13 @@ const createColumns = (
       <div className="flex justify-end">
         <Button
           variant="ghost"
-          size="sm"
-          onClick={() => onReviewCompany(row.original)}
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-primary"
+          asChild
         >
-          Review
+          <Link href={`/admin/companies/${row.original.id}`}>
+            <Eye className="h-4 w-4" />
+          </Link>
         </Button>
       </div>
     ),
@@ -193,16 +188,6 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
-  const [selectedCompany, setSelectedCompany] =
-    React.useState<CompanyRow | null>(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const handleReviewCompany = (company: CompanyRow) => {
-    setSelectedCompany(company);
-    setDialogOpen(true);
-  };
-
-  const columns = React.useMemo(() => createColumns(handleReviewCompany), []);
 
   const table = useReactTable({
     data,
@@ -233,15 +218,9 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
   const endRow = Math.min(totalRows, (pageIndex + 1) * pageSize);
 
   return (
-    <>
-      <CompanyDetailDialog
-        company={selectedCompany}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
-      <div className="space-y-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="relative flex-1">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="relative w-full max-w-sm">
           <Input
             placeholder="Search companies"
             value={globalFilter ?? ""}
@@ -293,16 +272,6 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
                       <SortableHeader column={header.column} label="Company" />
                     ) : header.column.id === "contactPhone" ? (
                       <SortableHeader column={header.column} label="Phone" />
-                    ) : header.column.id === "recruiters" ? (
-                      <SortableHeader
-                        column={header.column}
-                        label="Recruiters"
-                      />
-                    ) : header.column.id === "jobsActive" ? (
-                      <SortableHeader
-                        column={header.column}
-                        label="Active Jobs"
-                      />
                     ) : header.column.id === "status" ? (
                       <SortableHeader column={header.column} label="Status" />
                     ) : header.column.id === "submitted" ? (
@@ -399,7 +368,6 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
           </Button>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 }

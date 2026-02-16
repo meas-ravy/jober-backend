@@ -23,6 +23,7 @@ import {
   ChevronsRight,
   ChevronsUpDown,
   Search,
+  Eye,
 } from "lucide-react";
 
 import { Badge } from "@/src/components/ui/badge";
@@ -44,14 +45,15 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 import { UserAvatar } from "@/src/components/ui/user-avatar";
-import { UserDetailDialog } from "./user-detail-dialog";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export type UserRow = {
   id?: string;
   name: string;
   email: string;
   phone: string;
-  role: "Job Seeker" | "Recruiter";
+  role: "Job Seeker" | "Recruiter" | "Admin";
   status: "Active" | "Pending" | "Suspended";
   joined: string;
 };
@@ -65,9 +67,7 @@ const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
   );
 };
 
-const createColumns = (
-  onViewUser: (user: UserRow) => void,
-): ColumnDef<UserRow>[] => [
+const columns: ColumnDef<UserRow>[] = [
   {
     id: "user",
     header: "User",
@@ -146,10 +146,13 @@ const createColumns = (
       <div className="flex justify-end">
         <Button
           variant="ghost"
-          size="sm"
-          onClick={() => onViewUser(row.original)}
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-primary"
+          asChild
         >
-          View
+          <Link href={`/admin/users/${row.original.id}`}>
+            <Eye className="h-4 w-4" />
+          </Link>
         </Button>
       </div>
     ),
@@ -201,15 +204,6 @@ export function UsersTable({ data }: UsersTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
-  const [selectedUser, setSelectedUser] = React.useState<UserRow | null>(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const handleViewUser = (user: UserRow) => {
-    setSelectedUser(user);
-    setDialogOpen(true);
-  };
-
-  const columns = React.useMemo(() => createColumns(handleViewUser), []);
 
   const table = useReactTable({
     data,
@@ -241,15 +235,9 @@ export function UsersTable({ data }: UsersTableProps) {
   const endRow = Math.min(totalRows, (pageIndex + 1) * pageSize);
 
   return (
-    <>
-      <UserDetailDialog
-        user={selectedUser}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
-      <div className="space-y-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="relative flex-1">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="relative w-full max-w-sm">
           <Input
             placeholder="Search users"
             value={globalFilter ?? ""}
@@ -413,7 +401,6 @@ export function UsersTable({ data }: UsersTableProps) {
           </Button>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 }

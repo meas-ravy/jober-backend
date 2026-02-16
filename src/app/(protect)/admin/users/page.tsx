@@ -4,13 +4,6 @@ import { AppSidebar } from "@/src/components/app-sidebar";
 import { SiteHeader } from "@/src/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import {
   type UserRow,
   UsersTable,
 } from "@/src/app/(protect)/admin/users/components/users-table";
@@ -18,6 +11,7 @@ import { TableSkeleton } from "@/src/components/ui/table-skeleton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/src/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Users - Jober",
@@ -26,18 +20,55 @@ export const metadata: Metadata = {
 
 async function fetchUsers(): Promise<UserRow[]> {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return [];
-    }
-
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/admin/users`, {
-      cache: "no-store",
+    const users = await prisma.user.findMany({
+      include: {
+        roles: true,
+        jobSeekerProfile: true,
+        companyProfile: true,
+        _count: {
+          select: {
+            applications: true,
+            postedJobs: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-    const data = await res.json();
-    return data.users || [];
+    return users.map(user => {
+      const primaryRole = user.roles[0]?.role || "Job_finder";
+      const roleName =
+        primaryRole === "Job_finder"
+          ? "Job Seeker"
+          : primaryRole === "Recruiter"
+            ? "Recruiter"
+            : "Admin";
+
+      let status: "Active" | "Pending" | "Suspended" = "Active";
+      if (primaryRole === "Job_finder" && !user.jobSeekerProfile) {
+        status = "Pending";
+      } else if (primaryRole === "Recruiter" && !user.companyProfile) {
+        status = "Pending";
+      }
+
+      return {
+        id: user.id,
+        name: user.name || "N/A",
+        email: user.email || "N/A",
+        phone: user.phone || "N/A",
+        role: roleName,
+        status,
+        joined: user.createdAt.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+        applicationsCount: user._count.applications,
+        jobsCount: user._count.postedJobs,
+      };
+    });
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
@@ -46,26 +77,12 @@ async function fetchUsers(): Promise<UserRow[]> {
 
 async function UsersContent() {
   const users = await fetchUsers();
-  
-  return (
-    <Card>
-      <CardHeader className="border-b">
-        <CardTitle>User Directory</CardTitle>
-        <CardDescription>
-          Manage job seekers and recruiters. Filter by role, status, and search
-          by name, email, or phone.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="py-4">
-        <UsersTable data={users} />
-      </CardContent>
-    </Card>
-  );
+  return <UsersTable data={users} />;
 }
 
 export default async function UsersPage() {
   const session = await getServerSession(authOptions);
-  
+
   if (!session || !session.user || session.user.role !== "Admin") {
     redirect("/admin/login");
   }

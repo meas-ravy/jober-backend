@@ -12,11 +12,17 @@ export async function POST(
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !session.user) {
+    if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id: jobId } = await params;
+
+    // Look up AdminUser by session email
+    const adminUser = await prisma.adminUser.findFirst({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
 
     // Parse request body
     const body: unknown = await request.json().catch(() => null);
@@ -82,7 +88,7 @@ export async function POST(
       data: {
         status: "Rejected",
         reviewedAt: new Date(),
-        reviewedBy: session.user.name,
+        reviewedBy: adminUser?.id ?? null,
         rejectionReason: reason.trim(),
       },
       include: {

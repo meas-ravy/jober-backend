@@ -34,15 +34,26 @@ export async function GET(request: Request) {
       ];
     }
 
+    // Order logic: Pending first, then by date
+    let orderBy: any = { [sortBy]: "desc" };
+    
+    if (sortBy === "createdAt") {
+      // Custom order to prioritize Pending status
+      // Note: Prisma doesn't support custom sort order values directly in orderBy easily, 
+      // but we can sort by status desc which puts 'Rejected', 'Pending' higher than 'Active'
+      orderBy = [
+        { status: 'desc' }, 
+        { createdAt: 'desc' }
+      ];
+    }
+
     // Get total count
     const totalCount = await prisma.job.count({ where });
 
     // Get jobs with pagination
     const jobs = await prisma.job.findMany({
       where,
-      orderBy: {
-        [sortBy]: "desc",
-      },
+      orderBy,
       skip: (page - 1) * limit,
       take: limit,
       include: {

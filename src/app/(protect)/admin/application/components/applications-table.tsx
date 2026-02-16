@@ -70,7 +70,7 @@ const globalApplicationFilter: FilterFn<ApplicationRow> = (
   const search = String(filterValue).toLowerCase().trim();
   if (!search) return true;
   const { applicantName, applicantEmail, jobTitle, company } = row.original;
-  return [applicantName, applicantEmail, jobTitle, company].some((value) =>
+  return [applicantName, applicantEmail, jobTitle, company].some(value =>
     value.toLowerCase().includes(search),
   );
 };
@@ -79,7 +79,7 @@ const columns: ColumnDef<ApplicationRow>[] = [
   {
     id: "applicant",
     header: "Applicant",
-    accessorFn: (row) => row.applicantName,
+    accessorFn: row => row.applicantName,
     cell: ({ row }) => (
       <div className="flex flex-col">
         <span className="font-medium">{row.original.applicantName}</span>
@@ -130,7 +130,7 @@ const columns: ColumnDef<ApplicationRow>[] = [
   {
     id: "submittedAt",
     header: "Submitted",
-    accessorFn: (row) => new Date(row.submittedAt).getTime(),
+    accessorFn: row => new Date(row.submittedAt).getTime(),
     cell: ({ row }) => (
       <span className="text-muted-foreground">{row.original.submittedAt}</span>
     ),
@@ -234,11 +234,11 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="relative flex-1">
+        <div className="relative w-full max-w-sm">
           <Input
             placeholder="Search applications"
             value={globalFilter ?? ""}
-            onChange={(event) => setGlobalFilter(event.target.value)}
+            onChange={event => setGlobalFilter(event.target.value)}
             className="pl-9"
           />
           <div className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2">
@@ -247,7 +247,7 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
         </div>
         <Select
           value={statusValue || "all-status"}
-          onValueChange={(value) => {
+          onValueChange={value => {
             table
               .getColumn("status")
               ?.setFilterValue(value === "all-status" ? "" : value);
@@ -280,19 +280,28 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : header.column.id ===
                       "applicant" ? (
-                      <SortableHeader column={header.column} label="Applicant" />
+                      <SortableHeader
+                        column={header.column}
+                        label="Applicant"
+                      />
                     ) : header.column.id === "jobTitle" ? (
-                      <SortableHeader column={header.column} label="Job Title" />
+                      <SortableHeader
+                        column={header.column}
+                        label="Job Title"
+                      />
                     ) : header.column.id === "status" ? (
                       <SortableHeader column={header.column} label="Status" />
                     ) : header.column.id === "submittedAt" ? (
-                      <SortableHeader column={header.column} label="Submitted" />
+                      <SortableHeader
+                        column={header.column}
+                        label="Submitted"
+                      />
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -306,9 +315,9 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,

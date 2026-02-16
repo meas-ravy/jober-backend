@@ -2,13 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AppSidebar } from "@/src/components/app-sidebar";
 import { SiteHeader } from "@/src/components/site-header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
 import { SidebarInset, SidebarProvider } from "@/src/components/ui/sidebar";
 import {
   type CompanyRow,
@@ -18,6 +11,7 @@ import { TableSkeleton } from "@/src/components/ui/table-skeleton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/src/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Companies | Jober Admin",
@@ -26,19 +20,67 @@ export const metadata: Metadata = {
 
 async function fetchCompanies(): Promise<CompanyRow[]> {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return [];
-    }
-
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/admin/companies`, {
-      cache: "no-store",
+    const companies = await prisma.companyProfile.findMany({
+      include: {
+        user: {
+          include: {
+            roles: true,
+          },
+        },
+        jobs: {
+          where: {
+            status: "Active",
+          },
+        },
+        _count: {
+          select: {
+            jobs: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
+    const transformedCompanies = await Promise.all(
+      companies.map(async company => {
+        const recruitersCount = await prisma.job.findMany({
+          where: {
+            companyProfileId: company.id,
+          },
+          distinct: ["recruiterId"],
+          select: {
+            recruiterId: true,
+          },
+        });
 
-    const data = await res.json();
-    return data.companies || [];
+        const status: "Pending" | "Verified" = company.isVerified
+          ? "Verified"
+          : "Pending";
+
+        return {
+          id: company.id,
+          name: company.name,
+          contactEmail: company.contactEmail,
+          contactPhone: company.contactPhone,
+          location: company.location,
+          description: company.description,
+          logoUrl: company.logoUrl,
+          recruiters: recruitersCount.length || 1,
+          jobsActive: company.jobs.length,
+          jobsTotal: company._count.jobs,
+          status,
+          submitted: company.createdAt.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+        };
+      }),
+    );
+
+    return transformedCompanies;
   } catch (error) {
     console.error("Error fetching companies:", error);
     return [];
@@ -47,25 +89,12 @@ async function fetchCompanies(): Promise<CompanyRow[]> {
 
 async function CompaniesContent() {
   const companies = await fetchCompanies();
-  
-  return (
-    <Card>
-      <CardHeader className="border-b">
-        <CardTitle>Company Verification</CardTitle>
-        <CardDescription>
-          Review recruiter companies, verify profiles, and monitor active jobs.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="py-4">
-        <CompaniesTable data={companies} />
-      </CardContent>
-    </Card>
-  );
+  return <CompaniesTable data={companies} />;
 }
 
 export default async function CompaniesPage() {
   const session = await getServerSession(authOptions);
-  
+
   if (!session || !session.user || session.user.role !== "Admin") {
     redirect("/admin/login");
   }
