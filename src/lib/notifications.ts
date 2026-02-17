@@ -1,3 +1,4 @@
+import { messaging } from "./firebase-admin";
 import prisma from "./prisma";
 
 export type NotificationType =
@@ -12,12 +13,12 @@ export type NotificationType =
   | "NEW_VERIFICATION_REQUEST";
 
 interface CreateNotificationParams {
-  userId?: string;     // Recruiter or Seeker
-  adminId?: string;    // Admin User
+  userId?: string; // Recruiter or Seeker
+  adminId?: string; // Admin User
   title: string;
   content: string;
   type: NotificationType;
-  link?: string;       // Deep link for Flutter or React URL
+  link?: string; // Deep link for Flutter or React URL
 }
 
 /**
@@ -53,26 +54,79 @@ export async function createNotification(params: CreateNotificationParams) {
 }
 
 /**
- * Placeholder for Firebase Cloud Messaging logic.
- * This will fetch the user's device tokens and send a push to their phone.
+ * Sends push notifications to all registered device tokens for a user.
+ * Automatically handles token cleanup for expired/invalid registrations.
  */
-async function sendPushNotification(userId: string, title: string, body: string, link?: string) {
+async function sendPushNotification(
+  userId: string,
+  title: string,
+  body: string,
+  link?: string,
+) {
   try {
-    // Fetch all active tokens for this user
+    // 1. Fetch all active device tokens for the user
     const tokens = await prisma.deviceToken.findMany({
       where: { userId },
       select: { token: true },
     });
 
-    if (tokens.length === 0) return;
+    if (tokens.length === 0) {
+      console.log(
+        `[PUSH] No device tokens found for user ${userId}. Skipping push.`,
+      );
+      return;
+    }
 
-    // TODO: Implement Firebase Admin SDK call here
-    // Example logic:
-    // const fcmTokens = tokens.map(t => t.token);
-    // await admin.messaging().sendMulticast({ tokens: fcmTokens, notification: { title, body }, data: { link } });
-    
-    console.log(`[PUSH] Sending to user ${userId} (${tokens.length} devices): ${title}`);
+    const fcmTokens = tokens.map(t => t.token);
+
+    // 2. Prepare the mobile payload
+    // Note: 'data' is where Flutter takes the link for navigation
+    const message = {
+      notification: {
+        title,
+        body,
+      },
+      data: {
+        click_action: "FLUTTER_NOTIFICATION_CLICK",
+        link: link || "",
+      },
+      tokens: fcmTokens,
+    };
+
+    // 3. Send to all devices
+    const response = await messaging.sendEachForMulticast(message);
+
+    console.log(
+      `[PUSH] Multicast results for user ${userId}: Successfully sent ${response.successCount}, Failed: ${response.failureCount}`,
+    );
+
+    // 4. Cleanup invalid or stale tokens
+    if (response.failureCount > 0) {
+      const tokensToDelete: string[] = [];
+
+      response.responses.forEach((resp: any, idx: number) => {
+        if (!resp.success) {
+          const errorCode = resp.error?.code;
+          // Tokens that are definitely invalid
+          if (
+            errorCode === "messaging/invalid-registration-token" ||
+            errorCode === "messaging/registration-token-not-registered"
+          ) {
+            tokensToDelete.push(fcmTokens[idx]);
+          }
+        }
+      });
+
+      if (tokensToDelete.length > 0) {
+        await prisma.deviceToken.deleteMany({
+          where: { token: { in: tokensToDelete } },
+        });
+        console.log(
+          `[PUSH] Cleaned up ${tokensToDelete.length} invalid device tokens.`,
+        );
+      }
+    }
   } catch (error) {
-    console.error("Failed to send push notification:", error);
+    console.error("Critical error in sendPushNotification:", error);
   }
 }
