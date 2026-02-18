@@ -75,6 +75,11 @@ export type CompanyProfile = Prisma.CompanyProfileModel
  */
 export type AdminUser = Prisma.AdminUserModel
 /**
+ * Model Tip
+ * 
+ */
+export type Tip = Prisma.TipModel
+/**
  * Model OAuthAccount
  * 
  */

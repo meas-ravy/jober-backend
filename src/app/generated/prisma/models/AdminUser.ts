@@ -201,6 +201,7 @@ export type AdminUserWhereInput = {
   reviewedJobs?: Prisma.JobListRelationFilter
   verifiedCompanies?: Prisma.CompanyProfileListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  tips?: Prisma.TipListRelationFilter
 }
 
 export type AdminUserOrderByWithRelationInput = {
@@ -214,6 +215,7 @@ export type AdminUserOrderByWithRelationInput = {
   reviewedJobs?: Prisma.JobOrderByRelationAggregateInput
   verifiedCompanies?: Prisma.CompanyProfileOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  tips?: Prisma.TipOrderByRelationAggregateInput
 }
 
 export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
@@ -230,6 +232,7 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   reviewedJobs?: Prisma.JobListRelationFilter
   verifiedCompanies?: Prisma.CompanyProfileListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  tips?: Prisma.TipListRelationFilter
 }, "id" | "email">
 
 export type AdminUserOrderByWithAggregationInput = {
@@ -269,6 +272,7 @@ export type AdminUserCreateInput = {
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateInput = {
@@ -282,6 +286,7 @@ export type AdminUserUncheckedCreateInput = {
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUpdateInput = {
@@ -295,6 +300,7 @@ export type AdminUserUpdateInput = {
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateInput = {
@@ -308,6 +314,7 @@ export type AdminUserUncheckedUpdateInput = {
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserCreateManyInput = {
@@ -375,6 +382,11 @@ export type AdminUserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type AdminUserScalarRelationFilter = {
+  is?: Prisma.AdminUserWhereInput
+  isNot?: Prisma.AdminUserWhereInput
+}
+
 export type AdminUserCreateNestedOneWithoutVerifiedCompaniesInput = {
   create?: Prisma.XOR<Prisma.AdminUserCreateWithoutVerifiedCompaniesInput, Prisma.AdminUserUncheckedCreateWithoutVerifiedCompaniesInput>
   connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutVerifiedCompaniesInput
@@ -389,6 +401,20 @@ export type AdminUserUpdateOneWithoutVerifiedCompaniesNestedInput = {
   delete?: Prisma.AdminUserWhereInput | boolean
   connect?: Prisma.AdminUserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutVerifiedCompaniesInput, Prisma.AdminUserUpdateWithoutVerifiedCompaniesInput>, Prisma.AdminUserUncheckedUpdateWithoutVerifiedCompaniesInput>
+}
+
+export type AdminUserCreateNestedOneWithoutTipsInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutTipsInput, Prisma.AdminUserUncheckedCreateWithoutTipsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutTipsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneRequiredWithoutTipsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutTipsInput, Prisma.AdminUserUncheckedCreateWithoutTipsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutTipsInput
+  upsert?: Prisma.AdminUserUpsertWithoutTipsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutTipsInput, Prisma.AdminUserUpdateWithoutTipsInput>, Prisma.AdminUserUncheckedUpdateWithoutTipsInput>
 }
 
 export type AdminUserCreateNestedOneWithoutReviewedJobsInput = {
@@ -433,6 +459,7 @@ export type AdminUserCreateWithoutVerifiedCompaniesInput = {
   updatedAt?: Date | string
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutVerifiedCompaniesInput = {
@@ -445,6 +472,7 @@ export type AdminUserUncheckedCreateWithoutVerifiedCompaniesInput = {
   updatedAt?: Date | string
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutVerifiedCompaniesInput = {
@@ -473,6 +501,7 @@ export type AdminUserUpdateWithoutVerifiedCompaniesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutVerifiedCompaniesInput = {
@@ -484,6 +513,75 @@ export type AdminUserUncheckedUpdateWithoutVerifiedCompaniesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserCreateWithoutTipsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
+  verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+}
+
+export type AdminUserUncheckedCreateWithoutTipsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
+  verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type AdminUserCreateOrConnectWithoutTipsInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutTipsInput, Prisma.AdminUserUncheckedCreateWithoutTipsInput>
+}
+
+export type AdminUserUpsertWithoutTipsInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutTipsInput, Prisma.AdminUserUncheckedUpdateWithoutTipsInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutTipsInput, Prisma.AdminUserUncheckedCreateWithoutTipsInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutTipsInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutTipsInput, Prisma.AdminUserUncheckedUpdateWithoutTipsInput>
+}
+
+export type AdminUserUpdateWithoutTipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
+  verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutTipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
+  verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
 }
 
@@ -497,6 +595,7 @@ export type AdminUserCreateWithoutReviewedJobsInput = {
   updatedAt?: Date | string
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutReviewedJobsInput = {
@@ -509,6 +608,7 @@ export type AdminUserUncheckedCreateWithoutReviewedJobsInput = {
   updatedAt?: Date | string
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutReviewedJobsInput = {
@@ -537,6 +637,7 @@ export type AdminUserUpdateWithoutReviewedJobsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutReviewedJobsInput = {
@@ -549,6 +650,7 @@ export type AdminUserUncheckedUpdateWithoutReviewedJobsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserCreateWithoutNotificationsInput = {
@@ -561,6 +663,7 @@ export type AdminUserCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
+  tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutNotificationsInput = {
@@ -573,6 +676,7 @@ export type AdminUserUncheckedCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
+  tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutNotificationsInput = {
@@ -601,6 +705,7 @@ export type AdminUserUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
+  tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutNotificationsInput = {
@@ -613,6 +718,7 @@ export type AdminUserUncheckedUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
+  tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 
@@ -624,12 +730,14 @@ export type AdminUserCountOutputType = {
   reviewedJobs: number
   verifiedCompanies: number
   notifications: number
+  tips: number
 }
 
 export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviewedJobs?: boolean | AdminUserCountOutputTypeCountReviewedJobsArgs
   verifiedCompanies?: boolean | AdminUserCountOutputTypeCountVerifiedCompaniesArgs
   notifications?: boolean | AdminUserCountOutputTypeCountNotificationsArgs
+  tips?: boolean | AdminUserCountOutputTypeCountTipsArgs
 }
 
 /**
@@ -663,6 +771,13 @@ export type AdminUserCountOutputTypeCountNotificationsArgs<ExtArgs extends runti
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountTipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TipWhereInput
+}
+
 
 export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -675,6 +790,7 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   reviewedJobs?: boolean | Prisma.AdminUser$reviewedJobsArgs<ExtArgs>
   verifiedCompanies?: boolean | Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>
   notifications?: boolean | Prisma.AdminUser$notificationsArgs<ExtArgs>
+  tips?: boolean | Prisma.AdminUser$tipsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
@@ -713,6 +829,7 @@ export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   reviewedJobs?: boolean | Prisma.AdminUser$reviewedJobsArgs<ExtArgs>
   verifiedCompanies?: boolean | Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>
   notifications?: boolean | Prisma.AdminUser$notificationsArgs<ExtArgs>
+  tips?: boolean | Prisma.AdminUser$tipsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -724,6 +841,7 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     reviewedJobs: Prisma.$JobPayload<ExtArgs>[]
     verifiedCompanies: Prisma.$CompanyProfilePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    tips: Prisma.$TipPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1130,6 +1248,7 @@ export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtim
   reviewedJobs<T extends Prisma.AdminUser$reviewedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$reviewedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   verifiedCompanies<T extends Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.AdminUser$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tips<T extends Prisma.AdminUser$tipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$tipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1623,6 +1742,30 @@ export type AdminUser$notificationsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.tips
+ */
+export type AdminUser$tipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tip
+   */
+  select?: Prisma.TipSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tip
+   */
+  omit?: Prisma.TipOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipInclude<ExtArgs> | null
+  where?: Prisma.TipWhereInput
+  orderBy?: Prisma.TipOrderByWithRelationInput | Prisma.TipOrderByWithRelationInput[]
+  cursor?: Prisma.TipWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TipScalarFieldEnum | Prisma.TipScalarFieldEnum[]
 }
 
 /**

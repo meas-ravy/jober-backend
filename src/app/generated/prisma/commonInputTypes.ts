@@ -236,6 +236,23 @@ export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
 }
 
+export type EnumTipCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipCategory | Prisma.EnumTipCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel> | $Enums.TipCategory
+}
+
+export type EnumTipCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipCategory | Prisma.EnumTipCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TipCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel>
+}
+
 export type EnumOAuthProviderFilter<$PrismaModel = never> = {
   equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel>
   in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
@@ -655,6 +672,23 @@ export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type NestedEnumTipCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipCategory | Prisma.EnumTipCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel> | $Enums.TipCategory
+}
+
+export type NestedEnumTipCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipCategory | Prisma.EnumTipCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipCategory[] | Prisma.ListEnumTipCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TipCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipCategoryFilter<$PrismaModel>
 }
 
 export type NestedEnumOAuthProviderFilter<$PrismaModel = never> = {

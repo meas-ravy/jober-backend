@@ -391,6 +391,7 @@ export const ModelName = {
   JobSeekerProfile: 'JobSeekerProfile',
   CompanyProfile: 'CompanyProfile',
   AdminUser: 'AdminUser',
+  Tip: 'Tip',
   OAuthAccount: 'OAuthAccount',
   Job: 'Job',
   JobApplication: 'JobApplication',
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userRole" | "phoneOtp" | "revokedToken" | "jobSeekerProfile" | "companyProfile" | "adminUser" | "oAuthAccount" | "job" | "jobApplication" | "savedJob" | "follow" | "deviceToken" | "notification"
+    modelProps: "user" | "userRole" | "phoneOtp" | "revokedToken" | "jobSeekerProfile" | "companyProfile" | "adminUser" | "tip" | "oAuthAccount" | "job" | "jobApplication" | "savedJob" | "follow" | "deviceToken" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -932,6 +933,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AdminUserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AdminUserCountAggregateOutputType> | number
+        }
+      }
+    }
+    Tip: {
+      payload: Prisma.$TipPayload<ExtArgs>
+      fields: Prisma.TipFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TipFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TipFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        findFirst: {
+          args: Prisma.TipFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TipFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        findMany: {
+          args: Prisma.TipFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>[]
+        }
+        create: {
+          args: Prisma.TipCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        createMany: {
+          args: Prisma.TipCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TipCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>[]
+        }
+        delete: {
+          args: Prisma.TipDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        update: {
+          args: Prisma.TipUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        deleteMany: {
+          args: Prisma.TipDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TipUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TipUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>[]
+        }
+        upsert: {
+          args: Prisma.TipUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipPayload>
+        }
+        aggregate: {
+          args: Prisma.TipAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTip>
+        }
+        groupBy: {
+          args: Prisma.TipGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TipCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipCountAggregateOutputType> | number
         }
       }
     }
@@ -1587,6 +1662,21 @@ export const AdminUserScalarFieldEnum = {
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
 
 
+export const TipScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  category: 'category',
+  isPublished: 'isPublished',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TipScalarFieldEnum = (typeof TipScalarFieldEnum)[keyof typeof TipScalarFieldEnum]
+
+
 export const OAuthAccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1824,6 +1914,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TipCategory'
+ */
+export type EnumTipCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'TipCategory[]'
+ */
+export type ListEnumTipCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipCategory[]'>
     
 
 
@@ -2068,6 +2172,7 @@ export type GlobalOmitConfig = {
   jobSeekerProfile?: Prisma.JobSeekerProfileOmit
   companyProfile?: Prisma.CompanyProfileOmit
   adminUser?: Prisma.AdminUserOmit
+  tip?: Prisma.TipOmit
   oAuthAccount?: Prisma.OAuthAccountOmit
   job?: Prisma.JobOmit
   jobApplication?: Prisma.JobApplicationOmit

@@ -71,11 +71,7 @@ export function CompanyDetailDialog({
               </p>
               <Badge
                 variant={
-                  company.status === "Rejected"
-                    ? "destructive"
-                    : company.status === "Pending"
-                      ? "outline"
-                      : "secondary"
+                  company.status === "Verified" ? "secondary" : "outline"
                 }
               >
                 {company.status}

@@ -26,8 +26,6 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 
-export const description = "Jobs and applications trend";
-
 const chartConfig = {
   jobs: {
     label: "Jobs Posted",
@@ -53,26 +51,36 @@ export function ChartAreaInteractive({
   const [timeRange, setTimeRange] = React.useState("7d");
   const [chartData, setChartData] =
     React.useState<ChartDataPoint[]>(initialData);
-  const [loading, setLoading] = React.useState(false); // Default to false since we have initial data
-
-  const fetchChartData = React.useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/admin/dashboard/chart?range=${timeRange}`);
-      const data = await res.json();
-      if (data.chartData) {
-        setChartData(data.chartData);
-      }
-    } catch (error) {
-      console.error("Failed to fetch chart data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [timeRange]);
+  const [loading, setLoading] = React.useState(false);
+  const isFirstRender = React.useRef(true);
 
   React.useEffect(() => {
+    // Skip the first render — we already have initialData from the server
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Only fetch when user changes the time range
+    const fetchChartData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/admin/dashboard/chart?range=${timeRange}`,
+        );
+        const data = await res.json();
+        if (data.chartData) {
+          setChartData(data.chartData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch chart data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchChartData();
-  }, [fetchChartData]);
+  }, [timeRange]);
 
   // Calculate summary stats
   const totalJobs = chartData.reduce((sum, d) => sum + d.jobs, 0);
@@ -209,7 +217,8 @@ export function ChartAreaInteractive({
                   fill="url(#fillApplications)"
                   stroke="var(--color-applications)"
                   stackId="a"
-                  isAnimationActive={false}
+                  isAnimationActive={true}
+                  animationDuration={1500}
                 />
                 <Area
                   dataKey="jobs"
@@ -217,7 +226,8 @@ export function ChartAreaInteractive({
                   fill="url(#fillJobs)"
                   stroke="var(--color-jobs)"
                   stackId="a"
-                  isAnimationActive={false}
+                  isAnimationActive={true}
+                  animationDuration={1500}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>

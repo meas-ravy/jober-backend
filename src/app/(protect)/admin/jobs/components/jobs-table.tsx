@@ -25,11 +25,8 @@ import {
   Eye,
   Loader2,
   Search,
-  Star,
-  StarOff,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
@@ -41,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import { Switch } from "@/src/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -105,7 +103,63 @@ const globalJobFilter: FilterFn<JobRow> = (row, _columnId, filterValue) => {
   );
 };
 
-const createColumns = (): ColumnDef<JobRow>[] => [
+// Extracted as a proper component to avoid React Hooks violation
+function ActionCell({ job }: { job: JobRow }) {
+  return (
+    <div className="flex justify-end gap-2">
+      <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+        <Link href={`/admin/jobs/${job.id}`}>
+          <Eye className="size-3.5" />
+        </Link>
+      </Button>
+    </div>
+  );
+}
+
+function RecommendCell({
+  job,
+  onToggleRecommend,
+}: {
+  job: JobRow;
+  onToggleRecommend: (jobId: string) => void;
+}) {
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const toggleRecommendation = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/jobs/${job.id}/recommend`, {
+        method: "PATCH",
+      });
+
+      if (!res.ok) throw new Error("Failed to toggle recommendation");
+
+      const data = await res.json();
+      toast.success(data.message);
+      onToggleRecommend(job.id);
+    } catch (error) {
+      toast.error("Failed to update recommendation status");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (job.status !== "Active") return null;
+
+  return (
+    <div className="flex items-center justify-center">
+      <Switch
+        checked={job.isRecommended}
+        onCheckedChange={toggleRecommendation}
+        disabled={isLoading}
+      />
+    </div>
+  );
+}
+
+const createColumns = (
+  onToggleRecommend: (jobId: string) => void,
+): ColumnDef<JobRow>[] => [
   {
     id: "job",
     header: "Job",
@@ -212,68 +266,17 @@ const createColumns = (): ColumnDef<JobRow>[] => [
     ),
   },
   {
+    id: "isRecommended",
+    header: () => <div className="text-center">Recommended</div>,
+    cell: ({ row }) => (
+      <RecommendCell job={row.original} onToggleRecommend={onToggleRecommend} />
+    ),
+  },
+  {
     id: "actions",
     header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
-    cell: ({ row }) => {
-      const [isLoading, setIsLoading] = React.useState(false);
-      const isRecommended = row.original.isRecommended;
-      const router = useRouter();
-
-      const toggleRecommendation = async () => {
-        setIsLoading(true);
-        try {
-          const res = await fetch(
-            `/api/admin/jobs/${row.original.id}/recommend`,
-            {
-              method: "PATCH",
-            },
-          );
-
-          if (!res.ok) throw new Error("Failed to toggle recommendation");
-
-          const data = await res.json();
-          toast.success(data.message);
-          router.refresh();
-        } catch (error) {
-          toast.error("Failed to update recommendation status");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      return (
-        <div className="flex justify-end gap-2">
-          {row.original.status === "Active" && (
-            <Button
-              variant="outline"
-              size="sm"
-              className={`h-8 w-8 p-0 ${isRecommended ? "text-yellow-500 border-yellow-200 bg-yellow-50" : "text-muted-foreground"}`}
-              onClick={toggleRecommendation}
-              disabled={isLoading}
-              title={
-                isRecommended
-                  ? "Remove from recommended"
-                  : "Mark as recommended"
-              }
-            >
-              {isLoading ? (
-                <Loader2 className="size-3.5 animate-spin" />
-              ) : isRecommended ? (
-                <Star className="size-3.5 fill-current" />
-              ) : (
-                <StarOff className="size-3.5" />
-              )}
-            </Button>
-          )}
-          <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
-            <Link href={`/admin/jobs/${row.original.id}`}>
-              <Eye className="size-3.5" />
-            </Link>
-          </Button>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionCell job={row.original} />,
   },
 ];
 
@@ -322,10 +325,28 @@ export function JobsTable({ data }: JobsTableProps) {
     pageIndex: 0,
     pageSize: 10,
   });
-  const columns = React.useMemo(() => createColumns(), []);
+  const [tableData, setTableData] = React.useState<JobRow[]>(data);
+
+  // Keep tableData in sync if server data changes (e.g. after navigation)
+  React.useEffect(() => {
+    setTableData(data);
+  }, [data]);
+
+  const handleToggleRecommend = React.useCallback((jobId: string) => {
+    setTableData(prev =>
+      prev.map(job =>
+        job.id === jobId ? { ...job, isRecommended: !job.isRecommended } : job,
+      ),
+    );
+  }, []);
+
+  const columns = React.useMemo(
+    () => createColumns(handleToggleRecommend),
+    [handleToggleRecommend],
+  );
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     state: {
       sorting,
@@ -428,6 +449,8 @@ export function JobsTable({ data }: JobsTableProps) {
                           column={header.column}
                           label="Submitted"
                         />
+                      ) : header.column.id === "isRecommended" ? (
+                        <div className="text-center">Recommended</div>
                       ) : (
                         flexRender(
                           header.column.columnDef.header,

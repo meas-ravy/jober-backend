@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
     // Count recruiters per company (users who posted jobs for this company)
     const transformedCompanies = await Promise.all(
-      companies.map(async (company) => {
+      companies.map(async company => {
         // Count unique recruiters who posted jobs for this company
         const recruitersCount = await prisma.job.findMany({
           where: {
@@ -49,9 +49,9 @@ export async function GET(req: NextRequest) {
           },
         });
 
-        // Determine status - for now, all are "Verified" if they have a profile
-        // You can add more logic here based on your requirements
-        const status: "Pending" | "Verified" | "Rejected" = "Verified";
+        const status: "Pending" | "Verified" = company.isVerified
+          ? "Verified"
+          : "Pending";
 
         return {
           id: company.id,

@@ -11,10 +11,7 @@ export const runtime = "nodejs";
 
 // Simple in-memory rate limiter
 // In production, use Redis or a proper rate limiting solution
-const rateLimitMap = new Map<
-  string,
-  { count: number; resetTime: number }
->();
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 const RATE_LIMIT = {
   MAX_REQUESTS: 10,
@@ -47,6 +44,9 @@ function hasRequiredRole(roles: RoleName[], imageType: ImageType): boolean {
   }
   if (imageType === "job-seeker-avatar") {
     return roles.includes("Job_finder");
+  }
+  if (imageType === "tip-image") {
+    return roles.includes("Admin");
   }
   return false;
 }

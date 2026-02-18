@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import {
+  type Column,
   type ColumnDef,
   type ColumnFiltersState,
   type FilterFn,
   type SortingState,
-  type Column,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -23,7 +23,9 @@ import {
   ChevronsRight,
   ChevronsUpDown,
   Search,
-  Eye,
+  Pencil,
+  Trash2,
+  Plus,
 } from "lucide-react";
 
 import { Badge } from "@/src/components/ui/badge";
@@ -36,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import { Switch } from "@/src/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -44,156 +47,69 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { UserAvatar } from "@/src/components/ui/user-avatar";
 import Link from "next/link";
 
-export type UserRow = {
+export type TipRow = {
   id: string;
-  name: string;
-  avatar: string | null;
-  email: string;
-  phone: string;
-  role: "Job Seeker" | "Recruiter" | "Admin";
-  status: "Active" | "Pending" | "Suspended";
-  joined: string;
-  applicationsCount: number;
-  jobsCount: number;
+  title: string;
+  content: string;
+  imageUrl: string | null;
+  category: string;
+  isPublished: boolean;
+  authorName: string;
+  createdAt: string;
 };
 
-const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
+const TIP_CATEGORIES = [
+  "Career",
+  "Interview",
+  "Resume",
+  "Networking",
+  "WorkLife",
+  "Skills",
+  "JobSearch",
+  "Other",
+];
+
+const categoryColors: Record<string, string> = {
+  Career:
+    "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+  Interview:
+    "border-purple-500 bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
+  Resume:
+    "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300",
+  Networking:
+    "border-orange-500 bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300",
+  WorkLife:
+    "border-pink-500 bg-pink-50 text-pink-700 dark:bg-pink-950 dark:text-pink-300",
+  Skills:
+    "border-cyan-500 bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300",
+  JobSearch:
+    "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
+  Other:
+    "border-gray-500 bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300",
+};
+
+const globalTipFilter: FilterFn<TipRow> = (row, _columnId, filterValue) => {
   const search = String(filterValue).toLowerCase().trim();
   if (!search) return true;
-  const { name, email, phone } = row.original;
-  return [name, email, phone].some(value =>
+  const { title, category, authorName } = row.original;
+  return [title, category, authorName].some(value =>
     value.toLowerCase().includes(search),
   );
 };
 
-const columns: ColumnDef<UserRow>[] = [
-  {
-    id: "user",
-    header: "User",
-    accessorFn: row => row.name,
-    cell: ({ row }) => (
-      <div className="flex items-center gap-3">
-        <UserAvatar
-          name={row.original.name}
-          src={row.original.avatar ?? undefined}
-          className="h-10 w-10"
-        />
-        <div className="flex flex-col">
-          <span className="font-medium">{row.original.name}</span>
-          <span className="text-muted-foreground text-xs">
-            {row.original.email}
-          </span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.phone}</span>
-    ),
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-    filterFn: "equalsString",
-    cell: ({ row }) => (
-      <Badge
-        variant="outline"
-        className={
-          row.original.role === "Recruiter"
-            ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-            : "border-purple-500 bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300"
-        }
-      >
-        {row.original.role}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    filterFn: "equalsString",
-    cell: ({ row }) => {
-      const status = row.original.status;
-      return (
-        <Badge
-          variant="outline"
-          className={
-            status === "Active"
-              ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-              : status === "Pending"
-                ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-                : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
-          }
-        >
-          {status}
-        </Badge>
-      );
-    },
-  },
-  {
-    id: "applicationsCount",
-    header: "Applications",
-    accessorFn: row => row.applicationsCount,
-    cell: ({ row }) => (
-      <span className="text-muted-foreground text-center">
-        {row.original.applicationsCount}
-      </span>
-    ),
-  },
-  {
-    id: "jobsCount",
-    header: "Jobs Posted",
-    accessorFn: row => row.jobsCount,
-    cell: ({ row }) => (
-      <span className="text-muted-foreground text-center">
-        {row.original.jobsCount}
-      </span>
-    ),
-  },
-  {
-    id: "joined",
-    header: "Joined",
-    accessorFn: row => new Date(row.joined).getTime(),
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.joined}</span>
-    ),
-  },
-  {
-    id: "actions",
-    header: () => <div className="text-right">Action</div>,
-    enableSorting: false,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-primary"
-          asChild
-        >
-          <Link href={`/admin/users/${row.original.id}`}>
-            <Eye className="h-4 w-4" />
-          </Link>
-        </Button>
-      </div>
-    ),
-  },
-];
-
-type UsersTableProps = {
-  data: UserRow[];
+type TipsTableProps = {
+  data: TipRow[];
+  onDelete: (tip: TipRow) => void;
+  onTogglePublish: (tip: TipRow) => void;
 };
 
 function SortableHeader({
   column,
   label,
 }: {
-  column: Column<UserRow, unknown>;
+  column: Column<TipRow, unknown>;
   label: string;
 }) {
   if (!column.getCanSort()) {
@@ -220,7 +136,7 @@ function SortableHeader({
   );
 }
 
-export function UsersTable({ data }: UsersTableProps) {
+export function TipsTable({ data, onDelete, onTogglePublish }: TipsTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -230,6 +146,100 @@ export function UsersTable({ data }: UsersTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
+
+  const columns: ColumnDef<TipRow>[] = React.useMemo(
+    () => [
+      {
+        id: "title",
+        header: "Title",
+        accessorFn: row => row.title,
+        cell: ({ row }) => (
+          <div className="flex flex-col max-w-xs">
+            <span className="font-medium truncate">{row.original.title}</span>
+            <span className="text-muted-foreground text-xs truncate">
+              {row.original.content.substring(0, 80)}
+              {row.original.content.length > 80 ? "..." : ""}
+            </span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "category",
+        header: "Category",
+        filterFn: "equalsString",
+        cell: ({ row }) => {
+          const cat = row.original.category;
+          return (
+            <Badge
+              variant="outline"
+              className={categoryColors[cat] || categoryColors.Other}
+            >
+              {cat}
+            </Badge>
+          );
+        },
+      },
+      {
+        id: "author",
+        header: "Author",
+        accessorFn: row => row.authorName,
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">
+            {row.original.authorName}
+          </span>
+        ),
+      },
+      {
+        id: "published",
+        header: "Published",
+        accessorFn: row => (row.isPublished ? 1 : 0),
+        cell: ({ row }) => (
+          <Switch
+            checked={row.original.isPublished}
+            onCheckedChange={() => onTogglePublish(row.original)}
+          />
+        ),
+      },
+      {
+        id: "createdAt",
+        header: "Created",
+        accessorFn: row => new Date(row.createdAt).getTime(),
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">
+            {row.original.createdAt}
+          </span>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <div className="text-right">Actions</div>,
+        enableSorting: false,
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-primary"
+              asChild
+            >
+              <Link href={`/admin/tips/${row.original.id}`}>
+                <Pencil className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              onClick={() => onDelete(row.original)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [onDelete, onTogglePublish],
+  );
 
   const table = useReactTable({
     data,
@@ -248,12 +258,11 @@ export function UsersTable({ data }: UsersTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    globalFilterFn: globalUserFilter,
+    globalFilterFn: globalTipFilter,
   });
 
-  const roleValue = (table.getColumn("role")?.getFilterValue() as string) ?? "";
-  const statusValue =
-    (table.getColumn("status")?.getFilterValue() as string) ?? "";
+  const categoryValue =
+    (table.getColumn("category")?.getFilterValue() as string) ?? "";
   const totalRows = table.getFilteredRowModel().rows.length;
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
@@ -265,7 +274,7 @@ export function UsersTable({ data }: UsersTableProps) {
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="relative w-full max-w-sm">
           <Input
-            placeholder="Search users"
+            placeholder="Search tips..."
             value={globalFilter ?? ""}
             onChange={event => setGlobalFilter(event.target.value)}
             className="pl-9"
@@ -275,49 +284,30 @@ export function UsersTable({ data }: UsersTableProps) {
           </div>
         </div>
         <Select
-          value={roleValue || "all-roles"}
+          value={categoryValue || "all-categories"}
           onValueChange={value => {
             table
-              .getColumn("role")
-              ?.setFilterValue(value === "all-roles" ? "" : value);
+              .getColumn("category")
+              ?.setFilterValue(value === "all-categories" ? "" : value);
           }}
         >
           <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Role" />
+            <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-roles">All roles</SelectItem>
-            <SelectItem value="Job Seeker">Job Seeker</SelectItem>
-            <SelectItem value="Recruiter">Recruiter</SelectItem>
+            <SelectItem value="all-categories">All categories</SelectItem>
+            {TIP_CATEGORIES.map(cat => (
+              <SelectItem key={cat} value={cat}>
+                {cat}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
-        <Select
-          value={statusValue || "all-status"}
-          onValueChange={value => {
-            table
-              .getColumn("status")
-              ?.setFilterValue(value === "all-status" ? "" : value);
-          }}
-        >
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all-status">All status</SelectItem>
-            <SelectItem value="Active">Active</SelectItem>
-            <SelectItem value="Pending">Pending</SelectItem>
-            <SelectItem value="Suspended">Suspended</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button
-          variant="outline"
-          className="md:ml-auto"
-          onClick={() => {
-            setGlobalFilter("");
-            table.resetColumnFilters();
-          }}
-        >
-          Reset filters
+        <Button asChild className="md:ml-auto">
+          <Link href="/admin/tips/new">
+            <Plus className="mr-2 size-4" />
+            Create Tip
+          </Link>
         </Button>
       </div>
       <div className="overflow-hidden rounded-md border">
@@ -328,26 +318,19 @@ export function UsersTable({ data }: UsersTableProps) {
                 {headerGroup.headers.map(header => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : header.column.id ===
-                      "user" ? (
-                      <SortableHeader column={header.column} label="User" />
-                    ) : header.column.id === "phone" ? (
-                      <SortableHeader column={header.column} label="Phone" />
-                    ) : header.column.id === "role" ? (
-                      <SortableHeader column={header.column} label="Role" />
-                    ) : header.column.id === "status" ? (
-                      <SortableHeader column={header.column} label="Status" />
-                    ) : header.column.id === "applicationsCount" ? (
+                      "title" ? (
+                      <SortableHeader column={header.column} label="Title" />
+                    ) : header.column.id === "category" ? (
+                      <SortableHeader column={header.column} label="Category" />
+                    ) : header.column.id === "author" ? (
+                      <SortableHeader column={header.column} label="Author" />
+                    ) : header.column.id === "published" ? (
                       <SortableHeader
                         column={header.column}
-                        label="Applications"
+                        label="Published"
                       />
-                    ) : header.column.id === "jobsCount" ? (
-                      <SortableHeader
-                        column={header.column}
-                        label="Jobs Posted"
-                      />
-                    ) : header.column.id === "joined" ? (
-                      <SortableHeader column={header.column} label="Joined" />
+                    ) : header.column.id === "createdAt" ? (
+                      <SortableHeader column={header.column} label="Created" />
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -379,7 +362,7 @@ export function UsersTable({ data }: UsersTableProps) {
                   colSpan={columns.length}
                   className="py-6 text-center"
                 >
-                  No users found.
+                  No tips found.
                 </TableCell>
               </TableRow>
             )}

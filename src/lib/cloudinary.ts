@@ -17,17 +17,24 @@ export const IMAGE_UPLOAD_CONFIG = {
     COMPANY_LOGO: "company-logos",
     JOB_SEEKER_AVATAR: "job-seeker-avatars",
     JOB_IMAGE: "job-images",
+    TIP_IMAGE: "tip-images",
     RESUME: "resumes",
   },
   TRANSFORMATIONS: {
     COMPANY_LOGO: "c_limit,w_1000,h_1000,q_auto,f_auto",
     JOB_SEEKER_AVATAR: "c_limit,w_1000,h_1000,q_auto,f_auto",
     JOB_IMAGE: "c_limit,w_1200,h_800,q_auto,f_auto",
+    TIP_IMAGE: "c_limit,w_1200,h_800,q_auto,f_auto",
     RESUME: "q_auto,f_auto",
   },
 } as const;
 
-export type ImageType = "company-logo" | "job-seeker-avatar" | "job-image" | "resume";
+export type ImageType =
+  | "company-logo"
+  | "job-seeker-avatar"
+  | "job-image"
+  | "tip-image"
+  | "resume";
 
 interface UploadSignatureParams {
   timestamp: number;
@@ -57,19 +64,23 @@ export function generateUploadSignature(
     imageType === "company-logo"
       ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
       : imageType === "job-seeker-avatar"
-      ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
-      : imageType === "job-image"
-      ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
-      : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
+        ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+        : imageType === "job-image"
+          ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
+          : imageType === "tip-image"
+            ? IMAGE_UPLOAD_CONFIG.FOLDERS.TIP_IMAGE
+            : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
   const transformation =
     imageType === "company-logo"
       ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.COMPANY_LOGO
       : imageType === "job-seeker-avatar"
-      ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_SEEKER_AVATAR
-      : imageType === "job-image"
-      ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_IMAGE
-      : IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.RESUME;
+        ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_SEEKER_AVATAR
+        : imageType === "job-image"
+          ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.JOB_IMAGE
+          : imageType === "tip-image"
+            ? IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.TIP_IMAGE
+            : IMAGE_UPLOAD_CONFIG.TRANSFORMATIONS.RESUME;
 
   // Parameters to sign
   const paramsToSign: UploadSignatureParams = {
@@ -125,10 +136,10 @@ export function validateCloudinaryUrl(
       imageType === "company-logo"
         ? IMAGE_UPLOAD_CONFIG.FOLDERS.COMPANY_LOGO
         : imageType === "job-seeker-avatar"
-        ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
-        : imageType === "job-image"
-        ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
-        : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
+          ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_SEEKER_AVATAR
+          : imageType === "job-image"
+            ? IMAGE_UPLOAD_CONFIG.FOLDERS.JOB_IMAGE
+            : IMAGE_UPLOAD_CONFIG.FOLDERS.RESUME;
 
     if (!url.includes(`/${expectedFolder}/`)) {
       return false;
@@ -147,6 +158,7 @@ export function isValidImageType(type: unknown): type is ImageType {
   return (
     type === "company-logo" ||
     type === "job-seeker-avatar" ||
-    type === "job-image"
+    type === "job-image" ||
+    type === "tip-image"
   );
 }

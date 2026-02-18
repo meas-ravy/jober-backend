@@ -50,7 +50,7 @@ export function UserDetailDialog({
             <div>
               <p className="text-sm font-medium text-muted-foreground">Role</p>
               <Badge
-                variant="ghost"
+                variant="outline"
                 className={
                   user.role === "Recruiter"
                     ? "border-blue-200 text-blue-600"

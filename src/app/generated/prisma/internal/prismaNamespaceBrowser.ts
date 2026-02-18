@@ -58,6 +58,7 @@ export const ModelName = {
   JobSeekerProfile: 'JobSeekerProfile',
   CompanyProfile: 'CompanyProfile',
   AdminUser: 'AdminUser',
+  Tip: 'Tip',
   OAuthAccount: 'OAuthAccount',
   Job: 'Job',
   JobApplication: 'JobApplication',
@@ -176,6 +177,21 @@ export const AdminUserScalarFieldEnum = {
 } as const
 
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
+
+
+export const TipScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  category: 'category',
+  isPublished: 'isPublished',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TipScalarFieldEnum = (typeof TipScalarFieldEnum)[keyof typeof TipScalarFieldEnum]
 
 
 export const OAuthAccountScalarFieldEnum = {

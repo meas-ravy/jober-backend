@@ -44,16 +44,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/src/components/ui/avatar";
 import Link from "next/link";
 
 export type CompanyRow = {
-  id?: string;
+  id: string;
   name: string;
   contactEmail: string;
   contactPhone: string;
+  location: string;
+  description: string;
+  logoUrl: string;
   recruiters: number;
   jobsActive: number;
-  status: "Pending" | "Verified" | "Rejected";
+  jobsTotal: number;
+  status: "Pending" | "Verified";
   submitted: string;
 };
 
@@ -76,11 +85,23 @@ const columns: ColumnDef<CompanyRow>[] = [
     header: "Company",
     accessorFn: row => row.name,
     cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="font-medium">{row.original.name}</span>
-        <span className="text-muted-foreground text-xs">
-          {row.original.contactEmail}
-        </span>
+      <div className="flex items-center gap-3">
+        <Avatar className="h-10 w-10 rounded-lg border bg-white shadow-sm">
+          <AvatarImage
+            src={row.original.logoUrl}
+            alt={row.original.name}
+            className="object-contain p-1"
+          />
+          <AvatarFallback className="rounded-lg bg-primary/10 text-primary font-semibold">
+            {row.original.name.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.name}</span>
+          <span className="text-muted-foreground text-xs">
+            {row.original.contactEmail}
+          </span>
+        </div>
       </div>
     ),
   },
@@ -91,7 +112,16 @@ const columns: ColumnDef<CompanyRow>[] = [
       <span className="text-muted-foreground">{row.original.contactPhone}</span>
     ),
   },
-
+  {
+    id: "jobsActive",
+    header: "Active Jobs",
+    accessorFn: row => row.jobsActive,
+    cell: ({ row }) => (
+      <span className="text-muted-foreground">
+        {row.original.jobsActive} / {row.original.jobsTotal}
+      </span>
+    ),
+  },
   {
     accessorKey: "status",
     header: "Status",
@@ -104,9 +134,7 @@ const columns: ColumnDef<CompanyRow>[] = [
           className={
             status === "Verified"
               ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-              : status === "Pending"
-                ? "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-                : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+              : "border-yellow-500 bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
           }
         >
           {status}
@@ -272,6 +300,16 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
                       <SortableHeader column={header.column} label="Company" />
                     ) : header.column.id === "contactPhone" ? (
                       <SortableHeader column={header.column} label="Phone" />
+                    ) : header.column.id === "recruiters" ? (
+                      <SortableHeader
+                        column={header.column}
+                        label="Recruiters"
+                      />
+                    ) : header.column.id === "jobsActive" ? (
+                      <SortableHeader
+                        column={header.column}
+                        label="Active Jobs"
+                      />
                     ) : header.column.id === "status" ? (
                       <SortableHeader column={header.column} label="Status" />
                     ) : header.column.id === "submitted" ? (
@@ -324,7 +362,7 @@ export function CompaniesTable({ data }: CompaniesTableProps) {
         </span>
         <div className="flex items-center gap-2">
           <span className="text-muted-foreground mr-2">
-            Page {pageIndex + 1} of {table.getPageCount()}
+            Page {pageIndex + 1} of {table.getPageCount() || 1}
           </span>
           <Button
             variant="outline"

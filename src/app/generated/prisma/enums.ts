@@ -9,6 +9,20 @@
 * 🟢 You can import this file directly.
 */
 
+export const TipCategory = {
+  Career: 'Career',
+  Interview: 'Interview',
+  Resume: 'Resume',
+  Networking: 'Networking',
+  WorkLife: 'WorkLife',
+  Skills: 'Skills',
+  JobSearch: 'JobSearch',
+  Other: 'Other'
+} as const
+
+export type TipCategory = (typeof TipCategory)[keyof typeof TipCategory]
+
+
 export const RoleName = {
   Job_finder: 'Job_finder',
   Recruiter: 'Recruiter',

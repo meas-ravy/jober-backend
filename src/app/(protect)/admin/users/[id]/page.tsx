@@ -109,13 +109,6 @@ export default function AdminUserDetailPage() {
     return "border-gray-500 bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300";
   };
 
-  const displayName =
-    user?.jobSeekerProfile?.fullName ||
-    user?.companyProfile?.name ||
-    user?.name ||
-    user?.phone ||
-    "Unknown User";
-
   return (
     <SidebarProvider
       style={
@@ -173,18 +166,14 @@ export default function AdminUserDetailPage() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <UserAvatar
-                          name={displayName}
-                          src={
-                            user.jobSeekerProfile?.avatarUrl ||
-                            user.companyProfile?.logoUrl ||
-                            undefined
-                          }
+                          name={user?.jobSeekerProfile?.fullName || "N/A"}
+                          src={user.jobSeekerProfile?.avatarUrl || "N/A"}
                           className="h-12 w-12 text-lg border shadow-sm"
                         />
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-3">
                             <h1 className="text-xl font-bold leading-tight">
-                              {displayName}
+                              {user?.jobSeekerProfile?.fullName || "N/A"}
                             </h1>
                             <div className="flex flex-wrap items-center gap-1.5">
                               {user.roles.map(r => (
@@ -284,78 +273,12 @@ export default function AdminUserDetailPage() {
                     </div>
 
                     {/* ── Content Sections ── */}
-                    <div className="grid gap-6 md:grid-cols-2 border-t pt-6">
-                      {/* Left Column: Account + Linked */}
-                      <div className="space-y-5">
-                        <div>
-                          <h3 className="text-sm font-semibold mb-2">
-                            Account Information
-                          </h3>
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <UserIcon className="h-3.5 w-3.5 shrink-0" />
-                              <span>Name: {user.name || "Not set"}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Mail className="h-3.5 w-3.5 shrink-0" />
-                              <span>Email: {user.email || "Not set"}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Phone className="h-3.5 w-3.5 shrink-0" />
-                              <span>Phone: {user.phone || "Not set"}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Shield className="h-3.5 w-3.5 shrink-0" />
-                              <span>
-                                Roles:{" "}
-                                {user.roles
-                                  .map(r => getRoleName(r.role))
-                                  .join(", ")}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {user.oauthAccounts.length > 0 && (
-                          <div>
-                            <h3 className="text-sm font-semibold mb-2">
-                              Linked Accounts
-                            </h3>
-                            <div className="space-y-2">
-                              {user.oauthAccounts.map((a, i) => (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2 text-sm text-muted-foreground"
-                                >
-                                  <Link2 className="h-3.5 w-3.5 shrink-0" />
-                                  <span className="capitalize">
-                                    {a.provider}: {a.email}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {!user.jobSeekerProfile && !user.companyProfile && (
-                          <div className="p-4 rounded-lg bg-muted/30 border border-dashed flex flex-col items-center justify-center text-center py-8">
-                            <UserIcon className="h-8 w-8 text-muted-foreground/40 mb-2" />
-                            <p className="text-sm font-medium text-muted-foreground">
-                              No profiles yet
-                            </p>
-                            <p className="text-xs text-muted-foreground/60">
-                              User hasn&apos;t completed job seeker or recruiter
-                              setup.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Right Column: Profiles */}
+                    <div className="grid gap-5 md:grid-cols-2 border-t pt-6 ">
+                      {/* Left Column: Job Seeker Profile + Linked Accounts */}
                       <div className="space-y-5">
                         {user.jobSeekerProfile && (
-                          <div>
-                            <h3 className="text-sm font-semibold mb-2 flex items-center gap-1.5 text-purple-600">
+                          <div className="rounded-lg border p-4 space-y-3">
+                            <h3 className="text-sm font-semibold flex items-center gap-1.5 text-purple-600">
                               <UserIcon className="h-3.5 w-3.5" />
                               Job Seeker Profile
                             </h3>
@@ -387,13 +310,46 @@ export default function AdminUserDetailPage() {
                           </div>
                         )}
 
+                        {user.oauthAccounts.length > 0 && (
+                          <div>
+                            <h3 className="text-sm font-semibold mb-2">
+                              Linked Accounts
+                            </h3>
+                            <div className="space-y-2">
+                              {user.oauthAccounts.map((a, i) => (
+                                <div
+                                  key={i}
+                                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                                >
+                                  <Link2 className="h-3.5 w-3.5 shrink-0" />
+                                  <span className="capitalize">
+                                    {a.provider}: {a.email}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {!user.jobSeekerProfile && !user.companyProfile && (
+                        <div className="md:col-span-2 p-4 rounded-lg bg-muted/30 border border-dashed flex flex-col items-center justify-center text-center py-12">
+                          <UserIcon className="h-10 w-10 text-muted-foreground/40 mb-3" />
+                          <p className="text-sm font-medium text-muted-foreground">
+                            No profiles yet
+                          </p>
+                          <p className="text-xs text-muted-foreground/60 mt-1">
+                            User hasn&apos;t completed job seeker or recruiter
+                            setup.
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Right Column: Company Profile */}
+                      <div className="space-y-5">
                         {user.companyProfile && (
-                          <div
-                            className={
-                              user.jobSeekerProfile ? "pt-4 border-t" : ""
-                            }
-                          >
-                            <h3 className="text-sm font-semibold mb-2 flex items-center gap-1.5 text-blue-600">
+                          <div className="rounded-lg border p-4 space-y-3">
+                            <h3 className="text-sm font-semibold flex items-center gap-1.5 text-blue-600">
                               <Building className="h-3.5 w-3.5" />
                               Company Profile
                             </h3>
