@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { Loader2 } from "lucide-react";
 
 import {
   Card,
@@ -138,11 +137,6 @@ export function ChartAreaInteractive({
           </div>
         ) : (
           <div className="relative">
-            {loading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-[1px]">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-              </div>
-            )}
             <ChartContainer
               config={chartConfig}
               className="aspect-auto h-[250px] w-full"
@@ -215,6 +209,7 @@ export function ChartAreaInteractive({
                   fill="url(#fillApplications)"
                   stroke="var(--color-applications)"
                   stackId="a"
+                  isAnimationActive={false}
                 />
                 <Area
                   dataKey="jobs"
@@ -222,6 +217,7 @@ export function ChartAreaInteractive({
                   fill="url(#fillJobs)"
                   stroke="var(--color-jobs)"
                   stackId="a"
+                  isAnimationActive={false}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>

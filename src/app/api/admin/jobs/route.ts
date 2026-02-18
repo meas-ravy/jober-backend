@@ -15,6 +15,7 @@ export async function GET(request: Request) {
     // Parse query parameters
     const url = new URL(request.url);
     const status = url.searchParams.get("status");
+    const isRecommended = url.searchParams.get("isRecommended");
     const sortBy = url.searchParams.get("sort") || "createdAt";
     const page = parseInt(url.searchParams.get("page") || "1");
     const limit = parseInt(url.searchParams.get("limit") || "20");
@@ -27,6 +28,12 @@ export async function GET(request: Request) {
       where.status = status;
     }
 
+    if (isRecommended === "true") {
+      where.isRecommended = true;
+    } else if (isRecommended === "false") {
+      where.isRecommended = false;
+    }
+
     if (search) {
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },
@@ -36,15 +43,12 @@ export async function GET(request: Request) {
 
     // Order logic: Pending first, then by date
     let orderBy: any = { [sortBy]: "desc" };
-    
+
     if (sortBy === "createdAt") {
       // Custom order to prioritize Pending status
-      // Note: Prisma doesn't support custom sort order values directly in orderBy easily, 
+      // Note: Prisma doesn't support custom sort order values directly in orderBy easily,
       // but we can sort by status desc which puts 'Rejected', 'Pending' higher than 'Active'
-      orderBy = [
-        { status: 'desc' }, 
-        { createdAt: 'desc' }
-      ];
+      orderBy = [{ status: "desc" }, { createdAt: "desc" }];
     }
 
     // Get total count

@@ -23,8 +23,13 @@ import {
   ChevronsRight,
   ChevronsUpDown,
   Eye,
+  Loader2,
   Search,
+  Star,
+  StarOff,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
@@ -83,18 +88,19 @@ export type JobRow = {
   applicationCount: number;
   viewCount: number;
   rejectionReason?: string;
+  isRecommended: boolean;
 };
 
 // Format employment type for display: FullTime -> Full Time
 function formatEmploymentType(type: string): string {
-  return type.replace(/([a-z])([A-Z])/g, '$1 $2');
+  return type.replace(/([a-z])([A-Z])/g, "$1 $2");
 }
 
 const globalJobFilter: FilterFn<JobRow> = (row, _columnId, filterValue) => {
   const search = String(filterValue).toLowerCase().trim();
   if (!search) return true;
   const { title, company, location } = row.original;
-  return [title, company, location].some((value) =>
+  return [title, company, location].some(value =>
     value.toLowerCase().includes(search),
   );
 };
@@ -103,7 +109,7 @@ const createColumns = (): ColumnDef<JobRow>[] => [
   {
     id: "job",
     header: "Job",
-    accessorFn: (row) => row.title,
+    accessorFn: row => row.title,
     cell: ({ row }) => (
       <div className="flex items-center gap-3 min-w-[220px]">
         {row.original.companyLogo ? (
@@ -197,7 +203,7 @@ const createColumns = (): ColumnDef<JobRow>[] => [
   {
     id: "submittedAt",
     header: "Submitted",
-    accessorFn: (row) =>
+    accessorFn: row =>
       row.submittedAt ? new Date(row.submittedAt).getTime() : 0,
     cell: ({ row }) => (
       <span className="text-muted-foreground text-xs whitespace-nowrap">
@@ -209,20 +215,65 @@ const createColumns = (): ColumnDef<JobRow>[] => [
     id: "actions",
     header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button
-          variant="ghost"
-          size="sm"
-          asChild
-          className="gap-1.5 text-xs font-medium"
-        >
-          <Link href={`/admin/jobs/${row.original.id}`}>
-            <Eye className="size-3.5" />
-          </Link>
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const [isLoading, setIsLoading] = React.useState(false);
+      const isRecommended = row.original.isRecommended;
+      const router = useRouter();
+
+      const toggleRecommendation = async () => {
+        setIsLoading(true);
+        try {
+          const res = await fetch(
+            `/api/admin/jobs/${row.original.id}/recommend`,
+            {
+              method: "PATCH",
+            },
+          );
+
+          if (!res.ok) throw new Error("Failed to toggle recommendation");
+
+          const data = await res.json();
+          toast.success(data.message);
+          router.refresh();
+        } catch (error) {
+          toast.error("Failed to update recommendation status");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      return (
+        <div className="flex justify-end gap-2">
+          {row.original.status === "Active" && (
+            <Button
+              variant="outline"
+              size="sm"
+              className={`h-8 w-8 p-0 ${isRecommended ? "text-yellow-500 border-yellow-200 bg-yellow-50" : "text-muted-foreground"}`}
+              onClick={toggleRecommendation}
+              disabled={isLoading}
+              title={
+                isRecommended
+                  ? "Remove from recommended"
+                  : "Mark as recommended"
+              }
+            >
+              {isLoading ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : isRecommended ? (
+                <Star className="size-3.5 fill-current" />
+              ) : (
+                <StarOff className="size-3.5" />
+              )}
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+            <Link href={`/admin/jobs/${row.original.id}`}>
+              <Eye className="size-3.5" />
+            </Link>
+          </Button>
+        </div>
+      );
+    },
   },
 ];
 
@@ -309,7 +360,7 @@ export function JobsTable({ data }: JobsTableProps) {
             <Input
               placeholder="Search jobs by title, company, or location..."
               value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              onChange={event => setGlobalFilter(event.target.value)}
               className="pl-9"
             />
             <div className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2">
@@ -318,7 +369,7 @@ export function JobsTable({ data }: JobsTableProps) {
           </div>
           <Select
             value={statusValue || "all-status"}
-            onValueChange={(value) => {
+            onValueChange={value => {
               table
                 .getColumn("status")
                 ?.setFilterValue(value === "all-status" ? "" : value);
@@ -351,9 +402,9 @@ export function JobsTable({ data }: JobsTableProps) {
         <div className="overflow-hidden rounded-md border">
           <Table>
             <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
+              {table.getHeaderGroups().map(headerGroup => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
+                  {headerGroup.headers.map(header => (
                     <TableHead key={header.id}>
                       {header.isPlaceholder ? null : header.column.id ===
                         "job" ? (
@@ -390,8 +441,8 @@ export function JobsTable({ data }: JobsTableProps) {
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow 
+                table.getRowModel().rows.map(row => (
+                  <TableRow
                     key={row.id}
                     className={
                       row.original.status === "Pending"
@@ -399,7 +450,7 @@ export function JobsTable({ data }: JobsTableProps) {
                         : ""
                     }
                   >
-                    {row.getVisibleCells().map((cell) => (
+                    {row.getVisibleCells().map(cell => (
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,

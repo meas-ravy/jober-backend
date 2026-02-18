@@ -71,6 +71,7 @@ export default function AdminJobDetailPage() {
           applicationCount: j.applicationCount || 0,
           viewCount: j.viewCount || 0,
           rejectionReason: j.rejectionReason,
+          isRecommended: j.isRecommended,
         };
 
         setJob(transformedJob);
@@ -95,14 +96,23 @@ export default function AdminJobDetailPage() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Review Job" parent="Job Management" parentHref="/admin/jobs" />
+        <SiteHeader
+          title="Review Job"
+          parent="Job Management"
+          parentHref="/admin/jobs"
+        />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
                 {/* Back Button Header */}
                 <div className="flex items-center gap-3 mb-6">
-                  <Button variant="outline" size="icon" className="h-8 w-8" asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    asChild
+                  >
                     <Link href="/admin/jobs">
                       <ChevronLeft className="h-4 w-4" />
                     </Link>
