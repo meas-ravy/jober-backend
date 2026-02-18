@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Transform data for frontend
-    const transformedUsers = users.map((user) => {
+    const transformedUsers = users.map(user => {
       const primaryRole = user.roles[0]?.role || "Job_finder";
       const roleName =
         primaryRole === "Job_finder"

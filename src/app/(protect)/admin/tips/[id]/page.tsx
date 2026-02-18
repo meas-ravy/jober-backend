@@ -46,7 +46,7 @@ export default function EditTipPage() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader parent="Tips" parentHref="/admin/tips" />
+        <SiteHeader title="Edit Tip" parent="Tips" parentHref="/admin/tips" />
         <div className="flex flex-1 flex-col">
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center">

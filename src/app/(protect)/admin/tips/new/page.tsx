@@ -17,7 +17,7 @@ export default function NewTipPage() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader parent="Tips" parentHref="/admin/tips" />
+        <SiteHeader title="Create Tip" parent="Tips" parentHref="/admin/tips" />
         <div className="flex flex-1 flex-col">
           <TipForm />
         </div>
