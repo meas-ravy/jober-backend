@@ -122,7 +122,12 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ job });
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL ||
+      `https://${request.headers.get("host")}`;
+    const shareUrl = `${baseUrl}/jobs/${jobId}`;
+
+    return NextResponse.json({ job: { ...job, shareUrl } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Error fetching job:", error);
