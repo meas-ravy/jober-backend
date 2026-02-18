@@ -23,6 +23,7 @@ model User {
   follows          Follow[]          @relation("UserFollows")
   notifications    Notification[]
   deviceTokens     DeviceToken[]
+  savedJobs        SavedJob[]        @relation("UserSavedJobs")
 }
 
 model UserRole {
@@ -196,6 +197,7 @@ model Job {
   reviewedBy      String?
 
   // Metadata
+  isRecommended    Boolean   @default(false)
   viewCount        Int       @default(0)
   applicationCount Int       @default(0)
   createdAt        DateTime  @default(now())
@@ -208,11 +210,13 @@ model Job {
   companyProfile CompanyProfile   @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
   reviewer       AdminUser?       @relation(fields: [reviewedBy], references: [id])
   applications   JobApplication[]
+  savedBy        SavedJob[]
 
   @@index([recruiterId])
   @@index([companyProfileId])
   @@index([status, publishedAt])
   @@index([category])
+  @@index([isRecommended])
   @@index([employmentType])
   @@index([experienceLevel])
 }
@@ -321,6 +325,19 @@ enum ApplicationStatus {
   Rejected
   Hired
   Withdrawn
+}
+
+model SavedJob {
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  user User @relation("UserSavedJobs", fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@id([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
 }
 
 model Follow {

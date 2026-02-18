@@ -90,6 +90,11 @@ export type Job = Prisma.JobModel
  */
 export type JobApplication = Prisma.JobApplicationModel
 /**
+ * Model SavedJob
+ * 
+ */
+export type SavedJob = Prisma.SavedJobModel
+/**
  * Model Follow
  * 
  */

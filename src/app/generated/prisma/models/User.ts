@@ -199,6 +199,7 @@ export type UserWhereInput = {
   follows?: Prisma.FollowListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   deviceTokens?: Prisma.DeviceTokenListRelationFilter
+  savedJobs?: Prisma.SavedJobListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -217,6 +218,7 @@ export type UserOrderByWithRelationInput = {
   follows?: Prisma.FollowOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   deviceTokens?: Prisma.DeviceTokenOrderByRelationAggregateInput
+  savedJobs?: Prisma.SavedJobOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -238,6 +240,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   follows?: Prisma.FollowListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   deviceTokens?: Prisma.DeviceTokenListRelationFilter
+  savedJobs?: Prisma.SavedJobListRelationFilter
 }, "id" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -280,6 +283,7 @@ export type UserCreateInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -298,6 +302,7 @@ export type UserUncheckedCreateInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -316,6 +321,7 @@ export type UserUpdateInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -334,6 +340,7 @@ export type UserUncheckedUpdateInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -496,6 +503,20 @@ export type UserUpdateOneRequiredWithoutApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApplicationsInput, Prisma.UserUpdateWithoutApplicationsInput>, Prisma.UserUncheckedUpdateWithoutApplicationsInput>
 }
 
+export type UserCreateNestedOneWithoutSavedJobsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedJobsInput, Prisma.UserUncheckedCreateWithoutSavedJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedJobsInput, Prisma.UserUncheckedCreateWithoutSavedJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedJobsInput
+  upsert?: Prisma.UserUpsertWithoutSavedJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedJobsInput, Prisma.UserUpdateWithoutSavedJobsInput>, Prisma.UserUncheckedUpdateWithoutSavedJobsInput>
+}
+
 export type UserCreateNestedOneWithoutFollowsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutFollowsInput, Prisma.UserUncheckedCreateWithoutFollowsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowsInput
@@ -555,6 +576,7 @@ export type UserCreateWithoutRolesInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -572,6 +594,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -605,6 +628,7 @@ export type UserUpdateWithoutRolesInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -622,6 +646,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutJobSeekerProfileInput = {
@@ -639,6 +664,7 @@ export type UserCreateWithoutJobSeekerProfileInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutJobSeekerProfileInput = {
@@ -656,6 +682,7 @@ export type UserUncheckedCreateWithoutJobSeekerProfileInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutJobSeekerProfileInput = {
@@ -689,6 +716,7 @@ export type UserUpdateWithoutJobSeekerProfileInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJobSeekerProfileInput = {
@@ -706,6 +734,7 @@ export type UserUncheckedUpdateWithoutJobSeekerProfileInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCompanyProfileInput = {
@@ -723,6 +752,7 @@ export type UserCreateWithoutCompanyProfileInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompanyProfileInput = {
@@ -740,6 +770,7 @@ export type UserUncheckedCreateWithoutCompanyProfileInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompanyProfileInput = {
@@ -773,6 +804,7 @@ export type UserUpdateWithoutCompanyProfileInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyProfileInput = {
@@ -790,6 +822,7 @@ export type UserUncheckedUpdateWithoutCompanyProfileInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOauthAccountsInput = {
@@ -807,6 +840,7 @@ export type UserCreateWithoutOauthAccountsInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOauthAccountsInput = {
@@ -824,6 +858,7 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOauthAccountsInput = {
@@ -857,6 +892,7 @@ export type UserUpdateWithoutOauthAccountsInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOauthAccountsInput = {
@@ -874,6 +910,7 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostedJobsInput = {
@@ -891,6 +928,7 @@ export type UserCreateWithoutPostedJobsInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostedJobsInput = {
@@ -908,6 +946,7 @@ export type UserUncheckedCreateWithoutPostedJobsInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostedJobsInput = {
@@ -941,6 +980,7 @@ export type UserUpdateWithoutPostedJobsInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostedJobsInput = {
@@ -958,6 +998,7 @@ export type UserUncheckedUpdateWithoutPostedJobsInput = {
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutApplicationsInput = {
@@ -975,6 +1016,7 @@ export type UserCreateWithoutApplicationsInput = {
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -992,6 +1034,7 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutApplicationsInput = {
@@ -1025,6 +1068,7 @@ export type UserUpdateWithoutApplicationsInput = {
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -1039,6 +1083,95 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
+  follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSavedJobsInput = {
+  id?: string
+  phone?: string | null
+  email?: string | null
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
+  postedJobs?: Prisma.JobCreateNestedManyWithoutRecruiterInput
+  applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
+  follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedJobsInput = {
+  id?: string
+  phone?: string | null
+  email?: string | null
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
+  postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutRecruiterInput
+  applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
+  follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedJobsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedJobsInput, Prisma.UserUncheckedCreateWithoutSavedJobsInput>
+}
+
+export type UserUpsertWithoutSavedJobsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedJobsInput, Prisma.UserUncheckedUpdateWithoutSavedJobsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedJobsInput, Prisma.UserUncheckedCreateWithoutSavedJobsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedJobsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedJobsInput, Prisma.UserUncheckedUpdateWithoutSavedJobsInput>
+}
+
+export type UserUpdateWithoutSavedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
+  postedJobs?: Prisma.JobUpdateManyWithoutRecruiterNestedInput
+  applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
+  follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  postedJobs?: Prisma.JobUncheckedUpdateManyWithoutRecruiterNestedInput
+  applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1059,6 +1192,7 @@ export type UserCreateWithoutFollowsInput = {
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowsInput = {
@@ -1076,6 +1210,7 @@ export type UserUncheckedCreateWithoutFollowsInput = {
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowsInput = {
@@ -1109,6 +1244,7 @@ export type UserUpdateWithoutFollowsInput = {
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowsInput = {
@@ -1126,6 +1262,7 @@ export type UserUncheckedUpdateWithoutFollowsInput = {
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDeviceTokensInput = {
@@ -1143,6 +1280,7 @@ export type UserCreateWithoutDeviceTokensInput = {
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDeviceTokensInput = {
@@ -1160,6 +1298,7 @@ export type UserUncheckedCreateWithoutDeviceTokensInput = {
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDeviceTokensInput = {
@@ -1193,6 +1332,7 @@ export type UserUpdateWithoutDeviceTokensInput = {
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeviceTokensInput = {
@@ -1210,6 +1350,7 @@ export type UserUncheckedUpdateWithoutDeviceTokensInput = {
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1227,6 +1368,7 @@ export type UserCreateWithoutNotificationsInput = {
   applications?: Prisma.JobApplicationCreateNestedManyWithoutJobSeekerInput
   follows?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1244,6 +1386,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   applications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutJobSeekerInput
   follows?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  savedJobs?: Prisma.SavedJobUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1277,6 +1420,7 @@ export type UserUpdateWithoutNotificationsInput = {
   applications?: Prisma.JobApplicationUpdateManyWithoutJobSeekerNestedInput
   follows?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1294,6 +1438,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   applications?: Prisma.JobApplicationUncheckedUpdateManyWithoutJobSeekerNestedInput
   follows?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  savedJobs?: Prisma.SavedJobUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1309,6 +1454,7 @@ export type UserCountOutputType = {
   follows: number
   notifications: number
   deviceTokens: number
+  savedJobs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1319,6 +1465,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   follows?: boolean | UserCountOutputTypeCountFollowsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   deviceTokens?: boolean | UserCountOutputTypeCountDeviceTokensArgs
+  savedJobs?: boolean | UserCountOutputTypeCountSavedJobsArgs
 }
 
 /**
@@ -1380,6 +1527,13 @@ export type UserCountOutputTypeCountDeviceTokensArgs<ExtArgs extends runtime.Typ
   where?: Prisma.DeviceTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedJobWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1397,6 +1551,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   follows?: boolean | Prisma.User$followsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   deviceTokens?: boolean | Prisma.User$deviceTokensArgs<ExtArgs>
+  savedJobs?: boolean | Prisma.User$savedJobsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1438,6 +1593,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   follows?: boolean | Prisma.User$followsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   deviceTokens?: boolean | Prisma.User$deviceTokensArgs<ExtArgs>
+  savedJobs?: boolean | Prisma.User$savedJobsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1455,6 +1611,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     follows: Prisma.$FollowPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     deviceTokens: Prisma.$DeviceTokenPayload<ExtArgs>[]
+    savedJobs: Prisma.$SavedJobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1866,6 +2023,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   follows<T extends Prisma.User$followsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deviceTokens<T extends Prisma.User$deviceTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedJobs<T extends Prisma.User$savedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2492,6 +2650,30 @@ export type User$deviceTokensArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.DeviceTokenScalarFieldEnum | Prisma.DeviceTokenScalarFieldEnum[]
+}
+
+/**
+ * User.savedJobs
+ */
+export type User$savedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedJob
+   */
+  select?: Prisma.SavedJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedJob
+   */
+  omit?: Prisma.SavedJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedJobInclude<ExtArgs> | null
+  where?: Prisma.SavedJobWhereInput
+  orderBy?: Prisma.SavedJobOrderByWithRelationInput | Prisma.SavedJobOrderByWithRelationInput[]
+  cursor?: Prisma.SavedJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedJobScalarFieldEnum | Prisma.SavedJobScalarFieldEnum[]
 }
 
 /**

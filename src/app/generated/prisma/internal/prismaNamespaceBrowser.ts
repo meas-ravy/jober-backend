@@ -61,6 +61,7 @@ export const ModelName = {
   OAuthAccount: 'OAuthAccount',
   Job: 'Job',
   JobApplication: 'JobApplication',
+  SavedJob: 'SavedJob',
   Follow: 'Follow',
   DeviceToken: 'DeviceToken',
   Notification: 'Notification'
@@ -223,6 +224,7 @@ export const JobScalarFieldEnum = {
   submittedAt: 'submittedAt',
   reviewedAt: 'reviewedAt',
   reviewedBy: 'reviewedBy',
+  isRecommended: 'isRecommended',
   viewCount: 'viewCount',
   applicationCount: 'applicationCount',
   createdAt: 'createdAt',
@@ -248,6 +250,15 @@ export const JobApplicationScalarFieldEnum = {
 } as const
 
 export type JobApplicationScalarFieldEnum = (typeof JobApplicationScalarFieldEnum)[keyof typeof JobApplicationScalarFieldEnum]
+
+
+export const SavedJobScalarFieldEnum = {
+  userId: 'userId',
+  jobId: 'jobId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedJobScalarFieldEnum = (typeof SavedJobScalarFieldEnum)[keyof typeof SavedJobScalarFieldEnum]
 
 
 export const FollowScalarFieldEnum = {

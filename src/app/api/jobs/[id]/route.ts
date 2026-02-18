@@ -30,7 +30,7 @@ export async function GET(
   try {
     let userId: string;
     let roles: RoleName[] = [];
-    
+
     // 1. Check for Admin Session first (React Web)
     const session = await getServerSession(authOptions);
     if (session?.user?.role === "Admin" && session.user.id) {

@@ -1,0 +1,20 @@
+-- CreateTable
+CREATE TABLE "SavedJob" (
+    "userId" TEXT NOT NULL,
+    "jobId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SavedJob_pkey" PRIMARY KEY ("userId","jobId")
+);
+
+-- CreateIndex
+CREATE INDEX "SavedJob_userId_idx" ON "SavedJob"("userId");
+
+-- CreateIndex
+CREATE INDEX "SavedJob_jobId_idx" ON "SavedJob"("jobId");
+
+-- AddForeignKey
+ALTER TABLE "SavedJob" ADD CONSTRAINT "SavedJob_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SavedJob" ADD CONSTRAINT "SavedJob_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "Job"("id") ON DELETE CASCADE ON UPDATE CASCADE;

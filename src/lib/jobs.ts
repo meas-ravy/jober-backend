@@ -106,11 +106,13 @@ export function validateJobData(data: Partial<JobData>): ValidationResult {
   } else if (data.location.trim().length < 3) {
     errors.push("Location must be at least 3 characters");
   }
-  
+
   // Job image validation (optional)
   if (data.jobImageUrl) {
     if (!validateCloudinaryUrl(data.jobImageUrl, "job-image")) {
-      errors.push("Invalid job image URL. Must be a valid Cloudinary URL from the job-images folder");
+      errors.push(
+        "Invalid job image URL. Must be a valid Cloudinary URL from the job-images folder",
+      );
     }
   }
 
@@ -323,45 +325,49 @@ export function formatSalary(
   return "Not specified";
 }
 
+// Constants for categories and types
+export const JOB_CATEGORIES: JobCategory[] = [
+  "Technology",
+  "Healthcare",
+  "Finance",
+  "Education",
+  "Marketing",
+  "Sales",
+  "Engineering",
+  "Design",
+  "CustomerService",
+  "HumanResources",
+  "Operations",
+  "Legal",
+  "Construction",
+  "Retail",
+  "Hospitality",
+  "Manufacturing",
+  "Transportation",
+  "RealEstate",
+  "Media",
+  "Other",
+];
+
+export const EMPLOYMENT_TYPES: EmploymentType[] = [
+  "FullTime",
+  "PartTime",
+  "Contract",
+  "Internship",
+  "Freelance",
+];
+
 // Type guard functions
 export function isValidJobCategory(value: unknown): value is JobCategory {
-  const validCategories: JobCategory[] = [
-    "Technology",
-    "Healthcare",
-    "Finance",
-    "Education",
-    "Marketing",
-    "Sales",
-    "Engineering",
-    "Design",
-    "CustomerService",
-    "HumanResources",
-    "Operations",
-    "Legal",
-    "Construction",
-    "Retail",
-    "Hospitality",
-    "Manufacturing",
-    "Transportation",
-    "RealEstate",
-    "Media",
-    "Other",
-  ];
   return (
-    typeof value === "string" && validCategories.includes(value as JobCategory)
+    typeof value === "string" && JOB_CATEGORIES.includes(value as JobCategory)
   );
 }
 
 export function isValidEmploymentType(value: unknown): value is EmploymentType {
-  const validTypes: EmploymentType[] = [
-    "FullTime",
-    "PartTime",
-    "Contract",
-    "Internship",
-    "Freelance",
-  ];
   return (
-    typeof value === "string" && validTypes.includes(value as EmploymentType)
+    typeof value === "string" &&
+    EMPLOYMENT_TYPES.includes(value as EmploymentType)
   );
 }
 

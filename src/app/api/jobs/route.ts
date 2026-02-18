@@ -143,7 +143,7 @@ export async function POST(request: Request) {
   }
 }
 
-// GET /api/jobs - List recruiter's jobs
+// GET /api/jobs - List jobs (Recruiter's own jobs or Active jobs for Job Seekers)
 export async function GET(request: Request) {
   try {
     const token = getBearerToken(request);
@@ -164,27 +164,71 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: message }, { status: 401 });
     }
 
-    if (!hasRecruiterRole(roles)) {
+    const isRecruiter = roles.includes("Recruiter");
+    const isJobFinder = roles.includes("Job_finder");
+
+    if (!isRecruiter && !isJobFinder) {
       return NextResponse.json(
-        { error: "Recruiter role required" },
+        { error: "Insufficient permissions" },
         { status: 403 },
       );
     }
 
     // Parse query parameters
     const url = new URL(request.url);
+    const section = url.searchParams.get("section"); // 'recommended' | 'recent'
     const status = url.searchParams.get("status");
+    const category = url.searchParams.get("category");
+    const employmentType = url.searchParams.get("employmentType");
+    const location = url.searchParams.get("location");
+    const search = url.searchParams.get("search");
     const sortBy = url.searchParams.get("sort") || "createdAt";
     const page = parseInt(url.searchParams.get("page") || "1");
     const limit = parseInt(url.searchParams.get("limit") || "20");
 
     // Build where clause
-    const where: any = {
-      recruiterId: userId,
-    };
+    const where: any = {};
+    let orderBy: any = { [sortBy]: "desc" };
 
-    if (status) {
-      where.status = status;
+    if (isRecruiter && !isJobFinder && !section) {
+      // Recruiters see their own jobs by default
+      where.recruiterId = userId;
+      if (status) {
+        where.status = status;
+      }
+    } else {
+      // Job Seekers discovery
+      where.status = "Active";
+
+      if (section === "recommended") {
+        // Admin-managed recommendations
+        where.isRecommended = true;
+      }
+
+      // Default or "recent" sort
+      if (section === "recent" || !section) {
+        orderBy = { createdAt: "desc" };
+      }
+
+      // Applied common filters to all sections (Search, Recommended, Recent)
+      if (category && category.toLowerCase() !== "all") {
+        where.category = category;
+      }
+      if (employmentType) {
+        where.employmentType = employmentType;
+      }
+      if (location) {
+        where.location = { contains: location, mode: "insensitive" };
+      }
+      if (search) {
+        where.OR = [
+          { title: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+          {
+            companyProfile: { name: { contains: search, mode: "insensitive" } },
+          },
+        ];
+      }
     }
 
     // Get total count
@@ -193,16 +237,17 @@ export async function GET(request: Request) {
     // Get jobs with pagination
     const jobs = await prisma.job.findMany({
       where,
-      orderBy: {
-        [sortBy]: "desc",
-      },
+      orderBy,
       skip: (page - 1) * limit,
       take: limit,
       include: {
         companyProfile: {
           select: {
+            id: true,
             name: true,
             logoUrl: true,
+            location: true,
+            followerCount: true,
           },
         },
       },

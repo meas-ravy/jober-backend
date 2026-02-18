@@ -394,6 +394,7 @@ export const ModelName = {
   OAuthAccount: 'OAuthAccount',
   Job: 'Job',
   JobApplication: 'JobApplication',
+  SavedJob: 'SavedJob',
   Follow: 'Follow',
   DeviceToken: 'DeviceToken',
   Notification: 'Notification'
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userRole" | "phoneOtp" | "revokedToken" | "jobSeekerProfile" | "companyProfile" | "adminUser" | "oAuthAccount" | "job" | "jobApplication" | "follow" | "deviceToken" | "notification"
+    modelProps: "user" | "userRole" | "phoneOtp" | "revokedToken" | "jobSeekerProfile" | "companyProfile" | "adminUser" | "oAuthAccount" | "job" | "jobApplication" | "savedJob" | "follow" | "deviceToken" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1156,6 +1157,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SavedJob: {
+      payload: Prisma.$SavedJobPayload<ExtArgs>
+      fields: Prisma.SavedJobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SavedJobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SavedJobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        findFirst: {
+          args: Prisma.SavedJobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SavedJobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        findMany: {
+          args: Prisma.SavedJobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>[]
+        }
+        create: {
+          args: Prisma.SavedJobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        createMany: {
+          args: Prisma.SavedJobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SavedJobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>[]
+        }
+        delete: {
+          args: Prisma.SavedJobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        update: {
+          args: Prisma.SavedJobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        deleteMany: {
+          args: Prisma.SavedJobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SavedJobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SavedJobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>[]
+        }
+        upsert: {
+          args: Prisma.SavedJobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobPayload>
+        }
+        aggregate: {
+          args: Prisma.SavedJobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSavedJob>
+        }
+        groupBy: {
+          args: Prisma.SavedJobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedJobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SavedJobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedJobCountAggregateOutputType> | number
+        }
+      }
+    }
     Follow: {
       payload: Prisma.$FollowPayload<ExtArgs>
       fields: Prisma.FollowFieldRefs
@@ -1558,6 +1633,7 @@ export const JobScalarFieldEnum = {
   submittedAt: 'submittedAt',
   reviewedAt: 'reviewedAt',
   reviewedBy: 'reviewedBy',
+  isRecommended: 'isRecommended',
   viewCount: 'viewCount',
   applicationCount: 'applicationCount',
   createdAt: 'createdAt',
@@ -1583,6 +1659,15 @@ export const JobApplicationScalarFieldEnum = {
 } as const
 
 export type JobApplicationScalarFieldEnum = (typeof JobApplicationScalarFieldEnum)[keyof typeof JobApplicationScalarFieldEnum]
+
+
+export const SavedJobScalarFieldEnum = {
+  userId: 'userId',
+  jobId: 'jobId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedJobScalarFieldEnum = (typeof SavedJobScalarFieldEnum)[keyof typeof SavedJobScalarFieldEnum]
 
 
 export const FollowScalarFieldEnum = {
@@ -1986,6 +2071,7 @@ export type GlobalOmitConfig = {
   oAuthAccount?: Prisma.OAuthAccountOmit
   job?: Prisma.JobOmit
   jobApplication?: Prisma.JobApplicationOmit
+  savedJob?: Prisma.SavedJobOmit
   follow?: Prisma.FollowOmit
   deviceToken?: Prisma.DeviceTokenOmit
   notification?: Prisma.NotificationOmit
