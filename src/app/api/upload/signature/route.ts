@@ -42,7 +42,7 @@ function hasRequiredRole(roles: RoleName[], imageType: ImageType): boolean {
   if (imageType === "company-logo" || imageType === "job-image") {
     return roles.includes("Recruiter");
   }
-  if (imageType === "job-seeker-avatar") {
+  if (imageType === "job-seeker-avatar" || imageType === "resume") {
     return roles.includes("Job_finder");
   }
   if (imageType === "tip-image") {
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'Invalid imageType. Must be "company-logo" or "job-seeker-avatar"',
+            'Invalid imageType. Must be "company-logo", "job-seeker-avatar", "job-image" or "resume"',
         },
         { status: 400 },
       );

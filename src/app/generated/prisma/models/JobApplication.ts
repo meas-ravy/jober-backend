@@ -28,6 +28,8 @@ export type JobApplicationMinAggregateOutputType = {
   id: string | null
   jobId: string | null
   jobSeekerId: string | null
+  fullName: string | null
+  email: string | null
   resumeUrl: string | null
   coverLetter: string | null
   status: $Enums.ApplicationStatus | null
@@ -41,6 +43,8 @@ export type JobApplicationMaxAggregateOutputType = {
   id: string | null
   jobId: string | null
   jobSeekerId: string | null
+  fullName: string | null
+  email: string | null
   resumeUrl: string | null
   coverLetter: string | null
   status: $Enums.ApplicationStatus | null
@@ -54,6 +58,8 @@ export type JobApplicationCountAggregateOutputType = {
   id: number
   jobId: number
   jobSeekerId: number
+  fullName: number
+  email: number
   resumeUrl: number
   coverLetter: number
   status: number
@@ -69,6 +75,8 @@ export type JobApplicationMinAggregateInputType = {
   id?: true
   jobId?: true
   jobSeekerId?: true
+  fullName?: true
+  email?: true
   resumeUrl?: true
   coverLetter?: true
   status?: true
@@ -82,6 +90,8 @@ export type JobApplicationMaxAggregateInputType = {
   id?: true
   jobId?: true
   jobSeekerId?: true
+  fullName?: true
+  email?: true
   resumeUrl?: true
   coverLetter?: true
   status?: true
@@ -95,6 +105,8 @@ export type JobApplicationCountAggregateInputType = {
   id?: true
   jobId?: true
   jobSeekerId?: true
+  fullName?: true
+  email?: true
   resumeUrl?: true
   coverLetter?: true
   status?: true
@@ -181,6 +193,8 @@ export type JobApplicationGroupByOutputType = {
   id: string
   jobId: string
   jobSeekerId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter: string | null
   status: $Enums.ApplicationStatus
@@ -215,6 +229,8 @@ export type JobApplicationWhereInput = {
   id?: Prisma.StringFilter<"JobApplication"> | string
   jobId?: Prisma.StringFilter<"JobApplication"> | string
   jobSeekerId?: Prisma.StringFilter<"JobApplication"> | string
+  fullName?: Prisma.StringFilter<"JobApplication"> | string
+  email?: Prisma.StringFilter<"JobApplication"> | string
   resumeUrl?: Prisma.StringFilter<"JobApplication"> | string
   coverLetter?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
@@ -230,6 +246,8 @@ export type JobApplicationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   jobId?: Prisma.SortOrder
   jobSeekerId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
   coverLetter?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -248,6 +266,8 @@ export type JobApplicationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.JobApplicationWhereInput | Prisma.JobApplicationWhereInput[]
   jobId?: Prisma.StringFilter<"JobApplication"> | string
   jobSeekerId?: Prisma.StringFilter<"JobApplication"> | string
+  fullName?: Prisma.StringFilter<"JobApplication"> | string
+  email?: Prisma.StringFilter<"JobApplication"> | string
   resumeUrl?: Prisma.StringFilter<"JobApplication"> | string
   coverLetter?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
@@ -263,6 +283,8 @@ export type JobApplicationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   jobId?: Prisma.SortOrder
   jobSeekerId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
   coverLetter?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -282,6 +304,8 @@ export type JobApplicationScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   jobId?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   jobSeekerId?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
+  fullName?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
+  email?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   resumeUrl?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   coverLetter?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
   status?: Prisma.EnumApplicationStatusWithAggregatesFilter<"JobApplication"> | $Enums.ApplicationStatus
@@ -293,6 +317,8 @@ export type JobApplicationScalarWhereWithAggregatesInput = {
 
 export type JobApplicationCreateInput = {
   id?: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -308,6 +334,8 @@ export type JobApplicationUncheckedCreateInput = {
   id?: string
   jobId: string
   jobSeekerId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -319,6 +347,8 @@ export type JobApplicationUncheckedCreateInput = {
 
 export type JobApplicationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -334,6 +364,8 @@ export type JobApplicationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobId?: Prisma.StringFieldUpdateOperationsInput | string
   jobSeekerId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -347,6 +379,8 @@ export type JobApplicationCreateManyInput = {
   id?: string
   jobId: string
   jobSeekerId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -358,6 +392,8 @@ export type JobApplicationCreateManyInput = {
 
 export type JobApplicationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -371,6 +407,8 @@ export type JobApplicationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobId?: Prisma.StringFieldUpdateOperationsInput | string
   jobSeekerId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -394,6 +432,8 @@ export type JobApplicationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   jobId?: Prisma.SortOrder
   jobSeekerId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
   coverLetter?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -407,6 +447,8 @@ export type JobApplicationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   jobId?: Prisma.SortOrder
   jobSeekerId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
   coverLetter?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -420,6 +462,8 @@ export type JobApplicationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   jobId?: Prisma.SortOrder
   jobSeekerId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
   coverLetter?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -519,6 +563,8 @@ export type EnumApplicationStatusFieldUpdateOperationsInput = {
 
 export type JobApplicationCreateWithoutJobSeekerInput = {
   id?: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -532,6 +578,8 @@ export type JobApplicationCreateWithoutJobSeekerInput = {
 export type JobApplicationUncheckedCreateWithoutJobSeekerInput = {
   id?: string
   jobId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -574,6 +622,8 @@ export type JobApplicationScalarWhereInput = {
   id?: Prisma.StringFilter<"JobApplication"> | string
   jobId?: Prisma.StringFilter<"JobApplication"> | string
   jobSeekerId?: Prisma.StringFilter<"JobApplication"> | string
+  fullName?: Prisma.StringFilter<"JobApplication"> | string
+  email?: Prisma.StringFilter<"JobApplication"> | string
   resumeUrl?: Prisma.StringFilter<"JobApplication"> | string
   coverLetter?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
@@ -585,6 +635,8 @@ export type JobApplicationScalarWhereInput = {
 
 export type JobApplicationCreateWithoutJobInput = {
   id?: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -598,6 +650,8 @@ export type JobApplicationCreateWithoutJobInput = {
 export type JobApplicationUncheckedCreateWithoutJobInput = {
   id?: string
   jobSeekerId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -636,6 +690,8 @@ export type JobApplicationUpdateManyWithWhereWithoutJobInput = {
 export type JobApplicationCreateManyJobSeekerInput = {
   id?: string
   jobId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -647,6 +703,8 @@ export type JobApplicationCreateManyJobSeekerInput = {
 
 export type JobApplicationUpdateWithoutJobSeekerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -660,6 +718,8 @@ export type JobApplicationUpdateWithoutJobSeekerInput = {
 export type JobApplicationUncheckedUpdateWithoutJobSeekerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -672,6 +732,8 @@ export type JobApplicationUncheckedUpdateWithoutJobSeekerInput = {
 export type JobApplicationUncheckedUpdateManyWithoutJobSeekerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -684,6 +746,8 @@ export type JobApplicationUncheckedUpdateManyWithoutJobSeekerInput = {
 export type JobApplicationCreateManyJobInput = {
   id?: string
   jobSeekerId: string
+  fullName: string
+  email: string
   resumeUrl: string
   coverLetter?: string | null
   status?: $Enums.ApplicationStatus
@@ -695,6 +759,8 @@ export type JobApplicationCreateManyJobInput = {
 
 export type JobApplicationUpdateWithoutJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -708,6 +774,8 @@ export type JobApplicationUpdateWithoutJobInput = {
 export type JobApplicationUncheckedUpdateWithoutJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobSeekerId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -720,6 +788,8 @@ export type JobApplicationUncheckedUpdateWithoutJobInput = {
 export type JobApplicationUncheckedUpdateManyWithoutJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobSeekerId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   resumeUrl?: Prisma.StringFieldUpdateOperationsInput | string
   coverLetter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -735,6 +805,8 @@ export type JobApplicationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   jobId?: boolean
   jobSeekerId?: boolean
+  fullName?: boolean
+  email?: boolean
   resumeUrl?: boolean
   coverLetter?: boolean
   status?: boolean
@@ -750,6 +822,8 @@ export type JobApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   jobId?: boolean
   jobSeekerId?: boolean
+  fullName?: boolean
+  email?: boolean
   resumeUrl?: boolean
   coverLetter?: boolean
   status?: boolean
@@ -765,6 +839,8 @@ export type JobApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   jobId?: boolean
   jobSeekerId?: boolean
+  fullName?: boolean
+  email?: boolean
   resumeUrl?: boolean
   coverLetter?: boolean
   status?: boolean
@@ -780,6 +856,8 @@ export type JobApplicationSelectScalar = {
   id?: boolean
   jobId?: boolean
   jobSeekerId?: boolean
+  fullName?: boolean
+  email?: boolean
   resumeUrl?: boolean
   coverLetter?: boolean
   status?: boolean
@@ -789,7 +867,7 @@ export type JobApplicationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "jobSeekerId" | "resumeUrl" | "coverLetter" | "status" | "recruiterNotes" | "submittedAt" | "reviewedAt" | "updatedAt", ExtArgs["result"]["jobApplication"]>
+export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "jobSeekerId" | "fullName" | "email" | "resumeUrl" | "coverLetter" | "status" | "recruiterNotes" | "submittedAt" | "reviewedAt" | "updatedAt", ExtArgs["result"]["jobApplication"]>
 export type JobApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   jobSeeker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -813,6 +891,8 @@ export type $JobApplicationPayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     jobId: string
     jobSeekerId: string
+    fullName: string
+    email: string
     resumeUrl: string
     coverLetter: string | null
     status: $Enums.ApplicationStatus
@@ -1248,6 +1328,8 @@ export interface JobApplicationFieldRefs {
   readonly id: Prisma.FieldRef<"JobApplication", 'String'>
   readonly jobId: Prisma.FieldRef<"JobApplication", 'String'>
   readonly jobSeekerId: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly fullName: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly email: Prisma.FieldRef<"JobApplication", 'String'>
   readonly resumeUrl: Prisma.FieldRef<"JobApplication", 'String'>
   readonly coverLetter: Prisma.FieldRef<"JobApplication", 'String'>
   readonly status: Prisma.FieldRef<"JobApplication", 'ApplicationStatus'>

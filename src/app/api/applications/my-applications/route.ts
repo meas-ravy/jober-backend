@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 import prisma from "@/src/lib/prisma";
+import {
+  formatApplicationStatus,
+  ApplicationStatusType,
+} from "@/src/lib/applications";
 
 export const runtime = "nodejs";
 
@@ -101,9 +105,9 @@ export async function GET(request: Request) {
     ]);
 
     // Format response
-    const formattedApplications = applications.map((app) => ({
+    const formattedApplications = applications.map(app => ({
       id: app.id,
-      status: app.status,
+      status: formatApplicationStatus(app.status as ApplicationStatusType),
       submittedAt: app.submittedAt,
       updatedAt: app.updatedAt,
       reviewedAt: app.reviewedAt,

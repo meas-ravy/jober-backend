@@ -12,7 +12,7 @@ cloudinary.config({
 // Image upload constants
 export const IMAGE_UPLOAD_CONFIG = {
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
-  ALLOWED_FORMATS: ["jpg", "jpeg", "png", "webp"],
+  ALLOWED_FORMATS: ["jpg", "jpeg", "png", "webp", "pdf"],
   FOLDERS: {
     COMPANY_LOGO: "company-logos",
     JOB_SEEKER_AVATAR: "job-seeker-avatars",
@@ -159,6 +159,7 @@ export function isValidImageType(type: unknown): type is ImageType {
     type === "company-logo" ||
     type === "job-seeker-avatar" ||
     type === "job-image" ||
-    type === "tip-image"
+    type === "tip-image" ||
+    type === "resume"
   );
 }

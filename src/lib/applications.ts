@@ -15,15 +15,27 @@ export const ApplicationStatus = {
   Withdrawn: "Withdrawn",
 } as const;
 
-export type ApplicationStatusType = typeof ApplicationStatus[keyof typeof ApplicationStatus];
+export type ApplicationStatusType =
+  (typeof ApplicationStatus)[keyof typeof ApplicationStatus];
 
 /**
  * Validates application data before submission
  */
 export function validateApplicationData(data: {
+  fullName: string;
+  email: string;
   resumeUrl: string;
   coverLetter?: string;
 }): { valid: boolean; error?: string } {
+  // Validate name and email
+  if (!data.fullName || typeof data.fullName !== "string") {
+    return { valid: false, error: "Full name is required" };
+  }
+
+  if (!data.email || typeof data.email !== "string") {
+    return { valid: false, error: "Email is required" };
+  }
+
   // Validate resume URL
   if (!data.resumeUrl || typeof data.resumeUrl !== "string") {
     return { valid: false, error: "Resume URL is required" };
@@ -96,6 +108,22 @@ export async function canUserApplyToJob(
     return {
       allowed: false,
       reason: "This job is not accepting applications",
+    };
+  }
+
+  // Check if user has already applied for this job
+  const existingApplication = await prisma.jobApplication.findFirst({
+    where: {
+      jobId,
+      jobSeekerId: userId,
+    },
+    select: { id: true },
+  });
+
+  if (existingApplication) {
+    return {
+      allowed: false,
+      reason: "You have already applied for this job",
     };
   }
 
@@ -199,15 +227,15 @@ export function isTerminalStatus(status: ApplicationStatusType): boolean {
  */
 export function formatApplicationStatus(status: ApplicationStatusType): string {
   const statusLabels: Record<ApplicationStatusType, string> = {
-    [ApplicationStatus.Submitted]: "Submitted",
-    [ApplicationStatus.UnderReview]: "Under Review",
-    [ApplicationStatus.Shortlisted]: "Shortlisted",
-    [ApplicationStatus.Rejected]: "Rejected",
-    [ApplicationStatus.Hired]: "Hired",
-    [ApplicationStatus.Withdrawn]: "Withdrawn",
+    [ApplicationStatus.Submitted]: "application sent",
+    [ApplicationStatus.UnderReview]: "application pending",
+    [ApplicationStatus.Shortlisted]: "shortlisted",
+    [ApplicationStatus.Rejected]: "application rejected",
+    [ApplicationStatus.Hired]: "application accepted",
+    [ApplicationStatus.Withdrawn]: "withdrawn",
   };
 
-  return statusLabels[status] || status;
+  return statusLabels[status] || status.toLowerCase();
 }
 
 /**

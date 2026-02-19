@@ -326,6 +326,8 @@ model JobApplication {
   jobSeekerId String
 
   // Application Data
+  fullName    String
+  email       String
   resumeUrl   String // Cloudinary URL (required)
   coverLetter String? @db.Text
 

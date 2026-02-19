@@ -1739,6 +1739,8 @@ export const JobApplicationScalarFieldEnum = {
   id: 'id',
   jobId: 'jobId',
   jobSeekerId: 'jobSeekerId',
+  fullName: 'fullName',
+  email: 'email',
   resumeUrl: 'resumeUrl',
   coverLetter: 'coverLetter',
   status: 'status',
