@@ -74,21 +74,37 @@ export default function TipsPage() {
   }, []);
 
   const handleTogglePublish = async (tip: TipRow) => {
+    const originalStatus = tip.isPublished;
+
+    // Optimistic update
+    setTips(prev =>
+      prev.map(t =>
+        t.id === tip.id ? { ...t, isPublished: !originalStatus } : t,
+      ),
+    );
+
     try {
       const res = await fetch(`/api/admin/tips/${tip.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isPublished: !tip.isPublished }),
+        body: JSON.stringify({ isPublished: !originalStatus }),
       });
+
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || "Failed to update tip");
       }
-      toast.success(tip.isPublished ? "Tip unpublished" : "Tip published");
-      fetchTips();
+
+      toast.success(!originalStatus ? "Tip published" : "Tip unpublished");
     } catch (err) {
       console.error(err);
       toast.error("Failed to toggle publish status");
+      // Rollback on error
+      setTips(prev =>
+        prev.map(t =>
+          t.id === tip.id ? { ...t, isPublished: originalStatus } : t,
+        ),
+      );
     }
   };
 

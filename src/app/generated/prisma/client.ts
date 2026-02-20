@@ -114,3 +114,13 @@ export type DeviceToken = Prisma.DeviceTokenModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model ConversationParticipant
+ * 
+ */
+export type ConversationParticipant = Prisma.ConversationParticipantModel

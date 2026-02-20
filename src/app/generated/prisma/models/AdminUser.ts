@@ -202,6 +202,7 @@ export type AdminUserWhereInput = {
   verifiedCompanies?: Prisma.CompanyProfileListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   tips?: Prisma.TipListRelationFilter
+  conversationParticipants?: Prisma.ConversationParticipantListRelationFilter
 }
 
 export type AdminUserOrderByWithRelationInput = {
@@ -216,6 +217,7 @@ export type AdminUserOrderByWithRelationInput = {
   verifiedCompanies?: Prisma.CompanyProfileOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   tips?: Prisma.TipOrderByRelationAggregateInput
+  conversationParticipants?: Prisma.ConversationParticipantOrderByRelationAggregateInput
 }
 
 export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
@@ -233,6 +235,7 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   verifiedCompanies?: Prisma.CompanyProfileListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   tips?: Prisma.TipListRelationFilter
+  conversationParticipants?: Prisma.ConversationParticipantListRelationFilter
 }, "id" | "email">
 
 export type AdminUserOrderByWithAggregationInput = {
@@ -273,6 +276,7 @@ export type AdminUserCreateInput = {
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUncheckedCreateInput = {
@@ -287,6 +291,7 @@ export type AdminUserUncheckedCreateInput = {
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUpdateInput = {
@@ -301,6 +306,7 @@ export type AdminUserUpdateInput = {
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserUncheckedUpdateInput = {
@@ -315,6 +321,7 @@ export type AdminUserUncheckedUpdateInput = {
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserCreateManyInput = {
@@ -449,6 +456,22 @@ export type AdminUserUpdateOneWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.AdminUserUpdateWithoutNotificationsInput>, Prisma.AdminUserUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type AdminUserCreateNestedOneWithoutConversationParticipantsInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedCreateWithoutConversationParticipantsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutConversationParticipantsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneWithoutConversationParticipantsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedCreateWithoutConversationParticipantsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutConversationParticipantsInput
+  upsert?: Prisma.AdminUserUpsertWithoutConversationParticipantsInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutConversationParticipantsInput, Prisma.AdminUserUpdateWithoutConversationParticipantsInput>, Prisma.AdminUserUncheckedUpdateWithoutConversationParticipantsInput>
+}
+
 export type AdminUserCreateWithoutVerifiedCompaniesInput = {
   id?: string
   email: string
@@ -460,6 +483,7 @@ export type AdminUserCreateWithoutVerifiedCompaniesInput = {
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUncheckedCreateWithoutVerifiedCompaniesInput = {
@@ -473,6 +497,7 @@ export type AdminUserUncheckedCreateWithoutVerifiedCompaniesInput = {
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserCreateOrConnectWithoutVerifiedCompaniesInput = {
@@ -502,6 +527,7 @@ export type AdminUserUpdateWithoutVerifiedCompaniesInput = {
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutVerifiedCompaniesInput = {
@@ -515,6 +541,7 @@ export type AdminUserUncheckedUpdateWithoutVerifiedCompaniesInput = {
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserCreateWithoutTipsInput = {
@@ -528,6 +555,7 @@ export type AdminUserCreateWithoutTipsInput = {
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+  conversationParticipants?: Prisma.ConversationParticipantCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUncheckedCreateWithoutTipsInput = {
@@ -541,6 +569,7 @@ export type AdminUserUncheckedCreateWithoutTipsInput = {
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserCreateOrConnectWithoutTipsInput = {
@@ -570,6 +599,7 @@ export type AdminUserUpdateWithoutTipsInput = {
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutTipsInput = {
@@ -583,6 +613,7 @@ export type AdminUserUncheckedUpdateWithoutTipsInput = {
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserCreateWithoutReviewedJobsInput = {
@@ -596,6 +627,7 @@ export type AdminUserCreateWithoutReviewedJobsInput = {
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUncheckedCreateWithoutReviewedJobsInput = {
@@ -609,6 +641,7 @@ export type AdminUserUncheckedCreateWithoutReviewedJobsInput = {
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
   tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserCreateOrConnectWithoutReviewedJobsInput = {
@@ -638,6 +671,7 @@ export type AdminUserUpdateWithoutReviewedJobsInput = {
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutReviewedJobsInput = {
@@ -651,6 +685,7 @@ export type AdminUserUncheckedUpdateWithoutReviewedJobsInput = {
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
   tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserCreateWithoutNotificationsInput = {
@@ -664,6 +699,7 @@ export type AdminUserCreateWithoutNotificationsInput = {
   reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
   tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserUncheckedCreateWithoutNotificationsInput = {
@@ -677,6 +713,7 @@ export type AdminUserUncheckedCreateWithoutNotificationsInput = {
   reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
   tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type AdminUserCreateOrConnectWithoutNotificationsInput = {
@@ -706,6 +743,7 @@ export type AdminUserUpdateWithoutNotificationsInput = {
   reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
   tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUpdateManyWithoutAdminNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutNotificationsInput = {
@@ -719,6 +757,79 @@ export type AdminUserUncheckedUpdateWithoutNotificationsInput = {
   reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
   verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
   tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
+  conversationParticipants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type AdminUserCreateWithoutConversationParticipantsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobCreateNestedManyWithoutReviewerInput
+  verifiedCompanies?: Prisma.CompanyProfileCreateNestedManyWithoutVerifierInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserUncheckedCreateWithoutConversationParticipantsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutReviewerInput
+  verifiedCompanies?: Prisma.CompanyProfileUncheckedCreateNestedManyWithoutVerifierInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutAdminInput
+  tips?: Prisma.TipUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserCreateOrConnectWithoutConversationParticipantsInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedCreateWithoutConversationParticipantsInput>
+}
+
+export type AdminUserUpsertWithoutConversationParticipantsInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedUpdateWithoutConversationParticipantsInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedCreateWithoutConversationParticipantsInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutConversationParticipantsInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutConversationParticipantsInput, Prisma.AdminUserUncheckedUpdateWithoutConversationParticipantsInput>
+}
+
+export type AdminUserUpdateWithoutConversationParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUpdateManyWithoutReviewerNestedInput
+  verifiedCompanies?: Prisma.CompanyProfileUpdateManyWithoutVerifierNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutConversationParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedJobs?: Prisma.JobUncheckedUpdateManyWithoutReviewerNestedInput
+  verifiedCompanies?: Prisma.CompanyProfileUncheckedUpdateManyWithoutVerifierNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutAdminNestedInput
+  tips?: Prisma.TipUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 
@@ -731,6 +842,7 @@ export type AdminUserCountOutputType = {
   verifiedCompanies: number
   notifications: number
   tips: number
+  conversationParticipants: number
 }
 
 export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -738,6 +850,7 @@ export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   verifiedCompanies?: boolean | AdminUserCountOutputTypeCountVerifiedCompaniesArgs
   notifications?: boolean | AdminUserCountOutputTypeCountNotificationsArgs
   tips?: boolean | AdminUserCountOutputTypeCountTipsArgs
+  conversationParticipants?: boolean | AdminUserCountOutputTypeCountConversationParticipantsArgs
 }
 
 /**
@@ -778,6 +891,13 @@ export type AdminUserCountOutputTypeCountTipsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.TipWhereInput
 }
 
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountConversationParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationParticipantWhereInput
+}
+
 
 export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -791,6 +911,7 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   verifiedCompanies?: boolean | Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>
   notifications?: boolean | Prisma.AdminUser$notificationsArgs<ExtArgs>
   tips?: boolean | Prisma.AdminUser$tipsArgs<ExtArgs>
+  conversationParticipants?: boolean | Prisma.AdminUser$conversationParticipantsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
@@ -830,6 +951,7 @@ export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   verifiedCompanies?: boolean | Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>
   notifications?: boolean | Prisma.AdminUser$notificationsArgs<ExtArgs>
   tips?: boolean | Prisma.AdminUser$tipsArgs<ExtArgs>
+  conversationParticipants?: boolean | Prisma.AdminUser$conversationParticipantsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -842,6 +964,7 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     verifiedCompanies: Prisma.$CompanyProfilePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     tips: Prisma.$TipPayload<ExtArgs>[]
+    conversationParticipants: Prisma.$ConversationParticipantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1249,6 +1372,7 @@ export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtim
   verifiedCompanies<T extends Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$verifiedCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.AdminUser$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tips<T extends Prisma.AdminUser$tipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$tipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversationParticipants<T extends Prisma.AdminUser$conversationParticipantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$conversationParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1766,6 +1890,30 @@ export type AdminUser$tipsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.TipScalarFieldEnum | Prisma.TipScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.conversationParticipants
+ */
+export type AdminUser$conversationParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConversationParticipant
+   */
+  select?: Prisma.ConversationParticipantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConversationParticipant
+   */
+  omit?: Prisma.ConversationParticipantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationParticipantInclude<ExtArgs> | null
+  where?: Prisma.ConversationParticipantWhereInput
+  orderBy?: Prisma.ConversationParticipantOrderByWithRelationInput | Prisma.ConversationParticipantOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationParticipantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationParticipantScalarFieldEnum | Prisma.ConversationParticipantScalarFieldEnum[]
 }
 
 /**

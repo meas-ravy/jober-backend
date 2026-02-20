@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  phone            String?           @unique
-  email            String?           @unique
-  name             String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  jobSeekerProfile JobSeekerProfile?
-  companyProfile   CompanyProfile?
-  roles            UserRole[]
-  oauthAccounts    OAuthAccount[]
-  postedJobs       Job[]             @relation("PostedJobs")
-  applications     JobApplication[]  @relation("JobApplications")
-  follows          Follow[]          @relation("UserFollows")
-  notifications    Notification[]
-  deviceTokens     DeviceToken[]
-  savedJobs        SavedJob[]        @relation("UserSavedJobs")
+  id                       String                    @id @default(cuid())
+  phone                    String?                   @unique
+  email                    String?                   @unique
+  name                     String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  jobSeekerProfile         JobSeekerProfile?
+  companyProfile           CompanyProfile?
+  roles                    UserRole[]
+  oauthAccounts            OAuthAccount[]
+  postedJobs               Job[]                     @relation("PostedJobs")
+  applications             JobApplication[]          @relation("JobApplications")
+  follows                  Follow[]                  @relation("UserFollows")
+  notifications            Notification[]
+  deviceTokens             DeviceToken[]
+  savedJobs                SavedJob[]                @relation("UserSavedJobs")
+  conversationParticipants ConversationParticipant[]
 }
 
 model UserRole {
@@ -103,17 +104,18 @@ model CompanyProfile {
 }
 
 model AdminUser {
-  id                String           @id @default(cuid())
-  email             String           @unique
-  passwordHash      String
-  name              String?
-  avatarUrl         String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  reviewedJobs      Job[]
-  verifiedCompanies CompanyProfile[] @relation("VerifiedCompanies")
-  notifications     Notification[]
-  tips              Tip[]
+  id                       String                    @id @default(cuid())
+  email                    String                    @unique
+  passwordHash             String
+  name                     String?
+  avatarUrl                String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  reviewedJobs             Job[]
+  verifiedCompanies        CompanyProfile[]          @relation("VerifiedCompanies")
+  notifications            Notification[]
+  tips                     Tip[]
+  conversationParticipants ConversationParticipant[]
 }
 
 model Tip {
@@ -434,4 +436,44 @@ enum NotificationType {
   // Admin specific
   NEW_JOB_SUBMISSION
   NEW_VERIFICATION_REQUEST
+  NEW_MESSAGE
+  INCOMING_CALL
+  CALL_MISSED
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Participants (Track Recruiter/Seeker and Admin together)
+  participants ConversationParticipant[]
+
+  // Metadata for list view (updated via backend hook when message sent)
+  lastMessageContent String?   @db.Text
+  lastMessageAt      DateTime? @updatedAt
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Link to either a User (Recruiter/Seeker) OR an AdminUser
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  adminId String?
+  admin   AdminUser? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  joinedAt DateTime @default(now())
+
+  // For unread tracking
+  lastReadAt DateTime?
+
+  // Constraint: One unique entry per user per conversation
+  @@unique([conversationId, userId], map: "UniqueUserParticipant")
+  @@unique([conversationId, adminId], map: "UniqueAdminParticipant")
+  @@index([userId])
+  @@index([adminId])
 }

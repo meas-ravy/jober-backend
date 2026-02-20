@@ -17,3 +17,4 @@ if (!admin.apps.length) {
 }
 
 export const messaging = admin.messaging();
+export const auth = admin.auth();

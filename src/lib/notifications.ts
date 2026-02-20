@@ -1,16 +1,6 @@
+import { NotificationType } from "../app/generated/prisma/enums";
 import { messaging } from "./firebase-admin";
 import prisma from "./prisma";
-
-export type NotificationType =
-  | "INFO"
-  | "SYSTEM"
-  | "NEW_APPLICATION"
-  | "VERIFICATION_STATUS"
-  | "JOB_STATUS_CHANGE"
-  | "APPLICATION_UPDATE"
-  | "NEW_JOB_FROM_FOLLOW"
-  | "NEW_JOB_SUBMISSION"
-  | "NEW_VERIFICATION_REQUEST";
 
 interface CreateNotificationParams {
   userId?: string; // Recruiter or Seeker
@@ -18,7 +8,7 @@ interface CreateNotificationParams {
   title: string;
   content: string;
   type: NotificationType;
-  link?: string; // Deep link for Flutter or React URL
+  link?: string;
 }
 
 /**
@@ -47,7 +37,7 @@ export async function createNotification(params: CreateNotificationParams) {
   if (userId) {
     // We only send FCM to standard Users (Flutter app).
     // Admin notifications stay in the React dashboard for now.
-    await sendPushNotification(userId, title, content, link);
+    await sendPushNotification(userId, title, content, link, type);
   }
 
   return notification;
@@ -62,68 +52,79 @@ async function sendPushNotification(
   title: string,
   body: string,
   link?: string,
+  type?: NotificationType, // Added type to handle specific FCM logic
 ) {
   try {
-    // 1. Fetch all active device tokens for the user
     const tokens = await prisma.deviceToken.findMany({
       where: { userId },
       select: { token: true },
     });
 
-    if (tokens.length === 0) {
-      console.log(
-        `[PUSH] No device tokens found for user ${userId}. Skipping push.`,
-      );
-      return;
-    }
+    if (tokens.length === 0) return;
 
     const fcmTokens = tokens.map(t => t.token);
 
-    // 2. Prepare the mobile payload
-    // Note: 'data' is where Flutter takes the link for navigation
-    const message = {
-      notification: {
-        title,
-        body,
-      },
+    // Special handling for INCOMING_CALL (High Priority)
+    const isCall = type === "INCOMING_CALL";
+
+    const message: any = {
+      tokens: fcmTokens,
+      // For calls, we often want a "Data Message" to wake up the app
       data: {
         click_action: "FLUTTER_NOTIFICATION_CLICK",
         link: link || "",
+        type: type || "INFO",
+        title: title,
+        body: body,
       },
-      tokens: fcmTokens,
     };
 
-    // 3. Send to all devices
+    // If it's NOT a call, add the standard visual notification
+    // If it IS a call, we let the Flutter app handle the UI (Data Message)
+    if (!isCall) {
+      message.notification = { title, body };
+    }
+
+    // Android/iOS High Priority Config
+    message.android = {
+      priority: "high",
+      notification: !isCall
+        ? {
+            sound: "default",
+            priority: "high",
+            channelId: "high_importance_channel",
+          }
+        : undefined,
+    };
+
+    message.apns = {
+      payload: {
+        aps: {
+          contentAvailable: true, // Wakes up the app in background
+          badge: 1,
+          sound: isCall ? "call_ringtone.mp3" : "default",
+        },
+      },
+    };
+
     const response = await messaging.sendEachForMulticast(message);
 
-    console.log(
-      `[PUSH] Multicast results for user ${userId}: Successfully sent ${response.successCount}, Failed: ${response.failureCount}`,
-    );
-
-    // 4. Cleanup invalid or stale tokens
+    // Cleanup logic remains the same...
     if (response.failureCount > 0) {
       const tokensToDelete: string[] = [];
-
       response.responses.forEach((resp: any, idx: number) => {
-        if (!resp.success) {
-          const errorCode = resp.error?.code;
-          // Tokens that are definitely invalid
-          if (
-            errorCode === "messaging/invalid-registration-token" ||
-            errorCode === "messaging/registration-token-not-registered"
-          ) {
-            tokensToDelete.push(fcmTokens[idx]);
-          }
+        if (
+          !resp.success &&
+          (resp.error?.code === "messaging/invalid-registration-token" ||
+            resp.error?.code === "messaging/registration-token-not-registered")
+        ) {
+          tokensToDelete.push(fcmTokens[idx]);
         }
       });
-
       if (tokensToDelete.length > 0) {
         await prisma.deviceToken.deleteMany({
           where: { token: { in: tokensToDelete } },
         });
-        console.log(
-          `[PUSH] Cleaned up ${tokensToDelete.length} invalid device tokens.`,
-        );
       }
     }
   } catch (error) {

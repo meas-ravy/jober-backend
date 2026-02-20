@@ -23,6 +23,7 @@ import {
   IconUsers,
   IconInfoCircle,
   IconBulb,
+  IconMessage,
 } from "@tabler/icons-react";
 import { NavSecondary } from "./nav-seconary";
 
@@ -57,6 +58,11 @@ const data = {
       title: "Tips",
       url: "/admin/tips",
       icon: IconBulb,
+    },
+    {
+      title: "Messages",
+      url: "/admin/messages",
+      icon: IconMessage,
     },
   ],
   navSecondary: [

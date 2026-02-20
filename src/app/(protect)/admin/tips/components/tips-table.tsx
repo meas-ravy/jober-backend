@@ -102,7 +102,7 @@ const globalTipFilter: FilterFn<TipRow> = (row, _columnId, filterValue) => {
 type TipsTableProps = {
   data: TipRow[];
   onDelete: (tip: TipRow) => void;
-  onTogglePublish: (tip: TipRow) => void;
+  onTogglePublish: (tip: TipRow) => Promise<void>;
 };
 
 function SortableHeader({
@@ -133,6 +133,35 @@ function SortableHeader({
         <ChevronsUpDown className="ml-1 size-3 text-muted-foreground" />
       )}
     </Button>
+  );
+}
+
+function PublishCell({
+  tip,
+  onTogglePublish,
+}: {
+  tip: TipRow;
+  onTogglePublish: (tip: TipRow) => Promise<void>;
+}) {
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleToggle = async () => {
+    setIsLoading(true);
+    try {
+      await onTogglePublish(tip);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center">
+      <Switch
+        checked={tip.isPublished}
+        onCheckedChange={handleToggle}
+        disabled={isLoading}
+      />
+    </div>
   );
 }
 
@@ -191,13 +220,9 @@ export function TipsTable({ data, onDelete, onTogglePublish }: TipsTableProps) {
       },
       {
         id: "published",
-        header: "Published",
-        accessorFn: row => (row.isPublished ? 1 : 0),
+        header: () => <div className="text-center">Published</div>,
         cell: ({ row }) => (
-          <Switch
-            checked={row.original.isPublished}
-            onCheckedChange={() => onTogglePublish(row.original)}
-          />
+          <PublishCell tip={row.original} onTogglePublish={onTogglePublish} />
         ),
       },
       {
