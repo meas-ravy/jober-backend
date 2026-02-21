@@ -10,6 +10,7 @@ import {
   ApplicationStatus,
   type ApplicationStatusType,
 } from "@/src/lib/applications";
+import { sendAutoMessage } from "@/src/lib/messages";
 
 export async function PATCH(
   request: Request,
@@ -96,10 +97,7 @@ export async function PATCH(
     );
 
     if (!canManage.allowed) {
-      return NextResponse.json(
-        { error: canManage.reason },
-        { status: 403 },
-      );
+      return NextResponse.json({ error: canManage.reason }, { status: 403 });
     }
 
     // Get current application
@@ -168,6 +166,9 @@ export async function PATCH(
           select: {
             id: true,
             title: true,
+            companyProfile: {
+              select: { name: true },
+            },
           },
         },
       },
@@ -194,10 +195,30 @@ export async function PATCH(
         title: statusTitle,
         content: statusContent,
         type: "APPLICATION_UPDATE",
-        link: `/my-applications/${applicationId}`
+        link: `/my-applications/${applicationId}`,
       });
+
+      // --- AUTO MESSAGE LOGIC ---
+      if (status === "Hired" || status === "Rejected") {
+        const companyName =
+          (updatedApplication.job as any).companyProfile?.name || "the company";
+        const messageContent =
+          status === "Hired"
+            ? `Congratulations! You have been hired for the "${updatedApplication.job.title}" position at ${companyName}. Welcome to the team!`
+            : `Thank you for applying for the "${updatedApplication.job.title}" position at ${companyName}. We've decided to move forward with other candidates, but we wish you the best in your search.`;
+
+        await sendAutoMessage({
+          recruiterId: userId,
+          seekerId: updatedApplication.jobSeeker.id,
+          content: messageContent,
+          jobId: updatedApplication.job.id,
+        });
+      }
     } catch (notifError) {
-      console.error("Failed to notify seeker of application status update:", notifError);
+      console.error(
+        "Failed to notify seeker of application status update:",
+        notifError,
+      );
     }
 
     return NextResponse.json({
@@ -213,7 +234,8 @@ export async function PATCH(
           id: updatedApplication.jobSeeker.id,
           profile: updatedApplication.jobSeeker.jobSeekerProfile
             ? {
-                fullName: updatedApplication.jobSeeker.jobSeekerProfile.fullName,
+                fullName:
+                  updatedApplication.jobSeeker.jobSeekerProfile.fullName,
                 email: updatedApplication.jobSeeker.jobSeekerProfile.email,
               }
             : null,

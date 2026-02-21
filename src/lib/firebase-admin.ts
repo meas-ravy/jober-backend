@@ -9,6 +9,9 @@ if (!admin.apps.length) {
         // We replace escaped newlines for the private key if stored as a string in env
         privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       }),
+      databaseURL:
+        process.env.FIREBASE_DATABASE_URL ||
+        "https://push-notification-de8ac-default-rtdb.asia-southeast1.firebasedatabase.app",
     });
     console.log("Firebase Admin Initialized successfully");
   } catch (error) {
@@ -18,3 +21,4 @@ if (!admin.apps.length) {
 
 export const messaging = admin.messaging();
 export const auth = admin.auth();
+export const db = admin.database();
