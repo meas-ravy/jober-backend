@@ -179,12 +179,15 @@ export function getValidStatusTransitions(
   const transitions: Record<ApplicationStatusType, ApplicationStatusType[]> = {
     [ApplicationStatus.Submitted]: [
       ApplicationStatus.UnderReview,
+      ApplicationStatus.Shortlisted,
       ApplicationStatus.Rejected,
+      ApplicationStatus.Hired,
       ApplicationStatus.Withdrawn,
     ],
     [ApplicationStatus.UnderReview]: [
       ApplicationStatus.Shortlisted,
       ApplicationStatus.Rejected,
+      ApplicationStatus.Hired,
       ApplicationStatus.Withdrawn,
     ],
     [ApplicationStatus.Shortlisted]: [
