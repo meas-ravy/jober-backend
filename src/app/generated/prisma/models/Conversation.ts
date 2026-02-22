@@ -28,6 +28,7 @@ export type ConversationMinAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  jobId: string | null
   lastMessageContent: string | null
   lastMessageAt: Date | null
 }
@@ -36,6 +37,7 @@ export type ConversationMaxAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  jobId: string | null
   lastMessageContent: string | null
   lastMessageAt: Date | null
 }
@@ -44,6 +46,7 @@ export type ConversationCountAggregateOutputType = {
   id: number
   createdAt: number
   updatedAt: number
+  jobId: number
   lastMessageContent: number
   lastMessageAt: number
   _all: number
@@ -54,6 +57,7 @@ export type ConversationMinAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  jobId?: true
   lastMessageContent?: true
   lastMessageAt?: true
 }
@@ -62,6 +66,7 @@ export type ConversationMaxAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  jobId?: true
   lastMessageContent?: true
   lastMessageAt?: true
 }
@@ -70,6 +75,7 @@ export type ConversationCountAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  jobId?: true
   lastMessageContent?: true
   lastMessageAt?: true
   _all?: true
@@ -151,6 +157,7 @@ export type ConversationGroupByOutputType = {
   id: string
   createdAt: Date
   updatedAt: Date
+  jobId: string | null
   lastMessageContent: string | null
   lastMessageAt: Date | null
   _count: ConversationCountAggregateOutputType | null
@@ -180,18 +187,22 @@ export type ConversationWhereInput = {
   id?: Prisma.StringFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  jobId?: Prisma.StringNullableFilter<"Conversation"> | string | null
   lastMessageContent?: Prisma.StringNullableFilter<"Conversation"> | string | null
   lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   participants?: Prisma.ConversationParticipantListRelationFilter
+  job?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }
 
 export type ConversationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  jobId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessageContent?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   participants?: Prisma.ConversationParticipantOrderByRelationAggregateInput
+  job?: Prisma.JobOrderByWithRelationInput
 }
 
 export type ConversationWhereUniqueInput = Prisma.AtLeast<{
@@ -201,15 +212,18 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ConversationWhereInput | Prisma.ConversationWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  jobId?: Prisma.StringNullableFilter<"Conversation"> | string | null
   lastMessageContent?: Prisma.StringNullableFilter<"Conversation"> | string | null
   lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   participants?: Prisma.ConversationParticipantListRelationFilter
+  job?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }, "id">
 
 export type ConversationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  jobId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessageContent?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ConversationCountOrderByAggregateInput
@@ -224,6 +238,7 @@ export type ConversationScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
+  jobId?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   lastMessageContent?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   lastMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
 }
@@ -235,12 +250,14 @@ export type ConversationCreateInput = {
   lastMessageContent?: string | null
   lastMessageAt?: Date | string | null
   participants?: Prisma.ConversationParticipantCreateNestedManyWithoutConversationInput
+  job?: Prisma.JobCreateNestedOneWithoutConversationsInput
 }
 
 export type ConversationUncheckedCreateInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobId?: string | null
   lastMessageContent?: string | null
   lastMessageAt?: Date | string | null
   participants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
@@ -253,12 +270,14 @@ export type ConversationUpdateInput = {
   lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   participants?: Prisma.ConversationParticipantUpdateManyWithoutConversationNestedInput
+  job?: Prisma.JobUpdateOneWithoutConversationsNestedInput
 }
 
 export type ConversationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   participants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
@@ -268,6 +287,7 @@ export type ConversationCreateManyInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobId?: string | null
   lastMessageContent?: string | null
   lastMessageAt?: Date | string | null
 }
@@ -284,14 +304,26 @@ export type ConversationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type ConversationListRelationFilter = {
+  every?: Prisma.ConversationWhereInput
+  some?: Prisma.ConversationWhereInput
+  none?: Prisma.ConversationWhereInput
+}
+
+export type ConversationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ConversationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  jobId?: Prisma.SortOrder
   lastMessageContent?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
 }
@@ -300,6 +332,7 @@ export type ConversationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  jobId?: Prisma.SortOrder
   lastMessageContent?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
 }
@@ -308,6 +341,7 @@ export type ConversationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  jobId?: Prisma.SortOrder
   lastMessageContent?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
 }
@@ -315,6 +349,48 @@ export type ConversationMinOrderByAggregateInput = {
 export type ConversationScalarRelationFilter = {
   is?: Prisma.ConversationWhereInput
   isNot?: Prisma.ConversationWhereInput
+}
+
+export type ConversationCreateNestedManyWithoutJobInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput> | Prisma.ConversationCreateWithoutJobInput[] | Prisma.ConversationUncheckedCreateWithoutJobInput[]
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutJobInput | Prisma.ConversationCreateOrConnectWithoutJobInput[]
+  createMany?: Prisma.ConversationCreateManyJobInputEnvelope
+  connect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+}
+
+export type ConversationUncheckedCreateNestedManyWithoutJobInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput> | Prisma.ConversationCreateWithoutJobInput[] | Prisma.ConversationUncheckedCreateWithoutJobInput[]
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutJobInput | Prisma.ConversationCreateOrConnectWithoutJobInput[]
+  createMany?: Prisma.ConversationCreateManyJobInputEnvelope
+  connect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+}
+
+export type ConversationUpdateManyWithoutJobNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput> | Prisma.ConversationCreateWithoutJobInput[] | Prisma.ConversationUncheckedCreateWithoutJobInput[]
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutJobInput | Prisma.ConversationCreateOrConnectWithoutJobInput[]
+  upsert?: Prisma.ConversationUpsertWithWhereUniqueWithoutJobInput | Prisma.ConversationUpsertWithWhereUniqueWithoutJobInput[]
+  createMany?: Prisma.ConversationCreateManyJobInputEnvelope
+  set?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  disconnect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  delete?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  connect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  update?: Prisma.ConversationUpdateWithWhereUniqueWithoutJobInput | Prisma.ConversationUpdateWithWhereUniqueWithoutJobInput[]
+  updateMany?: Prisma.ConversationUpdateManyWithWhereWithoutJobInput | Prisma.ConversationUpdateManyWithWhereWithoutJobInput[]
+  deleteMany?: Prisma.ConversationScalarWhereInput | Prisma.ConversationScalarWhereInput[]
+}
+
+export type ConversationUncheckedUpdateManyWithoutJobNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput> | Prisma.ConversationCreateWithoutJobInput[] | Prisma.ConversationUncheckedCreateWithoutJobInput[]
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutJobInput | Prisma.ConversationCreateOrConnectWithoutJobInput[]
+  upsert?: Prisma.ConversationUpsertWithWhereUniqueWithoutJobInput | Prisma.ConversationUpsertWithWhereUniqueWithoutJobInput[]
+  createMany?: Prisma.ConversationCreateManyJobInputEnvelope
+  set?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  disconnect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  delete?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  connect?: Prisma.ConversationWhereUniqueInput | Prisma.ConversationWhereUniqueInput[]
+  update?: Prisma.ConversationUpdateWithWhereUniqueWithoutJobInput | Prisma.ConversationUpdateWithWhereUniqueWithoutJobInput[]
+  updateMany?: Prisma.ConversationUpdateManyWithWhereWithoutJobInput | Prisma.ConversationUpdateManyWithWhereWithoutJobInput[]
+  deleteMany?: Prisma.ConversationScalarWhereInput | Prisma.ConversationScalarWhereInput[]
 }
 
 export type ConversationCreateNestedOneWithoutParticipantsInput = {
@@ -331,18 +407,76 @@ export type ConversationUpdateOneRequiredWithoutParticipantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutParticipantsInput, Prisma.ConversationUpdateWithoutParticipantsInput>, Prisma.ConversationUncheckedUpdateWithoutParticipantsInput>
 }
 
+export type ConversationCreateWithoutJobInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastMessageContent?: string | null
+  lastMessageAt?: Date | string | null
+  participants?: Prisma.ConversationParticipantCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationUncheckedCreateWithoutJobInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastMessageContent?: string | null
+  lastMessageAt?: Date | string | null
+  participants?: Prisma.ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationCreateOrConnectWithoutJobInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput>
+}
+
+export type ConversationCreateManyJobInputEnvelope = {
+  data: Prisma.ConversationCreateManyJobInput | Prisma.ConversationCreateManyJobInput[]
+  skipDuplicates?: boolean
+}
+
+export type ConversationUpsertWithWhereUniqueWithoutJobInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  update: Prisma.XOR<Prisma.ConversationUpdateWithoutJobInput, Prisma.ConversationUncheckedUpdateWithoutJobInput>
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutJobInput, Prisma.ConversationUncheckedCreateWithoutJobInput>
+}
+
+export type ConversationUpdateWithWhereUniqueWithoutJobInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  data: Prisma.XOR<Prisma.ConversationUpdateWithoutJobInput, Prisma.ConversationUncheckedUpdateWithoutJobInput>
+}
+
+export type ConversationUpdateManyWithWhereWithoutJobInput = {
+  where: Prisma.ConversationScalarWhereInput
+  data: Prisma.XOR<Prisma.ConversationUpdateManyMutationInput, Prisma.ConversationUncheckedUpdateManyWithoutJobInput>
+}
+
+export type ConversationScalarWhereInput = {
+  AND?: Prisma.ConversationScalarWhereInput | Prisma.ConversationScalarWhereInput[]
+  OR?: Prisma.ConversationScalarWhereInput[]
+  NOT?: Prisma.ConversationScalarWhereInput | Prisma.ConversationScalarWhereInput[]
+  id?: Prisma.StringFilter<"Conversation"> | string
+  createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  jobId?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  lastMessageContent?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+}
+
 export type ConversationCreateWithoutParticipantsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   lastMessageContent?: string | null
   lastMessageAt?: Date | string | null
+  job?: Prisma.JobCreateNestedOneWithoutConversationsInput
 }
 
 export type ConversationUncheckedCreateWithoutParticipantsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobId?: string | null
   lastMessageContent?: string | null
   lastMessageAt?: Date | string | null
 }
@@ -369,9 +503,45 @@ export type ConversationUpdateWithoutParticipantsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  job?: Prisma.JobUpdateOneWithoutConversationsNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type ConversationCreateManyJobInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastMessageContent?: string | null
+  lastMessageAt?: Date | string | null
+}
+
+export type ConversationUpdateWithoutJobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  participants?: Prisma.ConversationParticipantUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateWithoutJobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastMessageContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  participants?: Prisma.ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateManyWithoutJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,9 +584,11 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  jobId?: boolean
   lastMessageContent?: boolean
   lastMessageAt?: boolean
   participants?: boolean | Prisma.Conversation$participantsArgs<ExtArgs>
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
@@ -424,43 +596,55 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  jobId?: boolean
   lastMessageContent?: boolean
   lastMessageAt?: boolean
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
 export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  jobId?: boolean
   lastMessageContent?: boolean
   lastMessageAt?: boolean
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
 export type ConversationSelectScalar = {
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  jobId?: boolean
   lastMessageContent?: boolean
   lastMessageAt?: boolean
 }
 
-export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "lastMessageContent" | "lastMessageAt", ExtArgs["result"]["conversation"]>
+export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "jobId" | "lastMessageContent" | "lastMessageAt", ExtArgs["result"]["conversation"]>
 export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   participants?: boolean | Prisma.Conversation$participantsArgs<ExtArgs>
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ConversationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ConversationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
+}
+export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  job?: boolean | Prisma.Conversation$jobArgs<ExtArgs>
+}
 
 export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Conversation"
   objects: {
     participants: Prisma.$ConversationParticipantPayload<ExtArgs>[]
+    job: Prisma.$JobPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     createdAt: Date
     updatedAt: Date
+    jobId: string | null
     lastMessageContent: string | null
     lastMessageAt: Date | null
   }, ExtArgs["result"]["conversation"]>
@@ -858,6 +1042,7 @@ readonly fields: ConversationFieldRefs;
 export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   participants<T extends Prisma.Conversation$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  job<T extends Prisma.Conversation$jobArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$jobArgs<ExtArgs>>): Prisma.Prisma__JobClient<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -890,6 +1075,7 @@ export interface ConversationFieldRefs {
   readonly id: Prisma.FieldRef<"Conversation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Conversation", 'DateTime'>
+  readonly jobId: Prisma.FieldRef<"Conversation", 'String'>
   readonly lastMessageContent: Prisma.FieldRef<"Conversation", 'String'>
   readonly lastMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
 }
@@ -1141,6 +1327,10 @@ export type ConversationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.ConversationCreateManyInput | Prisma.ConversationCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1211,6 +1401,10 @@ export type ConversationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many Conversations to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1301,6 +1495,25 @@ export type Conversation$participantsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.ConversationParticipantScalarFieldEnum | Prisma.ConversationParticipantScalarFieldEnum[]
+}
+
+/**
+ * Conversation.job
+ */
+export type Conversation$jobArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
 }
 
 /**

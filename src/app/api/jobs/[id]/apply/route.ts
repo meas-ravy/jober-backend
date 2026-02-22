@@ -134,7 +134,7 @@ export async function POST(
           title: "New Job Application",
           content: `${applicantName} has applied for your job: ${newApplication.job.title}`,
           type: "NEW_APPLICATION",
-          link: `/dashboard/jobs/${jobId}/applications`,
+          link: `/view-applicants/${jobId}`,
         });
       } catch (notifError) {
         // Log notification error but don't fail the application transaction

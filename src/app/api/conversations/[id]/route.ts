@@ -96,7 +96,7 @@ export async function PATCH(
               ? lastMessageContent.substring(0, 47) + "..."
               : lastMessageContent,
           type: "NEW_MESSAGE",
-          link: `/messages/${id}`, // Flutter handles this or React dashboard
+          link: `/chat-detail/${id}`, // Flutter app route
         });
       }
     } catch (notifError) {

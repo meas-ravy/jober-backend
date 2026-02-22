@@ -121,7 +121,7 @@ export async function POST(req: Request) {
         title: "Incoming Call",
         content: `${callerName} is calling you...`,
         type: "INCOMING_CALL" as any, // Cast to any until prisma generates
-        link: `/call/${conversationId}`,
+        link: `/chat-detail/${conversationId}`,
       });
     } else if (signalType === "MISSED_CALL") {
       // Send standard CALL_MISSED notification
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
         title: "Missed Call",
         content: `You missed a call from ${callerName}`,
         type: "CALL_MISSED" as any,
-        link: `/messages/${conversationId}`,
+        link: `/chat-detail/${conversationId}`,
       });
     }
 

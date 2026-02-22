@@ -55,8 +55,31 @@ async function sendPushNotification(
   type?: NotificationType, // Added type to handle specific FCM logic
 ) {
   try {
+    // Determine target role based on notification type
+    let targetRole: string = "Both";
+    if (
+      ["NEW_APPLICATION", "VERIFICATION_STATUS", "JOB_STATUS_CHANGE"].includes(
+        type || "",
+      )
+    ) {
+      targetRole = "Recruiter";
+    } else if (
+      ["APPLICATION_UPDATE", "NEW_JOB_FROM_FOLLOW"].includes(type || "")
+    ) {
+      targetRole = "Job_finder";
+    }
+
+    // If it's a role-specific notification, only send to tokens registered with that role
+    // OR tokens that haven't specified a role yet (legacy)
     const tokens = await prisma.deviceToken.findMany({
-      where: { userId },
+      where: {
+        userId,
+        ...(targetRole !== "Both"
+          ? {
+              OR: [{ role: targetRole as any }, { role: null }],
+            }
+          : {}),
+      },
       select: { token: true },
     });
 
@@ -76,6 +99,7 @@ async function sendPushNotification(
         type: type || "INFO",
         title: title,
         body: body,
+        targetRole,
       },
     };
 

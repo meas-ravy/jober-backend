@@ -50,6 +50,12 @@ export async function GET(req: Request) {
         },
       },
       include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
         participants: {
           include: {
             user: {
@@ -91,6 +97,7 @@ export async function GET(req: Request) {
         updatedAt: conv.updatedAt,
         lastMessageContent: conv.lastMessageContent,
         lastMessageAt: conv.lastMessageAt,
+        job: conv.job,
         otherParticipant: otherParticipant
           ? {
               id: otherParticipant.userId || otherParticipant.adminId,
@@ -130,7 +137,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const { receiverId, receiverType } = body;
+    const { receiverId, receiverType, jobId } = body;
 
     if (!receiverId || !receiverType) {
       return NextResponse.json(
@@ -139,7 +146,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if conversation already exists
+    // Check if conversation already exists (optionally filtered by jobId)
     const conversation = await prisma.conversation.findFirst({
       where: {
         AND: [
@@ -156,6 +163,7 @@ export async function POST(req: Request) {
                   : { adminId: receiverId },
             },
           },
+          jobId ? { jobId } : {},
         ],
       },
     });
@@ -167,6 +175,7 @@ export async function POST(req: Request) {
     // Create new conversation
     const newConversation = await prisma.conversation.create({
       data: {
+        jobId: jobId || null,
         participants: {
           create: [
             {

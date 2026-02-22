@@ -108,7 +108,7 @@ export async function POST(
         title: "Job Rejected",
         content: `Your job post "${existingJob.title}" was not approved. Reason: ${reason.trim()}`,
         type: "JOB_STATUS_CHANGE",
-        link: `/dashboard/jobs/${jobId}`
+        link: "/recruiter",
       });
     } catch (notifError) {
       console.error("Failed to notify recruiter of job rejection:", notifError);

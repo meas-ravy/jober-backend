@@ -28,6 +28,7 @@ export type DeviceTokenMinAggregateOutputType = {
   id: string | null
   userId: string | null
   token: string | null
+  role: $Enums.RoleName | null
   platform: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +38,7 @@ export type DeviceTokenMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   token: string | null
+  role: $Enums.RoleName | null
   platform: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +48,7 @@ export type DeviceTokenCountAggregateOutputType = {
   id: number
   userId: number
   token: number
+  role: number
   platform: number
   createdAt: number
   updatedAt: number
@@ -57,6 +60,7 @@ export type DeviceTokenMinAggregateInputType = {
   id?: true
   userId?: true
   token?: true
+  role?: true
   platform?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +70,7 @@ export type DeviceTokenMaxAggregateInputType = {
   id?: true
   userId?: true
   token?: true
+  role?: true
   platform?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +80,7 @@ export type DeviceTokenCountAggregateInputType = {
   id?: true
   userId?: true
   token?: true
+  role?: true
   platform?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +163,7 @@ export type DeviceTokenGroupByOutputType = {
   id: string
   userId: string
   token: string
+  role: $Enums.RoleName | null
   platform: string | null
   createdAt: Date
   updatedAt: Date
@@ -187,6 +194,7 @@ export type DeviceTokenWhereInput = {
   id?: Prisma.StringFilter<"DeviceToken"> | string
   userId?: Prisma.StringFilter<"DeviceToken"> | string
   token?: Prisma.StringFilter<"DeviceToken"> | string
+  role?: Prisma.EnumRoleNameNullableFilter<"DeviceToken"> | $Enums.RoleName | null
   platform?: Prisma.StringNullableFilter<"DeviceToken"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
@@ -197,6 +205,7 @@ export type DeviceTokenOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   platform?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -210,6 +219,7 @@ export type DeviceTokenWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DeviceTokenWhereInput[]
   NOT?: Prisma.DeviceTokenWhereInput | Prisma.DeviceTokenWhereInput[]
   userId?: Prisma.StringFilter<"DeviceToken"> | string
+  role?: Prisma.EnumRoleNameNullableFilter<"DeviceToken"> | $Enums.RoleName | null
   platform?: Prisma.StringNullableFilter<"DeviceToken"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
@@ -220,6 +230,7 @@ export type DeviceTokenOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   platform?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -235,6 +246,7 @@ export type DeviceTokenScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DeviceToken"> | string
   userId?: Prisma.StringWithAggregatesFilter<"DeviceToken"> | string
   token?: Prisma.StringWithAggregatesFilter<"DeviceToken"> | string
+  role?: Prisma.EnumRoleNameNullableWithAggregatesFilter<"DeviceToken"> | $Enums.RoleName | null
   platform?: Prisma.StringNullableWithAggregatesFilter<"DeviceToken"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DeviceToken"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DeviceToken"> | Date | string
@@ -243,6 +255,7 @@ export type DeviceTokenScalarWhereWithAggregatesInput = {
 export type DeviceTokenCreateInput = {
   id?: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -253,6 +266,7 @@ export type DeviceTokenUncheckedCreateInput = {
   id?: string
   userId: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -261,6 +275,7 @@ export type DeviceTokenUncheckedCreateInput = {
 export type DeviceTokenUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -271,6 +286,7 @@ export type DeviceTokenUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -280,6 +296,7 @@ export type DeviceTokenCreateManyInput = {
   id?: string
   userId: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -288,6 +305,7 @@ export type DeviceTokenCreateManyInput = {
 export type DeviceTokenUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -297,6 +315,7 @@ export type DeviceTokenUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -316,6 +335,7 @@ export type DeviceTokenCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -325,6 +345,7 @@ export type DeviceTokenMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -334,6 +355,7 @@ export type DeviceTokenMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -381,9 +403,14 @@ export type DeviceTokenUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.DeviceTokenScalarWhereInput | Prisma.DeviceTokenScalarWhereInput[]
 }
 
+export type NullableEnumRoleNameFieldUpdateOperationsInput = {
+  set?: $Enums.RoleName | null
+}
+
 export type DeviceTokenCreateWithoutUserInput = {
   id?: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -392,6 +419,7 @@ export type DeviceTokenCreateWithoutUserInput = {
 export type DeviceTokenUncheckedCreateWithoutUserInput = {
   id?: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -430,6 +458,7 @@ export type DeviceTokenScalarWhereInput = {
   id?: Prisma.StringFilter<"DeviceToken"> | string
   userId?: Prisma.StringFilter<"DeviceToken"> | string
   token?: Prisma.StringFilter<"DeviceToken"> | string
+  role?: Prisma.EnumRoleNameNullableFilter<"DeviceToken"> | $Enums.RoleName | null
   platform?: Prisma.StringNullableFilter<"DeviceToken"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeviceToken"> | Date | string
@@ -438,6 +467,7 @@ export type DeviceTokenScalarWhereInput = {
 export type DeviceTokenCreateManyUserInput = {
   id?: string
   token: string
+  role?: $Enums.RoleName | null
   platform?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -446,6 +476,7 @@ export type DeviceTokenCreateManyUserInput = {
 export type DeviceTokenUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -454,6 +485,7 @@ export type DeviceTokenUpdateWithoutUserInput = {
 export type DeviceTokenUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +494,7 @@ export type DeviceTokenUncheckedUpdateWithoutUserInput = {
 export type DeviceTokenUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.NullableEnumRoleNameFieldUpdateOperationsInput | $Enums.RoleName | null
   platform?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -473,6 +506,7 @@ export type DeviceTokenSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   userId?: boolean
   token?: boolean
+  role?: boolean
   platform?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -483,6 +517,7 @@ export type DeviceTokenSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   userId?: boolean
   token?: boolean
+  role?: boolean
   platform?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -493,6 +528,7 @@ export type DeviceTokenSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   userId?: boolean
   token?: boolean
+  role?: boolean
   platform?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -503,12 +539,13 @@ export type DeviceTokenSelectScalar = {
   id?: boolean
   userId?: boolean
   token?: boolean
+  role?: boolean
   platform?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DeviceTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "token" | "platform" | "createdAt" | "updatedAt", ExtArgs["result"]["deviceToken"]>
+export type DeviceTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "token" | "role" | "platform" | "createdAt" | "updatedAt", ExtArgs["result"]["deviceToken"]>
 export type DeviceTokenInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -528,6 +565,7 @@ export type $DeviceTokenPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     userId: string
     token: string
+    role: $Enums.RoleName | null
     platform: string | null
     createdAt: Date
     updatedAt: Date
@@ -958,6 +996,7 @@ export interface DeviceTokenFieldRefs {
   readonly id: Prisma.FieldRef<"DeviceToken", 'String'>
   readonly userId: Prisma.FieldRef<"DeviceToken", 'String'>
   readonly token: Prisma.FieldRef<"DeviceToken", 'String'>
+  readonly role: Prisma.FieldRef<"DeviceToken", 'RoleName'>
   readonly platform: Prisma.FieldRef<"DeviceToken", 'String'>
   readonly createdAt: Prisma.FieldRef<"DeviceToken", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"DeviceToken", 'DateTime'>

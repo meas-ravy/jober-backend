@@ -75,7 +75,7 @@ export async function POST(
         title: "Job Approved",
         content: `Your job post "${existingJob.title}" has been approved and is now live!`,
         type: "JOB_STATUS_CHANGE",
-        link: `/dashboard/jobs/${jobId}`
+        link: "/recruiter",
       });
     } catch (notifError) {
       console.error("Failed to notify recruiter of job approval:", notifError);

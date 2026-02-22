@@ -1925,6 +1925,7 @@ export const DeviceTokenScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   token: 'token',
+  role: 'role',
   platform: 'platform',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1952,6 +1953,7 @@ export const ConversationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  jobId: 'jobId',
   lastMessageContent: 'lastMessageContent',
   lastMessageAt: 'lastMessageAt'
 } as const

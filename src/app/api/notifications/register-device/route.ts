@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     if (!token) {
       return NextResponse.json(
         { error: "Authorization token is required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -26,35 +26,35 @@ export async function POST(request: Request) {
     } catch (error) {
       return NextResponse.json(
         { error: "Invalid or expired access token" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     // 2. Parse request body
     const body = await request.json().catch(() => ({}));
-    const { deviceToken, platform } = body;
+    const { deviceToken, platform, role } = body;
 
     if (!deviceToken || typeof deviceToken !== "string") {
       return NextResponse.json(
         { error: "deviceToken is required and must be a string" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // 3. Register or update the token
-    // We use upsert based on the unique 'token' field.
-    // If the token already exists (even for another user), we reassign it to the current user.
     await prisma.deviceToken.upsert({
       where: { token: deviceToken },
       update: {
         userId,
         platform: platform || null,
+        role: role || null,
         updatedAt: new Date(),
       },
       create: {
         token: deviceToken,
         userId,
         platform: platform || null,
+        role: role || null,
       },
     });
 
@@ -63,7 +63,8 @@ export async function POST(request: Request) {
       message: "Device token registered successfully",
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const message =
+      error instanceof Error ? error.message : "Internal server error";
     console.error("Device registration error    :", error);
     return NextResponse.json({ error: message }, { status: 500 });
   }

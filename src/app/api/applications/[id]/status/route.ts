@@ -195,17 +195,26 @@ export async function PATCH(
         title: statusTitle,
         content: statusContent,
         type: "APPLICATION_UPDATE",
-        link: `/my-applications/${applicationId}`,
+        link: "/jobseeker?tab=2", // Go to Applications tab
       });
 
       // --- AUTO MESSAGE LOGIC ---
-      if (status === "Hired" || status === "Rejected") {
+      if (
+        status === "Shortlisted" ||
+        status === "Hired" ||
+        status === "Rejected"
+      ) {
         const companyName =
-          (updatedApplication.job as any).companyProfile?.name || "the company";
-        const messageContent =
-          status === "Hired"
-            ? `Congratulations! You have been hired for the "${updatedApplication.job.title}" position at ${companyName}. Welcome to the team!`
-            : `Thank you for applying for the "${updatedApplication.job.title}" position at ${companyName}. We've decided to move forward with other candidates, but we wish you the best in your search.`;
+          updatedApplication.job.companyProfile?.name || "the company";
+        let messageContent = "";
+
+        if (status === "Shortlisted") {
+          messageContent = `Hi! You have been shortlisted for the "${updatedApplication.job.title}" position at ${companyName}. We would like to move forward with your application.`;
+        } else if (status === "Hired") {
+          messageContent = `Congratulations! You have been hired for the "${updatedApplication.job.title}" position at ${companyName}. Welcome to the team!`;
+        } else if (status === "Rejected") {
+          messageContent = `Thank you for applying for the "${updatedApplication.job.title}" position at ${companyName}. Unfortunately, we've decided to move forward with other candidates at this time.`;
+        }
 
         await sendAutoMessage({
           recruiterId: userId,

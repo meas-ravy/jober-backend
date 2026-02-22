@@ -19,18 +19,22 @@ export async function sendAutoMessage({
 }) {
   try {
     // 1. Find or create the conversation in Postgres
+    // We look for a conversation between these two specific to this job if jobId is provided
     let conversation = await prisma.conversation.findFirst({
       where: {
-        AND: [
-          { participants: { some: { userId: recruiterId } } },
-          { participants: { some: { userId: seekerId } } },
-        ],
+        participants: {
+          every: {
+            OR: [{ userId: recruiterId }, { userId: seekerId }],
+          },
+        },
+        jobId: jobId || null,
       },
     });
 
     if (!conversation) {
       conversation = await prisma.conversation.create({
         data: {
+          jobId: jobId || null,
           participants: {
             create: [{ userId: recruiterId }, { userId: seekerId }],
           },
@@ -39,18 +43,14 @@ export async function sendAutoMessage({
     }
 
     // 2. Send the message to Firebase Realtime Database
-    const messageData: any = {
-      content,
+    const messageData = {
+      content: content,
       senderId: recruiterId,
-      senderType: "User", // Both Recruiter and Seeker are "User" in our system roles
+      senderType: "User",
       timestamp: Date.now(),
-      status: "sent",
     };
 
-    if (jobId) {
-      messageData.jobId = jobId;
-    }
-
+    // Firebase Path: conversations/{conversationId}/messages
     const messagesRef = db.ref(`conversations/${conversation.id}/messages`);
     await messagesRef.push(messageData);
 
@@ -62,6 +62,21 @@ export async function sendAutoMessage({
         lastMessageAt: new Date(),
       },
     });
+
+    // 4. Send Push Notification to the recipient (seeker)
+    try {
+      const { createNotification } = await import("./notifications");
+      await createNotification({
+        userId: seekerId,
+        title: "New Message",
+        content:
+          content.length > 50 ? content.substring(0, 47) + "..." : content,
+        type: "NEW_MESSAGE",
+        link: `/chat-detail/${conversation.id}`,
+      });
+    } catch (notifError) {
+      console.error("Failed to send auto-message notification:", notifError);
+    }
 
     return { success: true, conversationId: conversation.id };
   } catch (error) {

@@ -18,16 +18,16 @@ export async function GET(request: Request) {
 
     // 1. Check for Admin Session first (React Web)
     const session = await getServerSession(authOptions);
-    console.log("Notification API - Session:", { 
-      hasSession: !!session, 
-      role: session?.user?.role, 
-      hasId: !!session?.user?.id 
+    console.log("Notification API - Session:", {
+      hasSession: !!session,
+      role: session?.user?.role,
+      hasId: !!session?.user?.id,
     });
 
     if (session?.user?.role === "Admin") {
       adminId = session.user.id || null;
-    } 
-    
+    }
+
     // 2. Check for Token (Flutter Mobile or Web Seeker/Recruiter)
     // We check this even if admin session is null, but we prioritize admin session
     if (!adminId) {
@@ -38,7 +38,10 @@ export async function GET(request: Request) {
           userId = verified.userId;
           console.log("Notification API - Token user verified:", userId);
         } catch (err) {
-          console.error("Notification API - Token verification failed:", err instanceof Error ? err.message : err);
+          console.error(
+            "Notification API - Token verification failed:",
+            err instanceof Error ? err.message : err,
+          );
         }
       } else {
         console.log("Notification API - No Bearer token found in headers");
@@ -46,17 +49,53 @@ export async function GET(request: Request) {
     }
 
     if (!userId && !adminId) {
-      console.warn("Notification API - 401 Unauthorized: No valid session or token found");
+      console.warn(
+        "Notification API - 401 Unauthorized: No valid session or token found",
+      );
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 3. Fetch notifications
+    // 3. Get query params for filtering
+    const { searchParams } = new URL(request.url);
+    const role = searchParams.get("role");
+
+    // 4. Define type filtering logic
+    let typeFilter: any = undefined;
+    if (role === "Job_finder") {
+      typeFilter = {
+        in: [
+          "INFO",
+          "SYSTEM",
+          "APPLICATION_UPDATE",
+          "NEW_JOB_FROM_FOLLOW",
+          "NEW_MESSAGE",
+          "INCOMING_CALL",
+          "CALL_MISSED",
+        ],
+      };
+    } else if (role === "Recruiter") {
+      typeFilter = {
+        in: [
+          "INFO",
+          "SYSTEM",
+          "NEW_APPLICATION",
+          "VERIFICATION_STATUS",
+          "JOB_STATUS_CHANGE",
+          "NEW_MESSAGE",
+          "INCOMING_CALL",
+          "CALL_MISSED",
+        ],
+      };
+    }
+
+    // 5. Fetch notifications
     const notifications = await prisma.notification.findMany({
       where: {
         OR: [
           { userId: userId || undefined },
           { adminId: adminId || undefined },
         ],
+        ...(typeFilter ? { type: typeFilter } : {}),
       },
       orderBy: {
         createdAt: "desc",
@@ -66,7 +105,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ notifications });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
+    const message =
+      error instanceof Error ? error.message : "Internal server error";
     console.error("Error fetching notifications:", error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
@@ -80,7 +120,7 @@ export async function PATCH(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     const token = getBearerToken(request);
-    
+
     let userId: string | null = null;
     let adminId: string | null = null;
 
@@ -128,6 +168,9 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update notifications" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to update notifications" },
+      { status: 500 },
+    );
   }
 }
