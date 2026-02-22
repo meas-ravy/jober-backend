@@ -108,6 +108,18 @@ export async function POST(request: Request) {
     // Issue authentication tokens
     const tokens = await issueTokensForUser(user.id);
 
+    // Generate Firebase Custom Token
+    let firebaseToken = null;
+    try {
+      const { auth: firebaseAdminAuth } =
+        await import("@/src/lib/firebase-admin");
+      firebaseToken = await firebaseAdminAuth.createCustomToken(user.id, {
+        roles: tokens.roles,
+      });
+    } catch (firebaseError) {
+      console.error("Failed to generate firebase token:", firebaseError);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Authentication successful",
@@ -117,6 +129,7 @@ export async function POST(request: Request) {
         roles: tokens.roles,
       },
       accessToken: tokens.accessToken,
+      firebaseToken: firebaseToken,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

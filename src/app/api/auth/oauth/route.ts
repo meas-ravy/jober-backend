@@ -59,9 +59,7 @@ export async function POST(request: Request) {
         accessToken:
           typeof body.accessToken === "string" ? body.accessToken : undefined,
         refreshToken:
-          typeof body.refreshToken === "string"
-            ? body.refreshToken
-            : undefined,
+          typeof body.refreshToken === "string" ? body.refreshToken : undefined,
       };
 
       userData = await verifyGoogleToken(googlePayload);
@@ -81,9 +79,7 @@ export async function POST(request: Request) {
       const linkedInPayload: LinkedInTokenPayload = {
         accessToken: body.accessToken,
         refreshToken:
-          typeof body.refreshToken === "string"
-            ? body.refreshToken
-            : undefined,
+          typeof body.refreshToken === "string" ? body.refreshToken : undefined,
       };
 
       userData = await verifyLinkedInToken(linkedInPayload);
@@ -123,6 +119,18 @@ export async function POST(request: Request) {
     // Generate JWT tokens
     const jwtTokens = await issueTokensForUser(userId);
 
+    // Generate Firebase Custom Token
+    let firebaseToken = null;
+    try {
+      const { auth: firebaseAdminAuth } =
+        await import("@/src/lib/firebase-admin");
+      firebaseToken = await firebaseAdminAuth.createCustomToken(userId, {
+        roles: user.roles.map(r => r.role),
+      });
+    } catch (firebaseError) {
+      console.error("Failed to generate firebase token:", firebaseError);
+    }
+
     // Return success response
     return NextResponse.json(
       {
@@ -135,9 +143,10 @@ export async function POST(request: Request) {
           email: user.email,
           name: user.name,
           phone: user.phone,
-          roles: user.roles.map((r) => r.role),
+          roles: user.roles.map(r => r.role),
         },
         accessToken: jwtTokens.accessToken,
+        firebaseToken: firebaseToken,
       },
       { status: isNewUser ? 201 : 200 },
     );

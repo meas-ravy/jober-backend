@@ -50,8 +50,8 @@ export async function sendAutoMessage({
       timestamp: Date.now(),
     };
 
-    // Firebase Path: conversations/{conversationId}/messages
-    const messagesRef = db.ref(`conversations/${conversation.id}/messages`);
+    // Firebase Path: messages/{conversationId}/messages
+    const messagesRef = db.ref(`messages/${conversation.id}/messages`);
     await messagesRef.push(messageData);
 
     // 3. Update the conversation metadata in Postgres
