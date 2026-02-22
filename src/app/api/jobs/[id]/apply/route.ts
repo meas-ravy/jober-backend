@@ -129,12 +129,19 @@ export async function POST(
 
       // Send Notification to Recruiter
       try {
+        // Fetch applicant's profile to get their avatar
+        const applicant = await tx.jobSeekerProfile.findUnique({
+          where: { userId: userId },
+          select: { avatarUrl: true },
+        });
+
         await createNotification({
           userId: newApplication.job.recruiterId,
           title: "New Job Application",
           content: `${applicantName} has applied for your job: ${newApplication.job.title}`,
           type: "NEW_APPLICATION",
           link: `/view-applicants/${jobId}`,
+          imageUrl: applicant?.avatarUrl || undefined,
         });
       } catch (notifError) {
         // Log notification error but don't fail the application transaction

@@ -71,11 +71,12 @@ export async function POST(
     // Notify recruiter
     try {
       await createNotification({
-        userId: existingJob.recruiterId,
+        userId: approvedJob.recruiterId,
         title: "Job Approved",
-        content: `Your job post "${existingJob.title}" has been approved and is now live!`,
+        content: `Your job post "${approvedJob.title}" has been approved and is now live!`,
         type: "JOB_STATUS_CHANGE",
         link: "/recruiter",
+        imageUrl: approvedJob.companyProfile?.logoUrl || undefined,
       });
     } catch (notifError) {
       console.error("Failed to notify recruiter of job approval:", notifError);

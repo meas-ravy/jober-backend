@@ -410,6 +410,7 @@ model Notification {
   content   String           @db.Text
   type      NotificationType
   link      String? // Deep link or URL
+  imageUrl  String? // Image or Avatar URL
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
 

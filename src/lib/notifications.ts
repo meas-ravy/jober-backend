@@ -9,13 +9,14 @@ interface CreateNotificationParams {
   content: string;
   type: NotificationType;
   link?: string;
+  imageUrl?: string;
 }
 
 /**
  * Creates a notification in the database and prepares for push delivery.
  */
 export async function createNotification(params: CreateNotificationParams) {
-  const { userId, adminId, title, content, type, link } = params;
+  const { userId, adminId, title, content, type, link, imageUrl } = params;
 
   if (!userId && !adminId) {
     throw new Error("Must provide either userId or adminId for notification");
@@ -30,6 +31,7 @@ export async function createNotification(params: CreateNotificationParams) {
       content,
       type,
       link,
+      imageUrl,
     },
   });
 

@@ -166,8 +166,17 @@ export async function PATCH(
           select: {
             id: true,
             title: true,
+            location: true,
+            salaryMin: true,
+            salaryMax: true,
+            salaryCurrency: true,
+            employmentType: true,
+            workArrangement: true,
             companyProfile: {
-              select: { name: true },
+              select: {
+                name: true,
+                logoUrl: true,
+              },
             },
           },
         },
@@ -196,6 +205,7 @@ export async function PATCH(
         content: statusContent,
         type: "APPLICATION_UPDATE",
         link: "/jobseeker?tab=2", // Go to Applications tab
+        imageUrl: updatedApplication.job.companyProfile?.logoUrl || undefined,
       });
 
       // --- AUTO MESSAGE LOGIC ---
@@ -206,8 +216,31 @@ export async function PATCH(
       ) {
         const companyName =
           updatedApplication.job.companyProfile?.name || "the company";
-        let messageContent = "";
 
+        // 1. Send the Job Card first
+        await sendAutoMessage({
+          recruiterId: userId,
+          seekerId: updatedApplication.jobSeeker.id,
+          content: "Job Information Card",
+          jobId: updatedApplication.job.id,
+          type: "job_card",
+          jobData: {
+            title: updatedApplication.job.title,
+            company: companyName,
+            location: updatedApplication.job.location,
+            salary:
+              updatedApplication.job.salaryMin &&
+              updatedApplication.job.salaryMax
+                ? `${updatedApplication.job.salaryCurrency} ${updatedApplication.job.salaryMin.toLocaleString()} - ${updatedApplication.job.salaryMax.toLocaleString()}`
+                : "Salary not specified",
+            logoUrl: updatedApplication.job.companyProfile?.logoUrl,
+            jobType: updatedApplication.job.employmentType,
+            workplace: updatedApplication.job.workArrangement,
+          },
+        });
+
+        // 2. Send the Text Message follow-up
+        let messageContent = "";
         if (status === "Shortlisted") {
           messageContent = `Hi! You have been shortlisted for the "${updatedApplication.job.title}" position at ${companyName}. We would like to move forward with your application.`;
         } else if (status === "Hired") {

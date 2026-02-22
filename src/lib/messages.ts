@@ -11,11 +11,15 @@ export async function sendAutoMessage({
   seekerId,
   content,
   jobId,
+  type = "text",
+  jobData = null,
 }: {
   recruiterId: string;
   seekerId: string;
   content: string;
   jobId?: string;
+  type?: string;
+  jobData?: any;
 }) {
   try {
     // 1. Find or create the conversation in Postgres
@@ -43,12 +47,17 @@ export async function sendAutoMessage({
     }
 
     // 2. Send the message to Firebase Realtime Database
-    const messageData = {
+    const messageData: any = {
       content: content,
       senderId: recruiterId,
       senderType: "User",
       timestamp: Date.now(),
+      type: type,
     };
+
+    if (jobData) {
+      messageData.jobData = jobData;
+    }
 
     // Firebase Path: messages/{conversationId}/messages
     const messagesRef = db.ref(`messages/${conversation.id}/messages`);
@@ -58,21 +67,32 @@ export async function sendAutoMessage({
     await prisma.conversation.update({
       where: { id: conversation.id },
       data: {
-        lastMessageContent: content,
+        lastMessageContent: type === "job_card" ? "[Job Card]" : content,
         lastMessageAt: new Date(),
       },
     });
 
     // 4. Send Push Notification to the recipient (seeker)
     try {
+      // Fetch recruiter's company logo for the notification image
+      const recruiter = await prisma.user.findUnique({
+        where: { id: recruiterId },
+        include: { companyProfile: { select: { logoUrl: true } } },
+      });
+
       const { createNotification } = await import("./notifications");
       await createNotification({
         userId: seekerId,
         title: "New Message",
         content:
-          content.length > 50 ? content.substring(0, 47) + "..." : content,
+          type === "job_card"
+            ? "You received a job offer/update card."
+            : content.length > 50
+              ? content.substring(0, 47) + "..."
+              : content,
         type: "NEW_MESSAGE",
         link: `/chat-detail/${conversation.id}`,
+        imageUrl: recruiter?.companyProfile?.logoUrl || undefined,
       });
     } catch (notifError) {
       console.error("Failed to send auto-message notification:", notifError);

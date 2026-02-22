@@ -37,8 +37,7 @@ export async function POST(req: Request) {
     }
 
     // Generate Custom Token for Firebase Utils
-    // The 'uid' here matches the Postgres ID, ensuring data consistency
-    const customToken = await auth.createCustomToken(uid, { role });
+    const customToken = await auth.createCustomToken(uid, { roles: [role] });
 
     return NextResponse.json({ firebaseToken: customToken });
   } catch (error) {

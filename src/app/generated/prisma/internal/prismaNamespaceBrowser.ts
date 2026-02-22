@@ -311,6 +311,7 @@ export const NotificationScalarFieldEnum = {
   content: 'content',
   type: 'type',
   link: 'link',
+  imageUrl: 'imageUrl',
   isRead: 'isRead',
   createdAt: 'createdAt'
 } as const

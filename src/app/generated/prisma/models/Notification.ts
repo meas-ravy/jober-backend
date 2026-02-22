@@ -32,6 +32,7 @@ export type NotificationMinAggregateOutputType = {
   content: string | null
   type: $Enums.NotificationType | null
   link: string | null
+  imageUrl: string | null
   isRead: boolean | null
   createdAt: Date | null
 }
@@ -44,6 +45,7 @@ export type NotificationMaxAggregateOutputType = {
   content: string | null
   type: $Enums.NotificationType | null
   link: string | null
+  imageUrl: string | null
   isRead: boolean | null
   createdAt: Date | null
 }
@@ -56,6 +58,7 @@ export type NotificationCountAggregateOutputType = {
   content: number
   type: number
   link: number
+  imageUrl: number
   isRead: number
   createdAt: number
   _all: number
@@ -70,6 +73,7 @@ export type NotificationMinAggregateInputType = {
   content?: true
   type?: true
   link?: true
+  imageUrl?: true
   isRead?: true
   createdAt?: true
 }
@@ -82,6 +86,7 @@ export type NotificationMaxAggregateInputType = {
   content?: true
   type?: true
   link?: true
+  imageUrl?: true
   isRead?: true
   createdAt?: true
 }
@@ -94,6 +99,7 @@ export type NotificationCountAggregateInputType = {
   content?: true
   type?: true
   link?: true
+  imageUrl?: true
   isRead?: true
   createdAt?: true
   _all?: true
@@ -179,6 +185,7 @@ export type NotificationGroupByOutputType = {
   content: string
   type: $Enums.NotificationType
   link: string | null
+  imageUrl: string | null
   isRead: boolean
   createdAt: Date
   _count: NotificationCountAggregateOutputType | null
@@ -212,6 +219,7 @@ export type NotificationWhereInput = {
   content?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
   link?: Prisma.StringNullableFilter<"Notification"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -226,6 +234,7 @@ export type NotificationOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   link?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -243,6 +252,7 @@ export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
   link?: Prisma.StringNullableFilter<"Notification"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -257,6 +267,7 @@ export type NotificationOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   link?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.NotificationCountOrderByAggregateInput
@@ -275,6 +286,7 @@ export type NotificationScalarWhereWithAggregatesInput = {
   content?: Prisma.StringWithAggregatesFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
   link?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   isRead?: Prisma.BoolWithAggregatesFilter<"Notification"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Notification"> | Date | string
 }
@@ -285,6 +297,7 @@ export type NotificationCreateInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutNotificationsInput
@@ -299,6 +312,7 @@ export type NotificationUncheckedCreateInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -309,6 +323,7 @@ export type NotificationUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutNotificationsNestedInput
@@ -323,6 +338,7 @@ export type NotificationUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -335,6 +351,7 @@ export type NotificationCreateManyInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -345,6 +362,7 @@ export type NotificationUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -357,6 +375,7 @@ export type NotificationUncheckedUpdateManyInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -379,6 +398,7 @@ export type NotificationCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   link?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -391,6 +411,7 @@ export type NotificationMaxOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   link?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -403,6 +424,7 @@ export type NotificationMinOrderByAggregateInput = {
   content?: Prisma.SortOrder
   type?: Prisma.SortOrder
   link?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -501,6 +523,7 @@ export type NotificationCreateWithoutUserInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
   admin?: Prisma.AdminUserCreateNestedOneWithoutNotificationsInput
@@ -513,6 +536,7 @@ export type NotificationUncheckedCreateWithoutUserInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -554,6 +578,7 @@ export type NotificationScalarWhereInput = {
   content?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
   link?: Prisma.StringNullableFilter<"Notification"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
 }
@@ -564,6 +589,7 @@ export type NotificationCreateWithoutAdminInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutNotificationsInput
@@ -576,6 +602,7 @@ export type NotificationUncheckedCreateWithoutAdminInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -613,6 +640,7 @@ export type NotificationCreateManyUserInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -623,6 +651,7 @@ export type NotificationUpdateWithoutUserInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   admin?: Prisma.AdminUserUpdateOneWithoutNotificationsNestedInput
@@ -635,6 +664,7 @@ export type NotificationUncheckedUpdateWithoutUserInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -646,6 +676,7 @@ export type NotificationUncheckedUpdateManyWithoutUserInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -657,6 +688,7 @@ export type NotificationCreateManyAdminInput = {
   content: string
   type: $Enums.NotificationType
   link?: string | null
+  imageUrl?: string | null
   isRead?: boolean
   createdAt?: Date | string
 }
@@ -667,6 +699,7 @@ export type NotificationUpdateWithoutAdminInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutNotificationsNestedInput
@@ -679,6 +712,7 @@ export type NotificationUncheckedUpdateWithoutAdminInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -690,6 +724,7 @@ export type NotificationUncheckedUpdateManyWithoutAdminInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -704,6 +739,7 @@ export type NotificationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   content?: boolean
   type?: boolean
   link?: boolean
+  imageUrl?: boolean
   isRead?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.Notification$userArgs<ExtArgs>
@@ -718,6 +754,7 @@ export type NotificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   content?: boolean
   type?: boolean
   link?: boolean
+  imageUrl?: boolean
   isRead?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.Notification$userArgs<ExtArgs>
@@ -732,6 +769,7 @@ export type NotificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   content?: boolean
   type?: boolean
   link?: boolean
+  imageUrl?: boolean
   isRead?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.Notification$userArgs<ExtArgs>
@@ -746,11 +784,12 @@ export type NotificationSelectScalar = {
   content?: boolean
   type?: boolean
   link?: boolean
+  imageUrl?: boolean
   isRead?: boolean
   createdAt?: boolean
 }
 
-export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "adminId" | "title" | "content" | "type" | "link" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
+export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "adminId" | "title" | "content" | "type" | "link" | "imageUrl" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
 export type NotificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Notification$userArgs<ExtArgs>
   admin?: boolean | Prisma.Notification$adminArgs<ExtArgs>
@@ -778,6 +817,7 @@ export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     content: string
     type: $Enums.NotificationType
     link: string | null
+    imageUrl: string | null
     isRead: boolean
     createdAt: Date
   }, ExtArgs["result"]["notification"]>
@@ -1212,6 +1252,7 @@ export interface NotificationFieldRefs {
   readonly content: Prisma.FieldRef<"Notification", 'String'>
   readonly type: Prisma.FieldRef<"Notification", 'NotificationType'>
   readonly link: Prisma.FieldRef<"Notification", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"Notification", 'String'>
   readonly isRead: Prisma.FieldRef<"Notification", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Notification", 'DateTime'>
 }
