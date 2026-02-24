@@ -23,8 +23,9 @@ import {
   ChevronsRight,
   ChevronsUpDown,
   Eye,
-  Loader2,
   Search,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -48,6 +49,8 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 import Link from "next/link";
+import { EditJobDialog } from "./edit-job-dialog";
+import { DeleteJobDialog } from "./delete-job-dialog";
 
 export type JobRow = {
   id: string;
@@ -104,13 +107,37 @@ const globalJobFilter: FilterFn<JobRow> = (row, _columnId, filterValue) => {
 };
 
 // Extracted as a proper component to avoid React Hooks violation
-function ActionCell({ job }: { job: JobRow }) {
+function ActionCell({
+  job,
+  onEdit,
+  onDelete,
+}: {
+  job: JobRow;
+  onEdit: (job: JobRow) => void;
+  onDelete: (job: JobRow) => void;
+}) {
   return (
-    <div className="flex justify-end gap-2">
+    <div className="flex justify-end gap-1">
       <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
         <Link href={`/admin/jobs/${job.id}`}>
           <Eye className="size-3.5" />
         </Link>
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 w-8 p-0 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/50"
+        onClick={() => onEdit(job)}
+      >
+        <Pencil className="size-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/50"
+        onClick={() => onDelete(job)}
+      >
+        <Trash2 className="size-3.5" />
       </Button>
     </div>
   );
@@ -159,6 +186,8 @@ function RecommendCell({
 
 const createColumns = (
   onToggleRecommend: (jobId: string) => void,
+  onEdit: (job: JobRow) => void,
+  onDelete: (job: JobRow) => void,
 ): ColumnDef<JobRow>[] => [
   {
     id: "job",
@@ -276,7 +305,9 @@ const createColumns = (
     id: "actions",
     header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
-    cell: ({ row }) => <ActionCell job={row.original} />,
+    cell: ({ row }) => (
+      <ActionCell job={row.original} onEdit={onEdit} onDelete={onDelete} />
+    ),
   },
 ];
 
@@ -327,6 +358,9 @@ export function JobsTable({ data }: JobsTableProps) {
   });
   const [tableData, setTableData] = React.useState<JobRow[]>(data);
 
+  const [jobToEdit, setJobToEdit] = React.useState<JobRow | null>(null);
+  const [jobToDelete, setJobToDelete] = React.useState<JobRow | null>(null);
+
   // Keep tableData in sync if server data changes (e.g. after navigation)
   React.useEffect(() => {
     setTableData(data);
@@ -340,9 +374,17 @@ export function JobsTable({ data }: JobsTableProps) {
     );
   }, []);
 
+  const handleEdit = React.useCallback((job: JobRow) => {
+    setJobToEdit(job);
+  }, []);
+
+  const handleDelete = React.useCallback((job: JobRow) => {
+    setJobToDelete(job);
+  }, []);
+
   const columns = React.useMemo(
-    () => createColumns(handleToggleRecommend),
-    [handleToggleRecommend],
+    () => createColumns(handleToggleRecommend, handleEdit, handleDelete),
+    [handleToggleRecommend, handleEdit, handleDelete],
   );
 
   const table = useReactTable({
@@ -548,6 +590,25 @@ export function JobsTable({ data }: JobsTableProps) {
           </div>
         </div>
       </div>
+
+      <EditJobDialog
+        job={jobToEdit}
+        open={!!jobToEdit}
+        onOpenChange={open => !open && setJobToEdit(null)}
+        onSuccess={updatedJob => {
+          setTableData(prev =>
+            prev.map(job => (job.id === updatedJob.id ? updatedJob : job)),
+          );
+        }}
+      />
+      <DeleteJobDialog
+        job={jobToDelete}
+        open={!!jobToDelete}
+        onOpenChange={open => !open && setJobToDelete(null)}
+        onSuccess={deletedJobId => {
+          setTableData(prev => prev.filter(job => job.id !== deletedJobId));
+        }}
+      />
     </>
   );
 }

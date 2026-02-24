@@ -24,6 +24,8 @@ import {
   ChevronsUpDown,
   Search,
   Eye,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 
 import { Badge } from "@/src/components/ui/badge";
@@ -46,6 +48,8 @@ import {
 } from "@/src/components/ui/table";
 import { UserAvatar } from "@/src/components/ui/user-avatar";
 import Link from "next/link";
+import { EditUserDialog } from "./edit-user-dialog";
+import { DeleteUserDialog } from "./delete-user-dialog";
 
 export type UserRow = {
   id: string;
@@ -69,7 +73,10 @@ const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
   );
 };
 
-const columns: ColumnDef<UserRow>[] = [
+const columns = (
+  onEdit: (user: UserRow) => void,
+  onDelete: (user: UserRow) => void,
+): ColumnDef<UserRow>[] => [
   {
     id: "user",
     header: "User",
@@ -169,7 +176,7 @@ const columns: ColumnDef<UserRow>[] = [
     header: () => <div className="text-right">Action</div>,
     enableSorting: false,
     cell: ({ row }) => (
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-1">
         <Button
           variant="ghost"
           size="icon"
@@ -179,6 +186,22 @@ const columns: ColumnDef<UserRow>[] = [
           <Link href={`/admin/users/${row.original.id}`}>
             <Eye className="h-4 w-4" />
           </Link>
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/50"
+          onClick={() => onEdit(row.original)}
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/50"
+          onClick={() => onDelete(row.original)}
+        >
+          <Trash2 className="h-4 w-4" />
         </Button>
       </div>
     ),
@@ -230,10 +253,31 @@ export function UsersTable({ data }: UsersTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
+  const [tableData, setTableData] = React.useState<UserRow[]>(data);
+
+  const [userToEdit, setUserToEdit] = React.useState<UserRow | null>(null);
+  const [userToDelete, setUserToDelete] = React.useState<UserRow | null>(null);
+
+  React.useEffect(() => {
+    setTableData(data);
+  }, [data]);
+
+  const handleEdit = React.useCallback((user: UserRow) => {
+    setUserToEdit(user);
+  }, []);
+
+  const handleDelete = React.useCallback((user: UserRow) => {
+    setUserToDelete(user);
+  }, []);
+
+  const tableColumns = React.useMemo(
+    () => columns(handleEdit, handleDelete),
+    [handleEdit, handleDelete],
+  );
 
   const table = useReactTable({
-    data,
-    columns,
+    data: tableData,
+    columns: tableColumns,
     state: {
       sorting,
       columnFilters,
@@ -376,7 +420,7 @@ export function UsersTable({ data }: UsersTableProps) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={tableColumns.length}
                   className="py-6 text-center"
                 >
                   No users found.
@@ -437,6 +481,26 @@ export function UsersTable({ data }: UsersTableProps) {
           </Button>
         </div>
       </div>
+
+      <EditUserDialog
+        user={userToEdit}
+        open={!!userToEdit}
+        onOpenChange={open => !open && setUserToEdit(null)}
+        onSuccess={updatedUser => {
+          setTableData(prev =>
+            prev.map(user => (user.id === updatedUser.id ? updatedUser : user)),
+          );
+        }}
+      />
+
+      <DeleteUserDialog
+        user={userToDelete}
+        open={!!userToDelete}
+        onOpenChange={open => !open && setUserToDelete(null)}
+        onSuccess={deletedUserId => {
+          setTableData(prev => prev.filter(user => user.id !== deletedUserId));
+        }}
+      />
     </div>
   );
 }

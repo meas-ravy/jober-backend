@@ -59,11 +59,6 @@ const data = {
       url: "/admin/tips",
       icon: IconBulb,
     },
-    {
-      title: "Messages",
-      url: "/admin/messages",
-      icon: IconMessage,
-    },
   ],
   navSecondary: [
     // {

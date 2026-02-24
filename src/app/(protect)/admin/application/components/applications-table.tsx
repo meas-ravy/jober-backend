@@ -44,6 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
+import Image from "next/image";
 
 export type ApplicationRow = {
   id: string;
@@ -140,18 +141,25 @@ const columns: ColumnDef<ApplicationRow>[] = [
     header: () => <div className="text-right">Actions</div>,
     enableSorting: false,
     cell: ({ row }) => (
-      <div className="flex justify-end gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => window.open(row.original.resumeUrl, "_blank")}
-        >
-          <ExternalLink className="mr-1 size-3" />
-          Resume
-        </Button>
-        <Button variant="ghost" size="sm">
-          View
-        </Button>
+      <div className="flex justify-end gap-2 items-center">
+        {row.original.resumeUrl ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 hover:bg-transparent"
+            onClick={() => window.open(row.original.resumeUrl, "_blank")}
+          >
+            <Image
+              src="/image/pdf.png"
+              alt="Resume PDF"
+              width={24}
+              height={24}
+              className="object-contain"
+            />
+          </Button>
+        ) : (
+          <span className="text-xs text-muted-foreground mr-2">No Resume</span>
+        )}
       </div>
     ),
   },

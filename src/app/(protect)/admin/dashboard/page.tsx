@@ -186,7 +186,18 @@ async function ActivitySection() {
               companyProfile: { select: { name: true } },
             },
           },
-          jobSeeker: { select: { name: true, email: true } },
+          jobSeeker: {
+            select: {
+              name: true,
+              email: true,
+              jobSeekerProfile: {
+                select: {
+                  fullName: true,
+                  avatarUrl: true,
+                },
+              },
+            },
+          },
         },
       }),
       prisma.job.count({ where: { status: "Pending" } }),
@@ -213,9 +224,11 @@ async function ActivitySection() {
 
 function getGreeting(): string {
   const hour = new Date().getHours();
+
   if (hour < 12) return "Good morning";
   if (hour < 17) return "Good afternoon";
-  return "Good evening";
+  if (hour < 21) return "Good evening";
+  return "Good night";
 }
 
 export default async function Dashboard() {
@@ -246,7 +259,7 @@ export default async function Dashboard() {
               {/* Welcome Header */}
               <div className="px-4 lg:px-6">
                 <h1 className="text-2xl font-bold tracking-tight">
-                  {greeting}, {adminName} 👋
+                  {greeting}, {adminName}
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Here&apos;s what&apos;s happening with your platform today.

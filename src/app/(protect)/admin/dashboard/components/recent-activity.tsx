@@ -11,6 +11,14 @@ import {
 import { Button } from "@/src/components/ui/button";
 import { Badge } from "@/src/components/ui/badge";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/src/components/ui/table";
+import {
   Briefcase,
   FileText,
   ArrowRight,
@@ -22,6 +30,8 @@ import {
   UserCheck,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { UserAvatar } from "@/src/components/ui/user-avatar";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/src/lib/utils";
 
@@ -49,6 +59,10 @@ type RecentApplication = {
   jobSeeker: {
     name: string | null;
     email: string | null;
+    jobSeekerProfile?: {
+      fullName: string | null;
+      avatarUrl: string | null;
+    } | null;
   };
 };
 
@@ -107,6 +121,7 @@ export function RecentActivity({
 }: {
   initialData?: ActivityData | null;
 }) {
+  const router = useRouter();
   const [data, setData] = useState<ActivityData | null>(initialData);
   const [loading, setLoading] = useState(!initialData);
 
@@ -174,49 +189,68 @@ export function RecentActivity({
                 </div>
               </div>
             ) : (
-              <div className="space-y-3">
-                {pendingJobs.map(job => (
-                  <Link
-                    key={job.id}
-                    href={`/admin/jobs/${job.id}`}
-                    className="group flex items-center gap-3 rounded-lg border p-3 transition-all hover:bg-muted/50 hover:shadow-sm"
-                  >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-yellow-500/10">
-                      {job.companyProfile.logoUrl ? (
-                        <img
-                          src={job.companyProfile.logoUrl}
-                          alt={job.companyProfile.name}
-                          className="h-9 w-9 rounded-lg object-cover"
-                        />
-                      ) : (
-                        <Building2 className="h-4 w-4 text-yellow-600" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
-                        {job.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {job.companyProfile.name}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <Badge
-                        variant="outline"
-                        className="text-[10px] bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800"
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Job Post</TableHead>
+                      <TableHead className="text-right">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {pendingJobs.map(job => (
+                      <TableRow
+                        key={job.id}
+                        className="cursor-pointer group hover:bg-muted/50 transition-colors"
+                        onClick={() => router.push(`/admin/jobs/${job.id}`)}
                       >
-                        Pending
-                      </Badge>
-                      {job.submittedAt && (
-                        <span className="text-[10px] text-muted-foreground">
-                          {formatDistanceToNow(new Date(job.submittedAt), {
-                            addSuffix: true,
-                          })}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
-                ))}
+                        <TableCell className="py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-yellow-500/10">
+                              {job.companyProfile.logoUrl ? (
+                                <img
+                                  src={job.companyProfile.logoUrl}
+                                  alt={job.companyProfile.name}
+                                  className="h-9 w-9 rounded-lg object-cover"
+                                />
+                              ) : (
+                                <Building2 className="h-4 w-4 text-yellow-600" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
+                                {job.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground truncate">
+                                {job.companyProfile.name}
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right py-3">
+                          <div className="flex flex-col items-end gap-1">
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800"
+                            >
+                              Pending
+                            </Badge>
+                            {job.submittedAt && (
+                              <span className="text-[10px] text-muted-foreground">
+                                {formatDistanceToNow(
+                                  new Date(job.submittedAt),
+                                  {
+                                    addSuffix: true,
+                                  },
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             )}
           </CardContent>
@@ -255,43 +289,72 @@ export function RecentActivity({
                 </div>
               </div>
             ) : (
-              <div className="space-y-3">
-                {recentApplications.map(app => {
-                  const statusBadge = getStatusBadge(app.status);
-                  return (
-                    <div
-                      key={app.id}
-                      className="flex items-center gap-3 rounded-lg border p-3"
-                    >
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
-                        <FileText className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">
-                          {app.jobSeeker.name ||
-                            app.jobSeeker.email ||
-                            "Unknown"}
-                        </p>
-                        <p className="text-xs text-muted-foreground truncate">
-                          Applied to {app.job.title}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <Badge
-                          variant="outline"
-                          className={cn("text-[10px]", statusBadge.className)}
-                        >
-                          {statusBadge.label}
-                        </Badge>
-                        <span className="text-[10px] text-muted-foreground">
-                          {formatDistanceToNow(new Date(app.submittedAt), {
-                            addSuffix: true,
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Applicant</TableHead>
+                      <TableHead className="text-right">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {recentApplications.map(app => {
+                      const statusBadge = getStatusBadge(app.status);
+                      return (
+                        <TableRow key={app.id}>
+                          <TableCell className="py-3">
+                            <div className="flex items-center gap-3">
+                              <UserAvatar
+                                name={
+                                  app.jobSeeker.jobSeekerProfile?.fullName ||
+                                  app.jobSeeker.name ||
+                                  "Unknown"
+                                }
+                                src={
+                                  app.jobSeeker.jobSeekerProfile?.avatarUrl ||
+                                  undefined
+                                }
+                                className="h-9 w-9 shrink-0"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium truncate">
+                                  {app.jobSeeker.jobSeekerProfile?.fullName ||
+                                    app.jobSeeker.name ||
+                                    app.jobSeeker.email ||
+                                    "Unknown"}
+                                </p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  Applied to {app.job.title}
+                                </p>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right py-3">
+                            <div className="flex flex-col items-end gap-1">
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "text-[10px]",
+                                  statusBadge.className,
+                                )}
+                              >
+                                {statusBadge.label}
+                              </Badge>
+                              <span className="text-[10px] text-muted-foreground">
+                                {formatDistanceToNow(
+                                  new Date(app.submittedAt),
+                                  {
+                                    addSuffix: true,
+                                  },
+                                )}
+                              </span>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
               </div>
             )}
           </CardContent>
