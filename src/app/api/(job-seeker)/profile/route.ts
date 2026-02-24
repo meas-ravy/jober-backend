@@ -32,7 +32,10 @@ export async function GET(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ success: false, error: message }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: message },
+        { status: 401 },
+      );
     }
 
     if (!hasJobFinderRole(roles)) {
@@ -56,7 +59,32 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ profile });
+    // Fetch baseline user data for Google/Phone pre-filling on the client
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        email: true,
+        phone: true,
+        oauthAccounts: {
+          select: {
+            avatarUrl: true,
+          },
+          take: 1,
+        },
+      },
+    });
+
+    const userData = user
+      ? {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          avatarUrl: user.oauthAccounts?.[0]?.avatarUrl || null,
+        }
+      : null;
+
+    return NextResponse.json({ profile, user: userData });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -80,7 +108,10 @@ export async function POST(request: Request) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Invalid access token";
-      return NextResponse.json({ success: false, error: message }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: message },
+        { status: 401 },
+      );
     }
 
     if (!hasJobFinderRole(roles)) {
@@ -264,7 +295,10 @@ export async function PUT(request: Request) {
     } = {};
 
     if (body.fullName !== undefined) {
-      if (typeof body.fullName !== "string" || body.fullName.trim().length === 0) {
+      if (
+        typeof body.fullName !== "string" ||
+        body.fullName.trim().length === 0
+      ) {
         return NextResponse.json(
           { error: "Full name must be a non-empty string" },
           { status: 400 },
@@ -306,7 +340,10 @@ export async function PUT(request: Request) {
     }
 
     if (body.dateOfBirth !== undefined) {
-      if (typeof body.dateOfBirth !== "string" || body.dateOfBirth.trim().length === 0) {
+      if (
+        typeof body.dateOfBirth !== "string" ||
+        body.dateOfBirth.trim().length === 0
+      ) {
         return NextResponse.json(
           { error: "Date of birth must be a non-empty string" },
           { status: 400 },
@@ -340,7 +377,9 @@ export async function PUT(request: Request) {
           updateData.avatarUrl = null;
         } else {
           // Validate Cloudinary URL
-          if (!validateCloudinaryUrl(body.avatarUrl.trim(), "job-seeker-avatar")) {
+          if (
+            !validateCloudinaryUrl(body.avatarUrl.trim(), "job-seeker-avatar")
+          ) {
             return NextResponse.json(
               {
                 success: false,

@@ -53,16 +53,9 @@ async function fetchUsers(): Promise<UserRow[]> {
         status = "Pending";
       }
 
-      const displayName =
-        user.jobSeekerProfile?.fullName ||
-        user.companyProfile?.name ||
-        user.name ||
-        "N/A";
+      const displayName = user.jobSeekerProfile?.fullName || "N/A";
 
-      const avatarUrl =
-        user.jobSeekerProfile?.avatarUrl ||
-        user.companyProfile?.logoUrl ||
-        null;
+      const avatarUrl = user.jobSeekerProfile?.avatarUrl || null;
 
       // const displayEmail =
       //   user.email ||
