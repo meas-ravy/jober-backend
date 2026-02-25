@@ -35,8 +35,8 @@ async function getCurrentUser(req: Request) {
 }
 
 /**
- * POST /api/agora/call-signal
- * Triggers a high-priority push notification to the recipient of a call.
+ * POST /api/zego/call-signal
+ * High-priority push notification signal to wake up the recipient's phone using ZEGO.
  */
 export async function POST(req: Request) {
   try {

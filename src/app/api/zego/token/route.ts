@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { RtcTokenBuilder, RtcRole } from "agora-token";
+import { generateToken04 } from "@/src/lib/zego-server-assistant";
 import prisma from "@/src/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
@@ -7,8 +7,8 @@ import { getBearerToken, verifyAccessToken } from "@/src/lib/auth";
 
 export const runtime = "nodejs";
 
-const APP_ID = process.env.AGORA_APP_ID;
-const APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
+const APP_ID = process.env.ZEGO_APP_ID;
+const SERVER_SECRET = process.env.ZEGO_SERVER_SECRET;
 
 // Helper to get current user
 async function getCurrentUser(req: Request) {
@@ -46,20 +46,20 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const channelName = searchParams.get("channelName"); // Use conversationId as channelName
+    const roomID = searchParams.get("roomID"); // Use conversationId as roomID
 
-    if (!channelName) {
+    if (!roomID) {
       return NextResponse.json(
-        { error: "channelName (conversationId) is required" },
+        { error: "roomID (conversationId) is required" },
         { status: 400 },
       );
     }
 
-    if (!APP_ID || !APP_CERTIFICATE) {
+    if (!APP_ID || !SERVER_SECRET) {
       return NextResponse.json(
         {
-          error: "Agora credentials not configured on server",
-          message: "Please add AGORA_APP_ID and AGORA_APP_CERTIFICATE to .env",
+          error: "ZEGOCLOUD credentials not configured on server",
+          message: "Please add ZEGO_APP_ID and ZEGO_SERVER_SECRET to .env",
         },
         { status: 500 },
       );
@@ -68,7 +68,7 @@ export async function GET(req: Request) {
     // 1. Verify user is a participant of this conversation
     const participant = await prisma.conversationParticipant.findFirst({
       where: {
-        conversationId: channelName,
+        conversationId: roomID,
         OR: [
           { userId: type === "User" ? userId : undefined },
           { adminId: type === "Admin" ? userId : undefined },
@@ -83,31 +83,31 @@ export async function GET(req: Request) {
       );
     }
 
-    // 2. Set token expiration (e.g., 1 hour)
-    const expirationTimeInSeconds = 3600;
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+    // 2. Setup Token Payload
+    const appID = parseInt(APP_ID, 10); // Zego requires AppID to be a number
+    const serverSecret = SERVER_SECRET;
+    const userID = userId; // The unique ID of the user joining
+    const effectiveTimeInSeconds = 3600; // Token valid for 1 hour
+    const payload = ""; // Optional empty payload string
 
     // 3. Generate Token
-    // We use buildTokenWithUserAccount because our IDs are strings (CUIDs)
-    const token = RtcTokenBuilder.buildTokenWithUserAccount(
-      APP_ID,
-      APP_CERTIFICATE,
-      channelName,
-      userId,
-      RtcRole.PUBLISHER,
-      privilegeExpiredTs,
-      privilegeExpiredTs,
+    // ZEGOCLOUD uses generateToken04 for their latest UI Kits
+    const token = generateToken04(
+      appID,
+      userID,
+      serverSecret,
+      effectiveTimeInSeconds,
+      payload,
     );
 
     return NextResponse.json({
       token,
-      appId: APP_ID,
-      channelName,
-      uid: userId, // The "Account" used for token generation
+      appID: appID,
+      roomID,
+      userID,
     });
   } catch (error) {
-    console.error("Agora token generation error:", error);
+    console.error("ZEGOCLOUD token generation error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
