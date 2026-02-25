@@ -25,6 +25,12 @@ async function fetchUsers(): Promise<UserRow[]> {
         roles: true,
         jobSeekerProfile: true,
         companyProfile: true,
+        oauthAccounts: {
+          select: {
+            avatarUrl: true,
+          },
+          take: 1,
+        },
         _count: {
           select: {
             applications: true,
@@ -53,19 +59,27 @@ async function fetchUsers(): Promise<UserRow[]> {
         status = "Pending";
       }
 
-      const displayName = user.jobSeekerProfile?.fullName || "N/A";
+      const displayName =
+        user.jobSeekerProfile?.fullName ||
+        user.companyProfile?.name ||
+        user.name ||
+        "N/A";
 
-      const avatarUrl = user.jobSeekerProfile?.avatarUrl || null;
-
-      // const displayEmail =
-      //   user.email ||
-      //   user.jobSeekerProfile?.email
+      const avatarUrl =
+        user.jobSeekerProfile?.avatarUrl ||
+        user.companyProfile?.logoUrl ||
+        user.oauthAccounts?.[0]?.avatarUrl ||
+        null;
 
       return {
         id: user.id,
         name: displayName,
         avatar: avatarUrl,
-        email: user.jobSeekerProfile?.email || "No email",
+        email:
+          user.jobSeekerProfile?.email ||
+          user.companyProfile?.contactEmail ||
+          user.email ||
+          "No email",
         phone: user.phone || "N/A",
         role: roleName,
         status,

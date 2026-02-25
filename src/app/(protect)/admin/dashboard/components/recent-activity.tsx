@@ -63,6 +63,9 @@ type RecentApplication = {
       fullName: string | null;
       avatarUrl: string | null;
     } | null;
+    oauthAccounts?: {
+      avatarUrl: string | null;
+    }[];
   };
 };
 
@@ -312,6 +315,7 @@ export function RecentActivity({
                                 }
                                 src={
                                   app.jobSeeker.jobSeekerProfile?.avatarUrl ||
+                                  app.jobSeeker.oauthAccounts?.[0]?.avatarUrl ||
                                   undefined
                                 }
                                 className="h-9 w-9 shrink-0"

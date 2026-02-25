@@ -17,6 +17,12 @@ export async function GET(req: NextRequest) {
         roles: true,
         jobSeekerProfile: true,
         companyProfile: true,
+        oauthAccounts: {
+          select: {
+            avatarUrl: true,
+          },
+          take: 1,
+        },
         _count: {
           select: {
             applications: true,
@@ -47,10 +53,27 @@ export async function GET(req: NextRequest) {
         status = "Pending";
       }
 
+      const displayName =
+        user.jobSeekerProfile?.fullName ||
+        user.companyProfile?.name ||
+        user.name ||
+        "N/A";
+
+      const avatarUrl =
+        user.jobSeekerProfile?.avatarUrl ||
+        user.companyProfile?.logoUrl ||
+        user.oauthAccounts?.[0]?.avatarUrl ||
+        null;
+
       return {
         id: user.id,
-        name: user.name || "N/A",
-        email: user.email || "N/A",
+        name: displayName,
+        avatar: avatarUrl,
+        email:
+          user.jobSeekerProfile?.email ||
+          user.companyProfile?.contactEmail ||
+          user.email ||
+          "No email",
         phone: user.phone || "N/A",
         role: roleName,
         status,

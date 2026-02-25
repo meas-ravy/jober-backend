@@ -55,6 +55,7 @@ type UserDetail = {
     provider: string;
     email: string;
     name: string | null;
+    avatarUrl: string | null;
   }[];
   _count: {
     applications: number;
@@ -166,14 +167,25 @@ export default function AdminUserDetailPage() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <UserAvatar
-                          name={user?.jobSeekerProfile?.fullName || "N/A"}
-                          src={user.jobSeekerProfile?.avatarUrl || "N/A"}
+                          name={
+                            user.jobSeekerProfile?.fullName ||
+                            user.name ||
+                            "N/A"
+                          }
+                          src={
+                            user.jobSeekerProfile?.avatarUrl ||
+                            user.oauthAccounts?.[0]?.avatarUrl ||
+                            undefined
+                          }
                           className="h-12 w-12 text-lg border shadow-sm"
                         />
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-3">
                             <h1 className="text-xl font-bold leading-tight">
-                              {user?.jobSeekerProfile?.fullName || "N/A"}
+                              {user.jobSeekerProfile?.fullName ||
+                                user.companyProfile?.name ||
+                                user.name ||
+                                "N/A"}
                             </h1>
                             <div className="flex flex-wrap items-center gap-1.5">
                               {user.roles.map(r => (
@@ -322,9 +334,7 @@ export default function AdminUserDetailPage() {
                                   className="flex items-center gap-2 text-sm text-muted-foreground"
                                 >
                                   <Link2 className="h-3.5 w-3.5 shrink-0" />
-                                  <span className="capitalize">
-                                    {a.provider}: {a.email}
-                                  </span>
+                                  {a.provider}: {a.email}
                                 </div>
                               ))}
                             </div>

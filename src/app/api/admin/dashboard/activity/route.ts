@@ -58,6 +58,12 @@ export async function GET(req: NextRequest) {
                 avatarUrl: true,
               },
             },
+            oauthAccounts: {
+              select: {
+                avatarUrl: true,
+              },
+              take: 1,
+            },
           },
         },
       },

@@ -66,7 +66,11 @@ export async function POST(req: Request) {
               select: {
                 id: true,
                 name: true,
-                jobSeekerProfile: { select: { fullName: true } },
+                jobSeekerProfile: {
+                  select: { fullName: true, avatarUrl: true },
+                },
+                companyProfile: { select: { name: true, logoUrl: true } },
+                oauthAccounts: { select: { avatarUrl: true }, take: 1 },
               },
             },
             admin: { select: { id: true, name: true } },
@@ -109,8 +113,15 @@ export async function POST(req: Request) {
     const callerName =
       callerParticipant.admin?.name ||
       callerParticipant.user?.jobSeekerProfile?.fullName ||
+      callerParticipant.user?.companyProfile?.name ||
       callerParticipant.user?.name ||
       "Someone";
+
+    const callerAvatar =
+      callerParticipant.user?.jobSeekerProfile?.avatarUrl ||
+      callerParticipant.user?.companyProfile?.logoUrl ||
+      callerParticipant.user?.oauthAccounts?.[0]?.avatarUrl ||
+      undefined;
 
     // 2. Handle Signal Types
     if (signalType === "START_CALL") {
@@ -122,6 +133,7 @@ export async function POST(req: Request) {
         content: `${callerName} is calling you...`,
         type: "INCOMING_CALL" as any, // Cast to any until prisma generates
         link: `/chat-detail/${conversationId}`,
+        imageUrl: callerAvatar,
       });
     } else if (signalType === "MISSED_CALL") {
       // Send standard CALL_MISSED notification
@@ -132,6 +144,7 @@ export async function POST(req: Request) {
         content: `You missed a call from ${callerName}`,
         type: "CALL_MISSED" as any,
         link: `/chat-detail/${conversationId}`,
+        imageUrl: callerAvatar,
       });
     }
 

@@ -73,10 +73,7 @@ const globalUserFilter: FilterFn<UserRow> = (row, _columnId, filterValue) => {
   );
 };
 
-const columns = (
-  onEdit: (user: UserRow) => void,
-  onDelete: (user: UserRow) => void,
-): ColumnDef<UserRow>[] => [
+const columns = (onDelete: (user: UserRow) => void): ColumnDef<UserRow>[] => [
   {
     id: "user",
     header: "User",
@@ -187,14 +184,14 @@ const columns = (
             <Eye className="h-4 w-4" />
           </Link>
         </Button>
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/50"
           onClick={() => onEdit(row.original)}
         >
           <Pencil className="h-4 w-4" />
-        </Button>
+        </Button> */}
         <Button
           variant="ghost"
           size="icon"
@@ -271,8 +268,8 @@ export function UsersTable({ data }: UsersTableProps) {
   }, []);
 
   const tableColumns = React.useMemo(
-    () => columns(handleEdit, handleDelete),
-    [handleEdit, handleDelete],
+    () => columns(handleDelete),
+    [handleDelete],
   );
 
   const table = useReactTable({

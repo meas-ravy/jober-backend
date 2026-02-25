@@ -196,6 +196,12 @@ async function ActivitySection() {
                   avatarUrl: true,
                 },
               },
+              oauthAccounts: {
+                select: {
+                  avatarUrl: true,
+                },
+                take: 1,
+              },
             },
           },
         },

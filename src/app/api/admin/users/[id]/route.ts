@@ -25,6 +25,7 @@ export async function GET(
             provider: true,
             email: true,
             name: true,
+            avatarUrl: true,
           },
         },
         _count: {
