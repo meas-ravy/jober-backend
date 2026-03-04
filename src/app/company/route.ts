@@ -8,7 +8,7 @@ import { success } from "zod";
 
 export const runtime = "nodejs";
 
-// src\app\api\(recruiter)\company\route.ts
+// src\app\api\company\route.ts
 
 function hasRecruiterRole(roles: RoleName[]): boolean {
   return roles.includes("Recruiter");

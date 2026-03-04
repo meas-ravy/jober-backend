@@ -1,0 +1,26 @@
+# this an env example
+# copy this file to .env and replace the values with your own
+
+# ZEGO_SERVER_SECRET= your-zego-server-secret
+# ZEGO_APP_ID= your-zego-app-id
+# GOOGLE_CLIENT_ID= your-google-client-id
+# GOOGLE_CLIENT_ID_IOS=your-google-ios-client-id
+# PLASGATE_SECRET= your-plasgate-secret
+# PLASGATE_SENDER= your-plasgate-sender
+# PLASGATE_PRIVATE_KEY= your-plasgate-private-key
+# CLOUDINARY_API_SECRET= your-cloudinary-api-secret
+# LINKEDIN_CLIENT_ID= your-linkedin-client-id
+# LINKEDIN_CLIENT_SECRET= your-linkedin-client-secret
+# CLOUDINARY_API_KEY= your-cloudinary-api-key
+# CLOUDINARY_CLOUD_NAME= your-cloudinary-cloud-name
+# NEXTAUTH_URL= your-nextauth-url
+# NEXTAUTH_SECRET= your-nextauth-secret
+# DATABASE_URL= your-database-url
+# JWT_ACCESS_SECRET= your-jwt-access-secret
+# NEXT_PUBLIC_APP_URL= your-app-url
+# FIREBASE_PRIVATE_KEY= your-firebase-private-key
+# FIREBASE_CLIENT_EMAIL= your-firebase-client-email
+# FIREBASE_PROJECT_ID= your-firebase-project-id
+
+# when you clone this project, in you local machin you need run npm install to install all the dependencies
+# after that you need to run npm run dev to start the server
