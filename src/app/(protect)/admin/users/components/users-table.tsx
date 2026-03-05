@@ -13,6 +13,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import {
   ChevronDown,
@@ -39,6 +40,13 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu";
+import { Settings2 } from "lucide-react";
+import {
   Table,
   TableBody,
   TableCell,
@@ -50,6 +58,7 @@ import { UserAvatar } from "@/src/components/ui/user-avatar";
 import Link from "next/link";
 import { EditUserDialog } from "./edit-user-dialog";
 import { DeleteUserDialog } from "./delete-user-dialog";
+import { cn } from "@/src/lib/utils";
 
 export type UserRow = {
   id: string;
@@ -144,21 +153,45 @@ const columns = (onDelete: (user: UserRow) => void): ColumnDef<UserRow>[] => [
     id: "applicationsCount",
     header: "Applications",
     accessorFn: row => row.applicationsCount,
-    cell: ({ row }) => (
-      <span className="text-muted-foreground text-center">
-        {row.original.applicationsCount}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const count = row.original.applicationsCount;
+      return (
+        <div className="flex justify-center">
+          <span
+            className={cn(
+              "px-2 py-0.5 rounded-md text-xs font-medium tabular-nums",
+              count > 0
+                ? "bg-primary/10 text-primary dark:bg-primary/20"
+                : "text-muted-foreground/50",
+            )}
+          >
+            {count}
+          </span>
+        </div>
+      );
+    },
   },
   {
     id: "jobsCount",
     header: "Jobs Posted",
     accessorFn: row => row.jobsCount,
-    cell: ({ row }) => (
-      <span className="text-muted-foreground text-center">
-        {row.original.jobsCount}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const count = row.original.jobsCount;
+      return (
+        <div className="flex justify-center">
+          <span
+            className={cn(
+              "px-2 py-0.5 rounded-md text-xs font-medium tabular-nums",
+              count > 0
+                ? "bg-primary/10 text-primary dark:bg-primary/20"
+                : "text-muted-foreground/50",
+            )}
+          >
+            {count}
+          </span>
+        </div>
+      );
+    },
   },
   {
     id: "joined",
@@ -184,14 +217,6 @@ const columns = (onDelete: (user: UserRow) => void): ColumnDef<UserRow>[] => [
             <Eye className="h-4 w-4" />
           </Link>
         </Button>
-        {/* <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/50"
-          onClick={() => onEdit(row.original)}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button> */}
         <Button
           variant="ghost"
           size="icon"
@@ -212,12 +237,16 @@ type UsersTableProps = {
 function SortableHeader({
   column,
   label,
+  center,
 }: {
   column: Column<UserRow, unknown>;
   label: string;
+  center?: boolean;
 }) {
   if (!column.getCanSort()) {
-    return <span>{label}</span>;
+    return (
+      <span className={cn(center && "w-full text-center block")}>{label}</span>
+    );
   }
 
   const sortState = column.getIsSorted();
@@ -225,7 +254,7 @@ function SortableHeader({
     <Button
       variant="ghost"
       size="sm"
-      className="-ml-2 h-8 px-2"
+      className={cn("-ml-2 h-8 px-2", center && "mx-auto")}
       onClick={column.getToggleSortingHandler()}
     >
       {label}
@@ -250,8 +279,14 @@ export function UsersTable({ data }: UsersTableProps) {
     pageIndex: 0,
     pageSize: 8,
   });
-  const [tableData, setTableData] = React.useState<UserRow[]>(data);
+  // const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({
+      applicationsCount: false,
+      jobsCount: false,
+    });
 
+  const [tableData, setTableData] = React.useState<UserRow[]>(data);
   const [userToEdit, setUserToEdit] = React.useState<UserRow | null>(null);
   const [userToDelete, setUserToDelete] = React.useState<UserRow | null>(null);
 
@@ -280,11 +315,13 @@ export function UsersTable({ data }: UsersTableProps) {
       columnFilters,
       globalFilter,
       pagination,
+      columnVisibility,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -350,16 +387,34 @@ export function UsersTable({ data }: UsersTableProps) {
             <SelectItem value="Suspended">Suspended</SelectItem>
           </SelectContent>
         </Select>
-        <Button
-          variant="outline"
-          className="md:ml-auto"
-          onClick={() => {
-            setGlobalFilter("");
-            table.resetColumnFilters();
-          }}
-        >
-          Reset filters
-        </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="md:ml-auto flex gap-2">
+              <Settings2 className="size-4" />
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[180px]">
+            {table
+              .getAllColumns()
+              .filter(column => column.getCanHide())
+              .map(column => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={value => column.toggleVisibility(!!value)}
+                  >
+                    {typeof column.columnDef.header === "string"
+                      ? column.columnDef.header
+                      : column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
@@ -367,7 +422,14 @@ export function UsersTable({ data }: UsersTableProps) {
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className={cn(
+                      (header.column.id === "applicationsCount" ||
+                        header.column.id === "jobsCount") &&
+                        "text-center",
+                    )}
+                  >
                     {header.isPlaceholder ? null : header.column.id ===
                       "user" ? (
                       <SortableHeader column={header.column} label="User" />
@@ -381,11 +443,13 @@ export function UsersTable({ data }: UsersTableProps) {
                       <SortableHeader
                         column={header.column}
                         label="Applications"
+                        center
                       />
                     ) : header.column.id === "jobsCount" ? (
                       <SortableHeader
                         column={header.column}
                         label="Jobs Posted"
+                        center
                       />
                     ) : header.column.id === "joined" ? (
                       <SortableHeader column={header.column} label="Joined" />

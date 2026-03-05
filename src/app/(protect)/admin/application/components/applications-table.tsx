@@ -24,7 +24,14 @@ import {
   ChevronsUpDown,
   ExternalLink,
   Search,
+  Settings2,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu";
 
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
@@ -210,6 +217,7 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [columnVisibility, setColumnVisibility] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -219,11 +227,13 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
       columnFilters,
       globalFilter,
       pagination,
+      columnVisibility,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -274,16 +284,32 @@ export function ApplicationsTable({ data }: ApplicationsTableProps) {
             <SelectItem value="Withdrawn">Withdrawn</SelectItem>
           </SelectContent>
         </Select>
-        <Button
-          variant="outline"
-          className="md:ml-auto"
-          onClick={() => {
-            setGlobalFilter("");
-            table.resetColumnFilters();
-          }}
-        >
-          Reset filters
-        </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="md:ml-auto flex gap-2">
+              <Settings2 className="size-4" />
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[180px]">
+            {table
+              .getAllColumns()
+              .filter(column => column.getCanHide())
+              .map(column => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={value => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

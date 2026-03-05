@@ -13,7 +13,7 @@
 # LINKEDIN_CLIENT_SECRET= your-linkedin-client-secret
 # CLOUDINARY_API_KEY= your-cloudinary-api-key
 # CLOUDINARY_CLOUD_NAME= your-cloudinary-cloud-name
-# NEXTAUTH_URL= your-nextauth-url
+# NEXTAUTH_URL= your-localhost-url
 # NEXTAUTH_SECRET= your-nextauth-secret
 # DATABASE_URL= your-database-url
 # JWT_ACCESS_SECRET= your-jwt-access-secret

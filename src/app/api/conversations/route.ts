@@ -54,6 +54,7 @@ export async function GET(req: Request) {
           select: {
             id: true,
             title: true,
+            recruiterId: true,
           },
         },
         participants: {
@@ -92,29 +93,56 @@ export async function GET(req: Request) {
           : p.adminId !== userId || p.userId !== null,
       );
 
+      if (!otherParticipant) return { id: conv.id, otherParticipant: null };
+
+      // SMART PROFILE LOGIC:
+      // If there's a job, determine if the other person is the Recruiter or the Seeker
+      const isOtherRecruiter =
+        conv.jobId && otherParticipant.userId === conv.job?.recruiterId;
+
+      let displayName = "Unknown";
+      let displayAvatar = null;
+
+      if (otherParticipant.admin) {
+        displayName = otherParticipant.admin.name || "Admin";
+        displayAvatar = otherParticipant.admin.avatarUrl;
+      } else if (otherParticipant.user) {
+        const { companyProfile, jobSeekerProfile, name } =
+          otherParticipant.user;
+
+        if (isOtherRecruiter) {
+          // Context: They are the Recruiter
+          displayName =
+            companyProfile?.name ||
+            jobSeekerProfile?.fullName ||
+            name ||
+            "Company";
+          displayAvatar =
+            companyProfile?.logoUrl || jobSeekerProfile?.avatarUrl;
+        } else {
+          // Context: They are the Seeker (or no job context)
+          displayName =
+            jobSeekerProfile?.fullName ||
+            companyProfile?.name ||
+            name ||
+            "User";
+          displayAvatar =
+            jobSeekerProfile?.avatarUrl || companyProfile?.logoUrl;
+        }
+      }
+
       return {
         id: conv.id,
         updatedAt: conv.updatedAt,
         lastMessageContent: conv.lastMessageContent,
         lastMessageAt: conv.lastMessageAt,
         job: conv.job,
-        otherParticipant: otherParticipant
-          ? {
-              id: otherParticipant.userId || otherParticipant.adminId,
-              type: otherParticipant.adminId ? "Admin" : "User",
-              name:
-                otherParticipant.admin?.name ||
-                otherParticipant.user?.companyProfile?.name ||
-                otherParticipant.user?.jobSeekerProfile?.fullName ||
-                otherParticipant.user?.name ||
-                "Unknown",
-              avatarUrl:
-                otherParticipant.admin?.avatarUrl ||
-                otherParticipant.user?.companyProfile?.logoUrl ||
-                otherParticipant.user?.jobSeekerProfile?.avatarUrl ||
-                null,
-            }
-          : null,
+        otherParticipant: {
+          id: otherParticipant.userId || otherParticipant.adminId,
+          type: otherParticipant.adminId ? "Admin" : "User",
+          name: displayName,
+          avatarUrl: displayAvatar,
+        },
       };
     });
 

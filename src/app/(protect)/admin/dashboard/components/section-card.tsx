@@ -100,8 +100,8 @@ export function SectionCards({ stats }: { stats: DashboardStats }) {
         const isPositive = statData.growth >= 0;
 
         return (
-          <Card key={card.key} className={cn("border-l-4", card.borderColor)}>
-            <CardHeader className="p-4">
+          <Card key={card.key}>
+            <CardHeader className="p-3">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground font-medium">
@@ -111,12 +111,13 @@ export function SectionCards({ stats }: { stats: DashboardStats }) {
                     {formatNumber(statData.total)}
                   </p>
                 </div>
+                {/* card iocn color */}
                 <div className={cn("rounded-lg p-2.5", card.iconBg)}>
                   <Icon className={cn("h-5 w-5", card.iconColor)} />
                 </div>
               </div>
 
-              {/* Growth Badge */}
+              {/* Growth Badge Color*/}
               <div className="flex items-center gap-2 pt-2">
                 <Badge
                   variant="outline"

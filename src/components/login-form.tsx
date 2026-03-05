@@ -62,6 +62,7 @@ export function LoginForm({
 
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const onSubmit = async (values: LoginValues) => {
     setErrorMessage(null);
@@ -76,8 +77,11 @@ export function LoginForm({
       return;
     }
 
+    setIsRedirecting(true);
     router.push("/admin/dashboard");
   };
+
+  const isLoading = isSubmitting || isRedirecting;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -158,8 +162,34 @@ export function LoginForm({
             </p>
           ) : null}
           <Field>
-            <Button type="submit" disabled={isSubmitting}>
-              Login
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                    />
+                  </svg>
+                  {isRedirecting ? "Redirecting..." : "Logging in..."}
+                </span>
+              ) : (
+                "Login"
+              )}
             </Button>
           </Field>
         </FieldGroup>

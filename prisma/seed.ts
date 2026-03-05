@@ -3,12 +3,12 @@ import prisma from "@/src/lib/prisma";
 import bcrypt from "bcryptjs";
 
 async function main() {
-  const passwordHash = await bcrypt.hash("iamStudy!", 10);
+  const passwordHash = await bcrypt.hash("iamStudy", 10);
 
   const admins = [
     {
-      email: "admin@gmail.com",
-      name: "Owner System",
+      email: "measravy072@gmail.com",
+      name: "Ravy",
       avatarUrl: null,
     },
     {

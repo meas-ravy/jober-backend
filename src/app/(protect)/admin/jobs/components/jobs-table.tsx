@@ -7,6 +7,7 @@ import {
   type ColumnFiltersState,
   type FilterFn,
   type SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -26,6 +27,7 @@ import {
   Search,
   Pencil,
   Trash2,
+  Settings2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -51,6 +53,13 @@ import {
 import Link from "next/link";
 import { EditJobDialog } from "./edit-job-dialog";
 import { DeleteJobDialog } from "./delete-job-dialog";
+import { cn } from "@/src/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu";
 
 export type JobRow = {
   id: string;
@@ -226,11 +235,38 @@ const createColumns = (
     accessorKey: "category",
     header: "Category",
     filterFn: "equalsString",
-    cell: ({ row }) => (
-      <Badge variant="outline" className="whitespace-nowrap">
-        {row.original.category}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const category = row.original.category;
+      const colors: Record<string, string> = {
+        Technology:
+          "border-blue-500/30 bg-blue-500/5 text-blue-600 dark:text-blue-400",
+        Design:
+          "border-pink-500/30 bg-pink-500/5 text-pink-600 dark:text-pink-400",
+        Marketing:
+          "border-orange-500/30 bg-orange-500/5 text-orange-600 dark:text-orange-400",
+        Sales:
+          "border-purple-500/30 bg-purple-500/5 text-purple-600 dark:text-purple-400",
+        Finance:
+          "border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400",
+        Management:
+          "border-cyan-500/30 bg-cyan-500/5 text-cyan-600 dark:text-cyan-400",
+        Healthcare:
+          "border-red-500/30 bg-red-500/5 text-red-600 dark:text-red-400",
+      };
+
+      return (
+        <Badge
+          variant="outline"
+          className={cn(
+            "rounded-full px-3 py-0.5 text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap",
+            colors[category] ||
+              "border-muted-foreground/20 bg-muted/50 text-muted-foreground",
+          )}
+        >
+          {category}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "employmentType",
@@ -356,6 +392,12 @@ export function JobsTable({ data }: JobsTableProps) {
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({
+      submittedAt: false,
+    });
+
   const [tableData, setTableData] = React.useState<JobRow[]>(data);
 
   const [jobToEdit, setJobToEdit] = React.useState<JobRow | null>(null);
@@ -395,11 +437,13 @@ export function JobsTable({ data }: JobsTableProps) {
       columnFilters,
       globalFilter,
       pagination,
+      columnVisibility,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -451,16 +495,36 @@ export function JobsTable({ data }: JobsTableProps) {
               <SelectItem value="Filled">Filled</SelectItem>
             </SelectContent>
           </Select>
-          <Button
-            variant="outline"
-            className="md:ml-auto"
-            onClick={() => {
-              setGlobalFilter("");
-              table.resetColumnFilters();
-            }}
-          >
-            Reset filters
-          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="md:ml-auto flex gap-2">
+                <Settings2 className="size-4" />
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[180px]">
+              {table
+                .getAllColumns()
+                .filter(column => column.getCanHide())
+                .map(column => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={value =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {typeof column.columnDef.header === "string"
+                        ? column.columnDef.header
+                        : column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="overflow-hidden rounded-md border">
           <Table>

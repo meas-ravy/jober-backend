@@ -18,13 +18,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/src/components/ui/chart";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select";
+import { cn } from "@/src/lib/utils";
 
 const chartConfig = {
   jobs: {
@@ -95,46 +89,33 @@ export function ChartAreaInteractive({
         <div className="grid flex-1 gap-1">
           <div className="flex items-center gap-3">
             <CardTitle>Jobs vs Applications</CardTitle>
-            {!loading && (
-              <div className="hidden items-center gap-4 text-xs text-muted-foreground sm:flex">
-                <span>
-                  <span className="font-semibold text-foreground">
-                    {totalJobs}
-                  </span>{" "}
-                  jobs
-                </span>
-                <span>
-                  <span className="font-semibold text-foreground">
-                    {totalApplications}
-                  </span>{" "}
-                  applications
-                </span>
-              </div>
-            )}
           </div>
           <CardDescription>
             Daily jobs posted and applications received
           </CardDescription>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger
-            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-            aria-label="Select a value"
-          >
-            <SelectValue placeholder="Last 3 months" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="7d" className="rounded-lg">
-              Last 7 days
-            </SelectItem>
-            <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
-            </SelectItem>
-            <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center rounded-lg border border-border bg-muted p-1 gap-1 sm:ml-auto">
+          {(
+            [
+              { label: "Last 7 days", value: "7d" },
+              { label: "Last 30 days", value: "30d" },
+              { label: "Last 3 months", value: "90d" },
+            ] as const
+          ).map(option => (
+            <button
+              key={option.value}
+              onClick={() => setTimeRange(option.value)}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-sm font-medium transition-all",
+                timeRange === option.value
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         {chartData.length === 0 && !loading ? (
