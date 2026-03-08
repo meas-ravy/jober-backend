@@ -43,8 +43,14 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { conversationId, callerName, callerAvatar, calleeId, isVideoCall } =
-      body;
+    const {
+      conversationId,
+      callerName,
+      callerAvatar: providedAvatar,
+      calleeId,
+      isVideoCall,
+      callerRole, // New: 'Recruiter' or 'Job_finder'
+    } = body;
 
     if (!conversationId || !calleeId) {
       return NextResponse.json(
@@ -80,6 +86,20 @@ export async function POST(req: Request) {
       );
     }
 
+    // Determine the avatar based on the active role
+    let finalAvatar = providedAvatar || "";
+    if (!finalAvatar) {
+      const user = senderParticipant.user;
+      if (callerRole === "Recruiter") {
+        finalAvatar = user?.companyProfile?.logoUrl || "";
+      } else if (callerRole === "Job_finder") {
+        finalAvatar = user?.jobSeekerProfile?.avatarUrl || "";
+      } else {
+        // Final fallback for Admin or unspecified
+        finalAvatar = senderParticipant.admin?.avatarUrl || "";
+      }
+    }
+
     // 2. Clear previous call state in Firebase RTDB
     const callRef = db.ref(`calls/${conversationId}`);
     await callRef.set({
@@ -90,11 +110,7 @@ export async function POST(req: Request) {
         senderParticipant.user?.name ||
         senderParticipant.admin?.name ||
         "Someone",
-      callerAvatar:
-        callerAvatar ||
-        senderParticipant.user?.jobSeekerProfile?.avatarUrl ||
-        senderParticipant.user?.companyProfile?.logoUrl ||
-        "",
+      callerAvatar: finalAvatar,
       calleeId: calleeId,
       isVideoCall: isVideoCall || false,
       timestamp: Date.now(),
@@ -116,7 +132,7 @@ export async function POST(req: Request) {
           type: "INCOMING_CALL",
           conversationId,
           callerName: callerName || "Someone",
-          callerAvatar: callerAvatar || "",
+          callerAvatar: finalAvatar,
           calleeId,
           isVideoCall: String(isVideoCall || false),
           click_action: "FLUTTER_NOTIFICATION_CLICK",
