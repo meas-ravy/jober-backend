@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Verify sender is a participant
+    // 1. Verify sender is a participant and get context (Job, etc.)
     const senderParticipant = await prisma.conversationParticipant.findFirst({
       where: {
         conversationId,
@@ -76,6 +76,9 @@ export async function POST(req: Request) {
           },
         },
         admin: true,
+        conversation: {
+          include: { job: true },
+        },
       },
     });
 
@@ -86,17 +89,29 @@ export async function POST(req: Request) {
       );
     }
 
-    // Determine the avatar based on the active role
+    // SMART PERSONA LOGIC (matches messaging)
+    const conversation = senderParticipant.conversation;
+    const isSenderRecruiter =
+      conversation.jobId && userId === conversation.job?.recruiterId;
+
+    let finalName = callerName || "";
     let finalAvatar = providedAvatar || "";
-    if (!finalAvatar) {
-      const user = senderParticipant.user;
-      if (callerRole === "Recruiter") {
-        finalAvatar = user?.companyProfile?.logoUrl || "";
-      } else if (callerRole === "Job_finder") {
-        finalAvatar = user?.jobSeekerProfile?.avatarUrl || "";
+
+    if (senderParticipant.admin) {
+      finalName = finalName || senderParticipant.admin.name || "Admin";
+      finalAvatar = finalAvatar || senderParticipant.admin.avatarUrl || "";
+    } else if (senderParticipant.user) {
+      const { companyProfile, jobSeekerProfile, name } = senderParticipant.user;
+
+      if (isSenderRecruiter || callerRole === "Recruiter") {
+        // Context: Calling as Recruiter
+        finalName = finalName || companyProfile?.name || name || "Company";
+        finalAvatar = finalAvatar || companyProfile?.logoUrl || "";
       } else {
-        // Final fallback for Admin or unspecified
-        finalAvatar = senderParticipant.admin?.avatarUrl || "";
+        // Context: Calling as Job Seeker
+        finalName =
+          finalName || jobSeekerProfile?.fullName || name || "Job Seeker";
+        finalAvatar = finalAvatar || jobSeekerProfile?.avatarUrl || "";
       }
     }
 
@@ -105,11 +120,7 @@ export async function POST(req: Request) {
     await callRef.set({
       state: "ringing",
       callerId: userId,
-      callerName:
-        callerName ||
-        senderParticipant.user?.name ||
-        senderParticipant.admin?.name ||
-        "Someone",
+      callerName: finalName || "Someone",
       callerAvatar: finalAvatar,
       calleeId: calleeId,
       isVideoCall: isVideoCall || false,
@@ -131,7 +142,7 @@ export async function POST(req: Request) {
         data: {
           type: "INCOMING_CALL",
           conversationId,
-          callerName: callerName || "Someone",
+          callerName: finalName || "Someone",
           callerAvatar: finalAvatar,
           calleeId,
           isVideoCall: String(isVideoCall || false),
