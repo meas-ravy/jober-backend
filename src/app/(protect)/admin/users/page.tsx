@@ -15,7 +15,7 @@ import prisma from "@/src/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Users - Jober",
-  description: "Manage job seekers and recruiters in one place.",
+  description: "Manage job seekers",
 };
 
 async function fetchUsers(): Promise<UserRow[]> {
@@ -55,20 +55,14 @@ async function fetchUsers(): Promise<UserRow[]> {
       let status: "Active" | "Pending" | "Suspended" = "Active";
       if (primaryRole === "Job_finder" && !user.jobSeekerProfile) {
         status = "Pending";
-      } else if (primaryRole === "Recruiter" && !user.companyProfile) {
-        status = "Pending";
       }
 
       const displayName =
         user.jobSeekerProfile?.fullName ||
-        user.companyProfile?.name ||
-        user.name ||
         "N/A";
 
       const avatarUrl =
         user.jobSeekerProfile?.avatarUrl ||
-        user.companyProfile?.logoUrl ||
-        user.oauthAccounts?.[0]?.avatarUrl ||
         null;
 
       return {
