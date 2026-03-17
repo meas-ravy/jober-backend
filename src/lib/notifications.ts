@@ -37,8 +37,6 @@ export async function createNotification(params: CreateNotificationParams) {
 
   // 2. Push Notification (FCM logic for Flutter)
   if (userId) {
-    // We only send FCM to standard Users (Flutter app).
-    // Admin notifications stay in the React dashboard for now.
     await sendPushNotification(userId, title, content, link, type);
   }
 
@@ -92,6 +90,44 @@ async function sendPushNotification(
     // Special handling for INCOMING_CALL (High Priority)
     const isCall = type === "INCOMING_CALL";
 
+    // 4. Fetch total unread count for this user specific to the role they are receiving a notification for
+    // This ensures the badge matches what the user will see in their current app mode (Seeker/Recruiter)
+    const recruiterTypes = [
+      "INFO",
+      "SYSTEM",
+      "NEW_APPLICATION",
+      "VERIFICATION_STATUS",
+      "JOB_STATUS_CHANGE",
+      "NEW_MESSAGE",
+      "INCOMING_CALL",
+      "CALL_MISSED",
+    ];
+
+    const seekerTypes = [
+      "INFO",
+      "SYSTEM",
+      "APPLICATION_UPDATE",
+      "NEW_JOB_FROM_FOLLOW",
+      "NEW_MESSAGE",
+      "INCOMING_CALL",
+      "CALL_MISSED",
+    ];
+
+    let typeFilter: any = undefined;
+    if (targetRole === "Recruiter") {
+      typeFilter = { in: recruiterTypes };
+    } else if (targetRole === "Job_finder") {
+      typeFilter = { in: seekerTypes };
+    }
+
+    const unreadCount = await prisma.notification.count({
+      where: {
+        userId,
+        isRead: false,
+        ...(typeFilter ? { type: typeFilter } : {}),
+      },
+    });
+
     const message: any = {
       tokens: fcmTokens,
       // For calls, we often want a "Data Message" to wake up the app
@@ -102,6 +138,7 @@ async function sendPushNotification(
         title: title,
         body: body,
         targetRole,
+        unreadCount: unreadCount.toString(),
       },
     };
 
@@ -127,7 +164,7 @@ async function sendPushNotification(
       payload: {
         aps: {
           contentAvailable: true, // Wakes up the app in background
-          badge: 1,
+          badge: unreadCount, // Use the actual dynamic count
           sound: isCall ? "call_ringtone.mp3" : "default",
         },
       },
